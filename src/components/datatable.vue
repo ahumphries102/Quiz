@@ -3,11 +3,11 @@
   <v-card-title>Quiz</v-card-title>
   <v-text-field label="Enter Question" />
   <v-data-table v-model="selected" :headers="headers" :items="data" :single-select="singleSelect" item-key="id" show-select class="elevation-1" v-on:item-selected="cat">
-    <template v-slot:item.name="props">
-      <v-edit-dialog :return-value.sync="props.item.name">
-        <v-text-field readonly :label="props.item.name"/>
+    <template v-slot:item.name="{ item }">
+      <v-edit-dialog :return-value.sync="item.name">
+        <v-text-field readonly :label="item.name"/>
         <template v-slot:input>
-          <v-text-field @input='addAnswer' v-model="props.item.name" label="Edit" single-line counter></v-text-field>
+          <v-text-field @input='addAnswer(item.id)' v-model="item.name" label="Edit" single-line counter></v-text-field>
         </template>
       </v-edit-dialog>
     </template>
@@ -25,7 +25,6 @@ export default {
     name: 'CreateQuiz',
       data() {
         return {
-          holder: 0,
           selected:[],
           singleSelect: true,
           name: "",
@@ -57,17 +56,19 @@ export default {
           return value
         },
         deleteAns(value){
-          this.data = this.data.filter(ele => ele.id != value)
+          if(this.data.length > 2)this.data = this.data.filter(ele => ele.id != value)
         },
-        addAnswer(){
-          let holder = 0
-          for(let i = 0; i <= this.data.length; i++){
-            holder = i
-          }
-          console.log(holder)
-          if(holder === this.data.length ){
-            this.data.push({id:Date.now(), name:'', edit: ''})
-          }
+        addAnswer(id){
+          let dataIds = this.data.map( ele => ele.id)
+          let maxValue = Math.max(...dataIds)
+            if(maxValue === id){
+              this.data.push( {
+                id: Date.now(),
+                name: '',
+                edit: '',
+                delete: this.addAnswer
+              } )
+            }
         } 
     }
 }

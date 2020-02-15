@@ -11,18 +11,7 @@ const routes = [{
         path: '/users',
         name:'CreateQuiz',
         component: ()=>import('../components/CreateQuiz')
-    },
-    {
-        path: '/routetest',
-        name: 'routertest',
-        component: ()=>import('../components/testroute')
-    },
-    {
-        path: '/routetest/:id',
-        name: 'characters',
-        props:true,
-        component: ()=>import('../components/characters')
-    },
+    }
 ]
 
 export default new VueRouter({
