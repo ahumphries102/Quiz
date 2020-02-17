@@ -7,17 +7,17 @@
           <v-card-title>Quiz
           </v-card-title>
             
-          <v-text-field label="Enter Question" />
+          <v-text-field label="Enter Question" v-model="question"/>
         </v-card>
       </template>
-      <template v-slot:item.name="{ item }">
-        
-          <v-text-field @input='addAnswerInput(item.id)' v-model="item.name" label="Edit" single-line counter
+      <template v-slot:item.answer="{ item }">
+        <v-form v-model="valid">
+          <v-text-field :rules="rules.answer" @input='addAnswerInput(item.id)' v-model="item.answer" label="Edit" single-line counter
             append-icon="mdi-close" @click:append="deleteAns(item.id)" />
-        
+        </v-form>
       </template>
       <template v-slot:footer>
-        <v-btn color="primary" @click="addAnswer">Add Answer</v-btn>
+        <v-btn color="primary" @click="addAnswer" :disabled="!valid || checked">Add Answer</v-btn>
       </template>
     </v-data-table>
   </v-card>
@@ -27,33 +27,42 @@
     name: 'CreateQuiz',
     data() {
       return {
+        rules:{
+          answer:[ v=> v.length > 0 || 'Answer cannot be empty']
+        },
+        checked: true,
+        valid:true,
         reset: true,
         selected: [],
         singleSelect: true,
-        name: "",
+        answer: "",
         headers: [{
             text: 'Answers',
-            value: 'name',
+            value: 'answer',
           },
         ],
-        data: [{}, {}],
+        question:'',
+        data: [{
+          id: 0,
+          answer: '',
+          answered: false,
+          delete: this.addAnswerInput
+        },
+        {
+          id: 1,
+          answer: '',
+          answered: false,
+          delete: this.addAnswerInput
+        }],
         totalData: []
       }
     },
     mounted() {
-      this.data = []
-      for (let i = 0; i < 2; i++) {
-        this.data.push({
-          id: i,
-          name: '',
-          answered: false,
-          delete: this.addAnswerInput
-        })
-      }
     },
     methods: {
       setAnswer(value) {
         value.item.answered = value.value
+        this.checked = !this.checked
       },
       deleteAns(value) {
         if (this.data.length > 2) this.data = this.data.filter(ele => ele.id != value)
@@ -64,14 +73,19 @@
         if (maxValue === id) {
           this.data.push({
             id: Date.now(),
-            name: '',
+            answer: '',
             answered: false,
             delete: this.addAnswerInput
           })
         }
       },
       addAnswer(){
-        this.totalData.push(this.data)
+        this.totalData.push(this.question)
+        this.data.forEach((ele,ind)=>{
+          if(ele.answer.length > 0){
+              this.totalData.push(this.data[ind])
+            }
+        })
         console.log(this.totalData)
       }
     }
