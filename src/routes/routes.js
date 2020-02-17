@@ -3,14 +3,14 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 const routes = [{
-        path: '/',
-        name: 'Quiz',
-        component:()=>import('../components/Quiz')
+        path: '/quiz',
+        name: 'quiz',
+        component:()=>import('../components/quiz')
     },
     {
-        path: '/users',
-        name:'CreateQuiz',
-        component: ()=>import('../components/CreateQuiz')
+        path: '/createquiz',
+        name:'createQuiz',
+        component: ()=>import('../components/createQuiz')
     }
 ]
 

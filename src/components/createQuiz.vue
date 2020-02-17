@@ -1,14 +1,16 @@
 <template>
-  <v-card>
-    <v-data-table v-model="selected" :headers="headers" :items="data" :single-select="singleSelect" item-key="id"
+  <div>
+    <v-data-table v-if="!quizReady" v-model="selected" :headers="headers" :items="data" :single-select="singleSelect" item-key="id"
       show-select class="elevation-1" v-on:item-selected="setAnswer">
       <template v-slot:top>
+        <v-form v-model="valid">
         <v-card>
           <v-card-title>Quiz
           </v-card-title>
             
           <v-text-field label="Enter Question" v-model="question"/>
         </v-card>
+        </v-form>
       </template>
       <template v-slot:item.answer="{ item }">
         <v-form v-model="valid">
@@ -18,16 +20,24 @@
       </template>
       <template v-slot:footer>
         <v-btn color="primary" @click="addAnswer" :disabled="!valid || checked">Add Answer</v-btn>
+        <v-btn @click="quizBegin">Submit Quiz</v-btn>
       </template>
     </v-data-table>
-  </v-card>
+    <Quiz v-if='quizReady' :quiz="totalData"/>
+    </div>
 </template>
 <script>
+import Quiz from './quiz'
   export default {
-    name: 'CreateQuiz',
+    name: 'createQuiz',
+    components:{
+      Quiz
+    },
     data() {
       return {
+        quizReady:false,
         rules:{
+          question: [ v=> v.length > 0 || 'Question cannot be empty'],
           answer:[ v=> v.length > 0 || 'Answer cannot be empty']
         },
         checked: true,
@@ -87,6 +97,9 @@
             }
         })
         console.log(this.totalData)
+      },
+      quizBegin(){
+        this.quizReady = true
       }
     }
   }

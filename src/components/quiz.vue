@@ -1,31 +1,28 @@
 
 <template>
-  <v-content>
-    <!-- <CreateQuiz v-show="!ready" :quizShow="quizShow" :testComp="testComp" :test="test" ref="quiz"/> -->
-    <Datatable />
-  </v-content>
+  <div>
+    <h1>Question: {{quizShow[0]}}</h1>
+    <h2 v-for="(answer, ind) in quizShow" :key="ind">{{answer.answer}}</h2>
+  </div>
 </template>
 <script>
 //import CreateQuiz from './CreateQuiz'
-import Datatable from './datatable'
 export default {
-  name:'Quiz',
-  components:{
-    //CreateQuiz,
-    Datatable
+  name:'quiz',
+  props:{
+    quiz: Array
   },
   data(){
     return{
-      testId:false,
-      ready:false,
-      msg:'Game Time',
-      whichQ:0,
       quizShow:[{
         id:Date.now(),
         gameOver:'Game Over',
         totalScore:0
       }]
     }
+  },
+  mounted(){
+    this.quizShow.unshift(...this.quiz)
   },
   methods:{
       nextQ(){
