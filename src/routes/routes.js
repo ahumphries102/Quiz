@@ -8,7 +8,7 @@ const routes = [{
         component:()=>import('../components/quiz')
     },
     {
-        path: '/createquiz',
+        path: '/',
         name:'createQuiz',
         component: ()=>import('../components/createQuiz')
     }

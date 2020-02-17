@@ -1,8 +1,8 @@
 
 <template>
   <div>
-    <h1>Question: {{quizShow[0]}}</h1>
-    <h2 v-for="(answer, ind) in quizShow" :key="ind">{{answer.answer}}</h2>
+    <h1>Question: {{quizShow[0][0][0]}}</h1>
+    <h6 v-for="(answer, ind) in quizShow[0]" :key="ind">{{answer[2].answer}}</h6>
   </div>
 </template>
 <script>
@@ -22,7 +22,8 @@ export default {
     }
   },
   mounted(){
-    this.quizShow.unshift(...this.quiz)
+    this.quizShow.unshift(this.quiz)
+    console.log(this.quizShow)
   },
   methods:{
       nextQ(){

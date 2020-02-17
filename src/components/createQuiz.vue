@@ -8,7 +8,7 @@
           <v-card-title>Quiz
           </v-card-title>
             
-          <v-text-field label="Enter Question" v-model="question"/>
+          <v-text-field label="Enter Question" v-model="question" :rules="rules.question"/>
         </v-card>
         </v-form>
       </template>
@@ -20,10 +20,12 @@
       </template>
       <template v-slot:footer>
         <v-btn color="primary" @click="addAnswer" :disabled="!valid || checked">Add Answer</v-btn>
-        <v-btn @click="quizBegin">Submit Quiz</v-btn>
+        Quiz Size: {{ numberOfQuestions }}
+        <v-spacer/>
+        <v-btn :disabled=" numberOfQuestions < 2? true:false " @click="quizBegin">Submit Quiz</v-btn>
       </template>
     </v-data-table>
-    <Quiz v-if='quizReady' :quiz="totalData"/>
+    <Quiz v-if='quizReady' :quiz="finalData"/>
     </div>
 </template>
 <script>
@@ -35,6 +37,7 @@ import Quiz from './quiz'
     },
     data() {
       return {
+        numberOfQuestions:0,
         quizReady:false,
         rules:{
           question: [ v=> v.length > 0 || 'Question cannot be empty'],
@@ -64,7 +67,8 @@ import Quiz from './quiz'
           answered: false,
           delete: this.addAnswerInput
         }],
-        totalData: []
+        totalData: [],
+        finalData: [],
       }
     },
     mounted() {
@@ -96,7 +100,22 @@ import Quiz from './quiz'
               this.totalData.push(this.data[ind])
             }
         })
-        console.log(this.totalData)
+        this.finalData.push(this.totalData)
+        this.numberOfQuestions++
+        this.totalData = []
+        this.data = [{
+          id: Date.now() + 1,
+          answer: '',
+          answered: false,
+          delete: this.addAnswerInput
+        },
+        {
+          id: Date.now() + 5,
+          answer: '',
+          answered: false,
+          delete: this.addAnswerInput
+        }]
+        console.log(this.finalData)
       },
       quizBegin(){
         this.quizReady = true
