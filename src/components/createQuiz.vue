@@ -1,78 +1,78 @@
 <template>
   <div>
-    <v-data-table v-if="!quizReady" v-model="selected" :headers="headers" :items="data" :single-select="singleSelect" item-key="id"
-      show-select class="elevation-1" v-on:item-selected="setAnswer">
+    <v-data-table v-if="!quizReady" v-model="selected" :headers="headers" :items="data" :single-select="singleSelect"
+      item-key="id" show-select class="elevation-1" v-on:item-selected="setAnswer">
       <template v-slot:top>
         <v-form v-model="valid">
-        <v-card>
-          <v-card-title>Quiz
-          </v-card-title>
-            
-          <v-text-field label="Enter Question" v-model="question" :rules="rules.question"/>
-        </v-card>
+          <v-card>
+            <v-card-title>Quiz
+            </v-card-title>
+
+            <v-text-field label="Enter Question" v-model="question" :rules="rules.question" />
+          </v-card>
         </v-form>
       </template>
       <template v-slot:item.answer="{ item }">
         <v-form v-model="valid">
-          <v-text-field :rules="rules.answer" @input='addAnswerInput(item.id)' v-model="item.answer" label="Edit" single-line counter
-            append-icon="mdi-close" @click:append="deleteAns(item.id)" />
+          <v-text-field :rules="rules.answer" @input='addAnswerInput(item.id)' v-model="item.answer" label="Edit"
+            single-line counter append-icon="mdi-close" @click:append="deleteAns(item.id)" />
         </v-form>
       </template>
       <template v-slot:footer>
         <v-btn color="primary" @click="addAnswer" :disabled="!valid || checked">Add Answer</v-btn>
         Quiz Size: {{ numberOfQuestions }}
-        <v-spacer/>
-        <v-btn :disabled=" numberOfQuestions < 2? true:false " @click="quizBegin">Submit Quiz</v-btn>
+        <v-spacer />
+        <v-btn :disabled=" numberOfQuestions < 0? true:false " @click="quizBegin">Submit Quiz</v-btn>
       </template>
     </v-data-table>
-    <Quiz v-if='quizReady' :quiz="finalData"/>
-    </div>
+    <Quiz v-if='quizReady' :quiz="finalData" :questions="questions"/>
+  </div>
 </template>
 <script>
-import Quiz from './quiz'
+  import Quiz from './quiz'
   export default {
     name: 'createQuiz',
-    components:{
-      Quiz
+    components: {
+      Quiz,
     },
     data() {
       return {
-        numberOfQuestions:0,
-        quizReady:false,
-        rules:{
-          question: [ v=> v.length > 0 || 'Question cannot be empty'],
-          answer:[ v=> v.length > 0 || 'Answer cannot be empty']
+        numberOfQuestions: 0,
+        quizReady: false,
+        rules: {
+          question: [v => v.length > 0 || 'Question cannot be empty'],
+          answer: [v => v.length > 0 || 'Answer cannot be empty']
         },
         checked: true,
-        valid:true,
+        valid: true,
         reset: true,
         selected: [],
         singleSelect: true,
         answer: "",
         headers: [{
-            text: 'Answers',
-            value: 'answer',
-          },
-        ],
-        question:'',
+          text: 'Answers',
+          value: 'answer',
+        }, ],
+        question: '',
         data: [{
-          id: 0,
-          answer: '',
-          answered: false,
-          delete: this.addAnswerInput
-        },
-        {
-          id: 1,
-          answer: '',
-          answered: false,
-          delete: this.addAnswerInput
-        }],
+            id: 0,
+            answer: '',
+            answered: false,
+            delete: this.addAnswerInput
+          },
+          {
+            id: 1,
+            answer: '',
+            answered: false,
+            delete: this.addAnswerInput
+          }
+        ],
+        questions: [],
         totalData: [],
         finalData: [],
       }
     },
-    mounted() {
-    },
+    mounted() {},
     methods: {
       setAnswer(value) {
         value.item.answered = value.value
@@ -93,31 +93,34 @@ import Quiz from './quiz'
           })
         }
       },
-      addAnswer(){
-        this.totalData.push(this.question)
-        this.data.forEach((ele,ind)=>{
-          if(ele.answer.length > 0){
-              this.totalData.push(this.data[ind])
-            }
+      addAnswer() {
+        this.questions.push(this.question)
+        this.data.forEach((ele, ind) => {
+          if (ele.answer.length > 0) {
+            this.totalData.push(this.data[ind])
+          }
         })
+        console.log(this.totalData)
         this.finalData.push(this.totalData)
         this.numberOfQuestions++
+        this.question = ''
         this.totalData = []
         this.data = [{
-          id: Date.now() + 1,
-          answer: '',
-          answered: false,
-          delete: this.addAnswerInput
-        },
-        {
-          id: Date.now() + 5,
-          answer: '',
-          answered: false,
-          delete: this.addAnswerInput
-        }]
+            id: Date.now() + 1,
+            answer: '',
+            answered: false,
+            delete: this.addAnswerInput
+          },
+          {
+            id: Date.now() + 5,
+            answer: '',
+            answered: false,
+            delete: this.addAnswerInput
+          }
+        ]
         console.log(this.finalData)
       },
-      quizBegin(){
+      quizBegin() {
         this.quizReady = true
       }
     }
