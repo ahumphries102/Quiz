@@ -1,15 +1,15 @@
 <template>
-  <div>
+  <v-container fill-height class="justify-center">
     <v-data-table v-if="!quizReady" v-model="selected" :headers="headers" :items="data" :single-select="singleSelect"
-      item-key="id" show-select class="elevation-1" v-on:item-selected="setAnswer">
+      item-key="id" show-select class="pa-10 elevation-1" v-on:item-selected="setAnswer">
       <template v-slot:top>
         <v-form v-model="valid">
-          <v-card>
-            <v-card-title>Quiz
-            </v-card-title>
+          <v-toolbar flat>
+            <v-toolbar-title>Quiz
+            </v-toolbar-title>
 
+          </v-toolbar>
             <v-text-field label="Enter Question" v-model="question" :rules="rules.question" />
-          </v-card>
         </v-form>
       </template>
       <template v-slot:item.answer="{ item }">
@@ -26,7 +26,7 @@
       </template>
     </v-data-table>
     <Quiz v-if='quizReady' :quiz="finalData" :questions="questions"/>
-  </div>
+  </v-container>
 </template>
 <script>
   import Quiz from './quiz'
@@ -76,7 +76,7 @@
     methods: {
       setAnswer(value) {
         value.item.answered = value.value
-        this.checked = !this.checked
+        this.checked = !value
       },
       deleteAns(value) {
         if (this.data.length > 2) this.data = this.data.filter(ele => ele.id != value)
@@ -100,8 +100,8 @@
             this.totalData.push(this.data[ind])
           }
         })
-        console.log(this.totalData)
         this.finalData.push(this.totalData)
+        this.checked = true
         this.numberOfQuestions++
         this.question = ''
         this.totalData = []
@@ -118,7 +118,6 @@
             delete: this.addAnswerInput
           }
         ]
-        console.log(this.finalData)
       },
       quizBegin() {
         this.quizReady = true
