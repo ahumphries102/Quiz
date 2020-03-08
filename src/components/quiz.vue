@@ -1,12 +1,12 @@
 <template>
   <v-container fill-height>
-    <v-form v-model="valid">
-    <v-card width="50%" class="mx-auto" v-show="!gameOver">
+    <v-form v-model="valid" class="mx-auto">
+    <v-card class="mx-auto" v-show="!gameOver">
       <v-card-title class="headline">Question {{nextQ + 1}}/{{quiz.length}}<br>{{questions[nextQ]}}</v-card-title>
       <v-divider />
       <v-card-text>
         <v-radio-group>
-          <v-radio :rules="[v => v != 5 || 'select answer']"  v-for="(answer, ind) in quiz[nextQ]" :key="ind" :label="answer.answer"
+          <v-radio :rules="[v => v != 5 || 'select answer']" v-for="(answer, ind) in quiz[nextQ]" :key="ind" :label="answer.answer"
             v-on:change="saveAnswer(quiz[nextQ][ind])" />
         </v-radio-group>
 
@@ -48,6 +48,7 @@
       }
     },
     mounted() {
+      console.log(this.quiz)
     },
     filters:{
       alwaysCap(){
@@ -62,12 +63,11 @@
       nextQuestion() {
         this.nextQ++
         this.tallyScore.push(this.currentAnswer)
-        console.log(this.tallyScore)
         if(this.nextQ > this.quiz.length - 1){
           this.tallyScore.forEach( ele =>{
+            console.log(ele, 'answers')
             if(ele.answered === true){
               this.finalScore++
-              console.log('score!')
             }
           })
         }
@@ -80,6 +80,7 @@
       },
       saveAnswer(value) {
         this.currentAnswer = value
+        console.log(value, 'value')
       },
     },
     watch:{

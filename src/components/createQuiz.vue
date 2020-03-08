@@ -1,16 +1,14 @@
 <template>
   <v-container fill-height class="justify-center">
-    <v-data-table v-if="!quizReady" v-model="selected" :headers="headers" :items="data" :single-select="singleSelect"
+    <v-data-table v-if="!quizReady" v-model="selected" :headers="headers" :items="listOfAnswers" :single-select="singleSelect"
       item-key="id" show-select class="pa-10 elevation-1" v-on:item-selected="setAnswer">
       <template v-slot:top>
-        <v-form v-model="valid">
           <v-toolbar flat>
             <v-toolbar-title>Quiz
             </v-toolbar-title>
-
           </v-toolbar>
-            <v-text-field label="Enter Question" v-model="question" :rules="rules.question" />
-        </v-form>
+            <v-text-field label="Enter Question" v-model="question"/>
+            {{finalData}}
       </template>
       <template v-slot:item.answer="{ item }">
         <v-form v-model="valid">
@@ -19,10 +17,10 @@
         </v-form>
       </template>
       <template v-slot:footer>
-        <v-btn color="primary" @click="addAnswer" :disabled="!valid || checked">Add Answer</v-btn>
+        <v-btn color="primary" @click="addAnswer" :disabled="!valid || !checked || question.length < 1">Add Answer</v-btn>
         Quiz Size: {{ numberOfQuestions }}
         <v-spacer />
-        <v-btn :disabled=" numberOfQuestions < 0? true:false " @click="quizBegin">Submit Quiz</v-btn>
+        <v-btn :disabled=" numberOfQuestions < 1? true:false" @click="quizBegin">Submit Quiz</v-btn>
       </template>
     </v-data-table>
     <Quiz v-if='quizReady' :quiz="finalData" :questions="questions"/>
@@ -40,9 +38,9 @@
         numberOfQuestions: 0,
         quizReady: false,
         rules: {
-          question: [v => v.length > 0 || 'Question cannot be empty'],
           answer: [v => v.length > 0 || 'Answer cannot be empty']
         },
+        errorMessage: false,
         checked: true,
         valid: true,
         reset: true,
@@ -54,7 +52,7 @@
           value: 'answer',
         }, ],
         question: '',
-        data: [{
+        listOfAnswers: [{
             id: 0,
             answer: '',
             answered: false,
@@ -70,22 +68,29 @@
         questions: [],
         totalData: [],
         finalData: [],
+        testHolder:[],
+        valueHolder: ''
       }
     },
     mounted() {},
     methods: {
       setAnswer(value) {
-        value.item.answered = value.value
-        this.checked = !value
+        // sets the object returned from the row from false to whatever value passed in is. Value.value is the boolean from vuetify datatable
+        if(value.value === true){
+          value.item.answered = value.value
+        }
+        // used to disable and enable add answer button
+        this.checked = value.value
       },
       deleteAns(value) {
-        if (this.data.length > 2) this.data = this.data.filter(ele => ele.id != value)
+        if (this.listOfAnswers.length > 2) this.listOfAnswers = this.listOfAnswers.filter(ele => ele.id != value)
       },
+      //checks user input if they're adding any text. only fires on last answer input field
       addAnswerInput(id) {
-        let dataIds = this.data.map(ele => ele.id)
+        let dataIds = this.listOfAnswers.map(ele => ele.id)
         let maxValue = Math.max(...dataIds)
         if (maxValue === id) {
-          this.data.push({
+          this.listOfAnswers.push({
             id: Date.now(),
             answer: '',
             answered: false,
@@ -95,24 +100,24 @@
       },
       addAnswer() {
         this.questions.push(this.question)
-        this.data.forEach((ele, ind) => {
+        this.listOfAnswers.forEach((ele, ind) => {
           if (ele.answer.length > 0) {
-            this.totalData.push(this.data[ind])
+            this.totalData.push(this.listOfAnswers[ind])
           }
         })
+        //this.totalData.foEach(ele => console.log(ele.answer, ele.answered, 'totalData'))
         this.finalData.push(this.totalData)
-        this.checked = true
         this.numberOfQuestions++
         this.question = ''
         this.totalData = []
-        this.data = [{
+        this.listOfAnswers = [{
             id: Date.now() + 1,
             answer: '',
             answered: false,
             delete: this.addAnswerInput
           },
           {
-            id: Date.now() + 5,
+            id: Date.now() + 2,
             answer: '',
             answered: false,
             delete: this.addAnswerInput
