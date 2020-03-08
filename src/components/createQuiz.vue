@@ -8,7 +8,6 @@
             </v-toolbar-title>
           </v-toolbar>
             <v-text-field label="Enter Question" v-model="question"/>
-            {{finalData}}
       </template>
       <template v-slot:item.answer="{ item }">
         <v-form v-model="valid">
@@ -20,7 +19,7 @@
         <v-btn color="primary" @click="addAnswer" :disabled="!valid || !checked || question.length < 1">Add Answer</v-btn>
         Quiz Size: {{ numberOfQuestions }}
         <v-spacer />
-        <v-btn :disabled=" numberOfQuestions < 1? true:false" @click="quizBegin">Submit Quiz</v-btn>
+        <v-btn :disabled=" numberOfQuestions < 2? true:false" @click="quizBegin">Submit Quiz</v-btn>
       </template>
     </v-data-table>
     <Quiz v-if='quizReady' :quiz="finalData" :questions="questions"/>
@@ -41,7 +40,7 @@
           answer: [v => v.length > 0 || 'Answer cannot be empty']
         },
         errorMessage: false,
-        checked: true,
+        checked: false,
         valid: true,
         reset: true,
         selected: [],
@@ -79,8 +78,7 @@
         if(value.value === true){
           value.item.answered = value.value
         }
-        // used to disable and enable add answer button
-        this.checked = value.value
+        this.checked = true
       },
       deleteAns(value) {
         if (this.listOfAnswers.length > 2) this.listOfAnswers = this.listOfAnswers.filter(ele => ele.id != value)
@@ -107,6 +105,7 @@
         })
         //this.totalData.foEach(ele => console.log(ele.answer, ele.answered, 'totalData'))
         this.finalData.push(this.totalData)
+        this.checked = false
         this.numberOfQuestions++
         this.question = ''
         this.totalData = []
