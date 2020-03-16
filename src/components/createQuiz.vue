@@ -1,6 +1,6 @@
 <template>
   <v-container fill-height class="justify-center">
-    <v-data-table v-if="!quizReady" v-model="selected" :headers="headers" :items="listOfAnswers" :single-select="singleSelect"
+    <v-data-table v-if="!quizReady" v-model="selected" disable-sort :headers="headers" :items="listOfAnswers" :single-select="singleSelect"
       item-key="id" show-select class="pa-10 elevation-1" v-on:item-selected="setAnswer">
       <template v-slot:top>
           <v-toolbar flat>
@@ -19,7 +19,7 @@
         <v-btn color="primary" @click="addAnswer" :disabled="!valid || !checked || question.length < 1">Add Answer</v-btn>
         Quiz Size: {{ numberOfQuestions }}
         <v-spacer />
-        <v-btn :disabled=" numberOfQuestions < 2? true:false" @click="quizBegin">Submit Quiz</v-btn>
+        <v-btn color="primary" :disabled=" numberOfQuestions < 2? true:false" @click="quizBegin">Submit Quiz</v-btn>
       </template>
     </v-data-table>
     <Quiz v-if='quizReady' :quiz="finalData" :questions="questions"/>

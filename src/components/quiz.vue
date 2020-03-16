@@ -7,10 +7,8 @@
         <v-card-text>
           <!-- <v-checkbox :rules="[v => v != 5 || 'select answer']" v-for="(answer, ind) in quiz[nextQ]" :key="ind" :label="answer.answer"
             v-on:change="saveAnswer(quiz[nextQ][ind])" /> -->
-          <ul>
-            <li class="headline" :rules="[v => v != 5 || 'select answer']" v-for="(answer, ind) in quiz[nextQ]"
-              :key="ind" v-on:click="saveAnswer(quiz[nextQ][ind])">{{answer.answer}}</li>
-          </ul>
+            <v-list-item :dark="currentAnswer===quiz[nextQ][ind]" :style="{'border-radius':'50px'}" :class="currentAnswer===quiz[nextQ][ind]?'light-green':''" :rules="[v => v != 5 || 'select answer']" v-for="(answer, ind) in quiz[nextQ]"
+              :key="ind" v-on:click="saveAnswer(quiz[nextQ][ind])"><h4>{{answer.answer}}</h4></v-list-item>
           <p>Your Current Answer Is: {{ currentAnswer.answer }}</p>
         </v-card-text>
         <v-card-actions>
@@ -21,11 +19,11 @@
         </v-card-actions>
       </v-card>
     </v-form>
-    <v-dialog v-model="gameOver" width="50%">
-      <EndScreen :quiz="quiz" :finalScore="finalScore" @viewAnswers="viewAnswers" />
+    <v-dialog v-model="gameOver" width="50%" persistent>
+      <EndScreen :questions="questions" :quiz="quiz" :finalScore="finalScore" @viewAnswers="viewAnswers" />
     </v-dialog>
   </v-container>
-  </template>
+</template>
 <script>
   //import CreateQuiz from './CreateQuiz'
   import EndScreen from './endScreen'
@@ -49,9 +47,6 @@
         nextQ: 0,
         tallyScore:[]
       }
-    },
-    mounted() {
-      console.log(this.quiz)
     },
     filters:{
       alwaysCap(){

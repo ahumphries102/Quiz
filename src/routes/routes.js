@@ -11,6 +11,11 @@ const routes = [{
         path: '/',
         name:'createQuiz',
         component: ()=>import('../components/createQuiz')
+    },
+    {
+        path: '/finalscore',
+        name:'finalscore',
+        component: ()=>import('../components/finalScore')
     }
 ]
 
