@@ -17,7 +17,7 @@
       </template>
       <template v-slot:footer>
         <v-btn color="primary" @click="addAnswer" :disabled="!valid || !checked || question.length < 1">Add Answer</v-btn>
-        Quiz Size: {{ numberOfQuestions }}
+        My Quiz has {{ numberOfQuestions }} Questions
         <v-spacer />
         <v-btn color="primary" :disabled=" numberOfQuestions < 2? true:false" @click="quizBegin">Submit Quiz</v-btn>
       </template>

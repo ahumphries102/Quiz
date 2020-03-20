@@ -5,9 +5,15 @@
                 <p>Question {{quiz.length - quiz.length + currentQuestion + 1}}</p>
                 <p>{{questions[currentQuestion]}}</p>
             </v-card-title>
+            <v-divider/>
             <v-card-text>
-                {{quiz}}
-                <p :style="{color:answer.answered===true?'green':'', padding:'1%'}" v-for="(answer, ind) in quiz[currentQuestion]" :key="ind">{{answer.answer}} {{answer.answered === true?'Correct':''}}</p>
+            
+                <p v-for="(answer, ind) in quiz[currentQuestion]" :key="ind" :style="{color:answer.answered?'green':'red'}">
+                    {{answer.answer}}
+                </p>
+                <p>
+                    {{tallyScore[currentQuestion].answered===true?'You answered ' + tallyScore[currentQuestion].answer + ' which is correct':'You answered ' + tallyScore[currentQuestion].answer + ' which is incorrect'}}
+                </p>
             </v-card-text>
             <v-card-actions>
                 <v-btn color="primary" @click="currentQuestion--" :disabled="currentQuestion < 1">Previous Question
@@ -23,7 +29,8 @@ export default {
     name:'finalscore',
     props:{
         quiz:Array,
-        questions:Array
+        questions:Array,
+        tallyScore:Array
     },
     data:()=>({
         currentQuestion: 0,

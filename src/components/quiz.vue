@@ -8,7 +8,7 @@
           <!-- <v-checkbox :rules="[v => v != 5 || 'select answer']" v-for="(answer, ind) in quiz[nextQ]" :key="ind" :label="answer.answer"
             v-on:change="saveAnswer(quiz[nextQ][ind])" /> -->
             <v-list-item :dark="currentAnswer===quiz[nextQ][ind]" :style="{'border-radius':'50px'}" :class="currentAnswer===quiz[nextQ][ind]?'light-green':''" :rules="[v => v != 5 || 'select answer']" v-for="(answer, ind) in quiz[nextQ]"
-              :key="ind" v-on:click="saveAnswer(quiz[nextQ][ind])"><h4>{{answer.answer}}</h4></v-list-item>
+              :key="ind" @click="saveAnswer(quiz[nextQ][ind])"><h4>{{answer.answer}}</h4></v-list-item>
           <p>Your Current Answer Is: {{ currentAnswer.answer }}</p>
         </v-card-text>
         <v-card-actions>
@@ -20,7 +20,7 @@
       </v-card>
     </v-form>
     <v-dialog v-model="gameOver" width="50%" persistent>
-      <EndScreen :questions="questions" :quiz="quiz" :finalScore="finalScore" @viewAnswers="viewAnswers" />
+      <EndScreen :questions="questions" :quiz="quiz" :finalScore="finalScore" @viewAnswers="viewAnswers" :tallyScore='tallyScore'/>
     </v-dialog>
   </v-container>
 </template>
@@ -65,7 +65,6 @@
         this.tallyScore.push(this.currentAnswer)
         if(this.nextQ > this.quiz.length - 1){
           this.tallyScore.forEach( ele =>{
-            console.log(ele, 'answers')
             if(ele.answered === true){
               this.finalScore++
             }
