@@ -11,7 +11,7 @@
             <v-btn color="primary" class="mx-auto" @click="answersViewing = true">View Answers</v-btn>
         </v-card-actions>
       </v-card>
-      <FinalScore v-if="answersViewing" :quiz="quiz" :questions="questions" :tallyScore='tallyScore'/>
+      <FinalScore v-if="answersViewing" :quiz="quiz" :questions="questions" :tallyScore='tallyScore' @close="answersViewing = false"/>
   </div>
 </template>
 
@@ -25,9 +25,6 @@ export default {
         quiz:Array,
         questions:Array,
         tallyScore: Array
-    },
-    mounted(){
-        console.log(this.tallyScore)
     },
     data:()=>({
         answersViewing: false

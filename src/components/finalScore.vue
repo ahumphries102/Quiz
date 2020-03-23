@@ -8,17 +8,18 @@
             <v-divider/>
             <v-card-text>
             
-                <p v-for="(answer, ind) in quiz[currentQuestion]" :key="ind" :style="{color:answer.answered?'green':'red'}">
+                <h3 class="my-5" v-for="(answer, ind) in quiz[currentQuestion]" :key="ind" :style="{color:answer.answered?'green':'red'}">
                     {{answer.answer}}
-                </p>
+                </h3>
                 <p>
-                    {{tallyScore[currentQuestion].answered===true?'You answered ' + tallyScore[currentQuestion].answer + ' which is correct':'You answered ' + tallyScore[currentQuestion].answer + ' which is incorrect'}}
+                    Your answer was <b>{{tallyScore[currentQuestion].answered===true?tallyScore[currentQuestion].answer:tallyScore[currentQuestion].answer}}</b>
                 </p>
             </v-card-text>
             <v-card-actions>
                 <v-btn color="primary" @click="currentQuestion--" :disabled="currentQuestion < 1">Previous Question
                 </v-btn>
-                <v-btn :disabled="finalQuestionReached" color="primary" @click="currentQuestion++">Next Question</v-btn>
+                <v-btn v-show="!finalQuestionReached" color="primary" @click="currentQuestion++">Next Question</v-btn>
+                <v-btn color="primary" v-show="finalQuestionReached" @click="$emit('close')">Return to Score Screen</v-btn>
             </v-card-actions>
         </v-card>
     </div>
