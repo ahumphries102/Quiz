@@ -1,8 +1,22 @@
 const mongoose = require('mongoose')
-let kittySchema = new mongoose.Schema({
-    name:String
+
+let Schema = mongoose.Schema
+
+const KittySchema = new Schema({
+    name:{
+        type:String,
+        required:true
+    }
 })
 
-let Kitten = mongoose.model('Kitten', kittySchema)
+// kittySchema.methods.speak = function(){
+//     let greeting = this.name?"Meow! My name is " + this.name:"pew... I don't has name"
+//     return console.log(greeting)
+// }
 
-console.log(Kitten)
+let Kitten = mongoose.model('Kitten', KittySchema)
+
+// let Silence = new Kitten({
+//     name:'Silence'
+// })
+module.exports = Kitten
