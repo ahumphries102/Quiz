@@ -28,7 +28,14 @@ router.post('/cat', (req, res, next) => {
     let newCat = new Kitten(req.body)
     newCat.save()
     .then(result => res.send(result))
-    .catch(err=>res.send(err.message))
+    .catch(err=>{
+        if(typeof req.body.name !== 'string'){
+            res.send('Must be a string')
+        }else if(typeof req.body.name === 'number'){
+            res.send('bad')
+        }
+    })  
+    
     return next()
 })
 
