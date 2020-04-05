@@ -16,14 +16,15 @@ const uri = 'mongodb+srv://foonakie:Cameraball1!@quizcluster-rrgqn.mongodb.net/q
 
 mongoose.connect(uri, {
         useNewUrlParser: true,
-        useUnifiedTopology: true
+        useUnifiedTopology: true,
+        useCreateIndex:true
     },
-    () => console.log('we connected'))
+    () => console.log('Database connected'))
 
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function () {
     // we're connected!
-    console.log('We have connected')
+    console.log('mongoose is connected')
 })
 
 

@@ -5,7 +5,12 @@ let Schema = mongoose.Schema
 const KittySchema = new Schema({
     name:{
         type:String,
-        required:true
+        validate: {
+            validator: function(v) {
+                return /[a-z]$/.test(v);
+            },
+            message: 'Must be a tring'
+        }
     }
 })
 

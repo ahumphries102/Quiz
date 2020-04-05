@@ -17,7 +17,7 @@ router.get('/allcats', (req,res,next)=>{
         }else{
             res.status(400)
             err = 'No Cats Found'
-            res.send()
+            res.send('No cats found')
         }
     });
     next()
@@ -29,33 +29,41 @@ router.post('/cat', (req, res, next) => {
     newCat.save()
     .then(result => res.send(result))
     .catch(err=>{
-        if(typeof req.body.name !== 'string'){
-            res.send('Must be a string')
-        }else if(typeof req.body.name === 'number'){
-            res.send('bad')
-        }
+        res.send(err.message)
     })  
     
     return next()
 })
 
 router.patch('/fixcat/:name', (req,res,next)=>{
-    Kitten.findOneAndUpdate({name:req.params.name}, {
+    Kitten.update({name:req.params.name}, {
         name:req.body.name
+    }, (err,result)=>{
+        if(req.params.name === req.body.name){
+            res.status(400)
+            return res.send('Cannot update name to same name')
+        }
+        else if(result.n > 0){
+            return res.send(result,`Your kitten's new name is ${req.body.name}`)
+        }else{
+            res.status(400)
+            return res.send(`There was no cat named ${req.params.name} to update`)
+        }
     })
-    .then(()=>console.log(req.body))
-    .catch(err=>console.log(err))
-    res.send(`Your kitten's new name is ${req.body.name}`)
     next()
 })
 
 router.del('/remove', (req,res,next)=>{
-    Kitten.deleteOne({
+    Kitten.remove({
         name:req.body.name
+    }, (err, result)=>{
+        if(result.n > 0){
+            res.send(`You deleted ${req.body.name}`)
+        }else{
+            res.status(400)
+            res.send(`There is no cat named ${req.body.name}`)
+        }
     })
-    .then(()=>console.log('deleted'))
-    .catch((err)=>console.log(err))
-    res.send(200)
     return next()
 
 })
