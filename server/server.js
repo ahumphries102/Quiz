@@ -2,7 +2,7 @@ const restify = require('restify');
 const mongoose = require('mongoose')
 const db = mongoose.connection
 const router = require('./routes')
-let PORT = process.env.PORT || 3000 || process.env.SITE
+let PORT = 3000 || process.env.SITE
 
 require('dotenv').config()
 
@@ -35,6 +35,6 @@ server.get('/*', restify.plugins.serveStatic({
     default: 'index.html',
   }));
 
-server.listen(PORT, function () {
+server.listen(process.env.PORT || PORT, function () {
     console.log('%s listening at %s', server.name, server.url);
 });
