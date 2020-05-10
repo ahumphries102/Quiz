@@ -160,7 +160,7 @@
           username:this.$store.state.username, 
           quiz:this.allQuestionsAnswers
         })
-        this.$router.push({name:'createquiz'}).catch(err=>err)
+        this.$router.push({name:'creatingquiz'}).catch(err=>err)
         if(request){
             this.color = 'green'
             this.responseMsg = request.msg
