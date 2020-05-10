@@ -42,7 +42,7 @@ export default {
             if(!request.err){
                 this.color = 'green'
                 this.responseMsg = request.msg
-                this.$router.push({name:'createquiz'}).catch(err=>err)
+                this.$router.push({name:'creatingquiz'}).catch(err=>err)
                 
                 this.$store.state.username = this.loginData.username
                 this.$store.state.token = request.token
