@@ -1,5 +1,6 @@
 <template>
   <v-container fill-height class="justify-center">
+    <v-card flat>
     <v-data-table v-if="!quizReady" v-model="selected" disable-sort :headers="headers" :items="listOfAnswers"
       :single-select="singleSelect" item-key="id" show-select class="pa-10 elevation-1" v-on:item-selected="setAnswer">
       <template v-slot:top>
@@ -16,20 +17,22 @@
         </v-form>
       </template>
       <template v-slot:footer>
-        <div class="d-flex flex-direction:row">
-          <v-btn class="mr-5" color="primary" @click="addAnswer" :disabled="!valid || !checked || question.length < 1">
+        <div>
+          <v-btn color="primary" @click="addAnswer" :disabled="!valid || !checked || question.length < 1">
             Add Answer | {{ numberOfQuestions }}</v-btn>
-          <v-btn color="primary" :disabled=" numberOfQuestions < 2? true:false" @click="quizBegin">Submit Quiz</v-btn>
+          <v-btn :class="isMobile()?'':'mx-5'" color="primary" :disabled=" numberOfQuestions < 2? true:false" @click="quizBegin">Submit Quiz</v-btn>
           <v-btn color="primary" @click="saveQuiz">Save Quiz</v-btn>
         </div>
       </template>
     </v-data-table>
+    </v-card>
     <TakeQuiz v-if="quizReady" :allQuestionsAnswers='allQuestionsAnswers' />
   </v-container>
 </template>
 
 <script>
   import TakeQuiz from './takequiz/takequiz'
+  import { isMobile } from '../mixins/mixins'
   export default {
     name: 'creatingquiz',
     components:{
@@ -84,6 +87,7 @@
         valid: true,
       }
     },
+    mixins:[isMobile],
     methods: {
       setAnswer(value) {
         // sets the object returned from the row from false to whatever value passed in is. Value.value is the boolean from vuetify datatable
