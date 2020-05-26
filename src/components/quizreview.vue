@@ -2,7 +2,7 @@
     <div>
         <v-card>
             <v-card-title class="d-flex flex-column align-start">
-                <p>Question {{wQ + 1}}/{{allQuizzes[wQ].quiz.length}}: {{allQuizzes[wQ].quiz[0].question}}</p>
+                <p>Question {{currentQuestion + 1}}/{{allQuizzes[wQ].quiz.length}}<br>{{allQuizzes[wQ].quiz[currentQuestion].question}}</p>
             </v-card-title>
             <v-divider/>
             <v-card-text>
@@ -14,9 +14,10 @@
                 </p>
             </v-card-text>
             <v-card-actions>
-                <v-btn color="primary" @click="previousQuestion" :disabled="currentQuestion < 1"><
+                <v-btn v-show="currentQuestion <= 0" color="primary" @click="$emit('close')">Go Back</v-btn>
+                <v-btn color="primary" @click="previousQuestion" v-show="currentQuestion > 0"><
                 </v-btn>
-                <v-btn color="primary" v-show="!finalQuestionReached" @click="nextQuestion" :disabled="currentQuestion === allQuizzes[wQ].quiz[0].question.length">{{endOfQuizText}}</v-btn>
+                <v-btn color="primary" v-show="!finalQuestionReached" @click="nextQuestion" :disabled="currentQuestion === allQuizzes[wQ].quiz.length-1">{{endOfQuizText}}</v-btn>
             </v-card-actions>
         </v-card>
     </div>
@@ -34,11 +35,8 @@ export default {
     data:()=>({
         currentQuestion: 0,
         endOfQuizText:'>',
-        finalQuestionReached: false
+        finalQuestionReached: false,
     }),
-    mounted(){
-        console.log(this.allQuizzes[this.wQ].quiz.length)
-    },
     methods:{
         nextQuestion(){
             if(this.currentQuestion !== this.allQuizzes[this.wQ].quiz.length -1){
