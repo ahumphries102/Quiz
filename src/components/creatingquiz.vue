@@ -29,7 +29,7 @@
 </template>
 
 <script>
-  import TakeQuiz from './takequiz'
+  import TakeQuiz from './takequiz/takequiz'
   export default {
     name: 'creatingquiz',
     components:{

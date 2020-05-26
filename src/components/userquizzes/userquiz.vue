@@ -5,13 +5,17 @@
               <h3>User Quiz</h3>
           </v-card-title>
           <v-card-text v-if="dataRetrieved">
-              <h4>Question {{test + 1}}: {{allQuizzes[routeId].quiz[test].question}}</h4>
-              <v-list-item v-for="(element, ind) in allQuizzes[routeId].quiz[test].answers" :key="ind">
-                  {{String.fromCharCode('A'.charCodeAt(0)+ind)}}: {{element.answer}}</v-list-item>
+              <h4>Question {{nextQuestion + 1}}/{{allQuizzes[routeId].quiz.length}}: {{allQuizzes[routeId].quiz[nextQuestion].question}}</h4>
+              <v-list-item v-for="(element, ind) in allQuizzes[routeId].quiz[nextQuestion].answers" :key="ind" :style="{color:element.answered?'green !important':'red !important'}">
+                {{String.fromCharCode('A'.charCodeAt(0)+ind)}}: {{element.answer}}
+              </v-list-item>
           </v-card-text>
           <v-card-actions>
-            <v-btn color="primary" :disabled="test < 1" @click="test--"><</v-btn>
-            <v-btn color="primary" :disabled="test >= allQuizzes[routeId].quiz.length - 1 " @click="test++">></v-btn>
+              <v-btn v-show="nextQuestion <= 0" color="primary" :to="{name:'viewquiz'}">View Quizzes</v-btn>
+              <v-btn v-show="nextQuestion > 0" color="primary" :disabled="nextQuestion < 1" @click="nextQuestion--">
+                  <</v-btn> <v-btn color="primary" :disabled="nextQuestion >= allQuizzes[routeId].quiz.length - 1 "
+                      @click="nextQuestion++">>
+              </v-btn>
           </v-card-actions>
       </v-card>
   </div>
@@ -27,7 +31,7 @@ export default {
         responseMsg:'',
         routeId: 0,
         changeQ: 0,
-        test:0
+        nextQuestion:0
     }),
     created(){
         this.viewQuiz()
