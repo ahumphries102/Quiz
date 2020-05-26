@@ -1,6 +1,6 @@
 <template>
   <div>
-      <v-dialog v-model="dialog" width="50%" persistent>
+      <v-dialog v-model="dialog" :width="isMobile()?'100%':'50%'" persistent>
           <v-card class="text-center" v-if="!answersViewing">
               <v-card-title class="justify-center">
                   <h2>Final Score</h2>
@@ -30,6 +30,7 @@
 
 <script>
 import FinalScore from './quizreview'
+import { isMobile } from '../mixins/mixins'
 export default {
     name:'EndGame',
     components:{FinalScore},
@@ -44,6 +45,7 @@ export default {
         answersViewing: false,
         dialog:false,
     }),
+    mixins:[isMobile],
     mounted(){
         this.dialog = true
     }

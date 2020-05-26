@@ -20,7 +20,7 @@
                 </v-btn>
             </v-card-actions>
         </v-card>
-        <EndScreen v-if="gameOver" :allQuestionsAnswers="allQuestionsAnswers" :allQuizzes="allQuizzes"
+        <EndScreen v-if="gameOver" :allQuizzes="allQuizzes"
             :quizreview="quizreview" @viewAnswers="viewAnswers" :tallyScore="tallyScore" :wQ="wQ" />
 
     </v-container>
@@ -28,11 +28,9 @@
 
 <script>
 import EndScreen from '../endScreen'
+import {isMobile} from '../../mixins/mixins'
 export default {
     name: 'whichquiz',
-    props: {
-        allQuestionsAnswers: Array,
-    },
     components: {
         EndScreen,
     },
@@ -58,8 +56,8 @@ export default {
     },
     mounted() {
         this.viewQuiz()
-        console.log(this.allQuestionsAnswers)
     },
+    mixins:[isMobile],
     methods: {
         isMobile() {
             if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
