@@ -1,6 +1,6 @@
 <template>
     <v-container fill-height>
-        <v-card width="35%" class="mx-auto">
+        <v-card :width="isMobile()?'100%':'50%'" class="mx-auto">
             <v-card-text v-if="dataFetched">
                 <h3>Question {{wQu + 1}}/{{allQuizzes[wQ].quiz.length}}: {{allQuizzes[wQ].quiz[0].question}}</h3>
                 <v-list-item :style="{'border-radius':'50px'}"
@@ -61,6 +61,13 @@ export default {
         console.log(this.allQuestionsAnswers)
     },
     methods: {
+        isMobile() {
+            if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                return true
+            } else {
+                return false
+            }
+        },
         async viewQuiz() {
             let request = await this.$root.fetchData('POST', "/viewquiz", {
                 username: this.$store.state.username
