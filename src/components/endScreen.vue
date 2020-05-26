@@ -8,7 +8,7 @@
               <v-divider />
               <v-card-text>
                   <h2>Congratulations You Answered</h2>
-                  <h2>{{finalScore}} out {{allQuizzes[0].quiz.length}} Questions Correctly!</h2>
+                  <h2>{{quizreview}} out {{allQuizzes[0].quiz.length}} Questions Correctly!</h2>
               </v-card-text>
               <v-card-actions>
                   <v-btn color="primary" class="mx-auto" @click="answersViewing = true">View Answers</v-btn>
@@ -20,23 +20,25 @@
               <v-card-actions>
                   <!-- <v-btn class="mx-auto" color="primary" @click="saveQuiz">Save Quiz</v-btn> -->
               </v-card-actions>
+              
           </v-card>
           <FinalScore v-if="answersViewing" :allQuizzes="allQuizzes" :questions="questions" :tallyScore='tallyScore'
-              @close="answersViewing = false" />
+              @close="answersViewing = false" :wQ="wQ" />
       </v-dialog>
   </div>
 </template>
 
 <script>
-import FinalScore from './finalScore'
+import FinalScore from './quizreview'
 export default {
     name:'EndGame',
     components:{FinalScore},
     props:{
-        finalScore: Number,
+        quizreview: Number,
         allQuizzes:Array,
         questions:Array,
-        tallyScore: Array
+        tallyScore: Array,
+        wQ:Number
     },
     data:()=>({
         answersViewing: false,

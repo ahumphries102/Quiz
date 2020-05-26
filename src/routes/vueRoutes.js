@@ -17,9 +17,9 @@ const routes = [
         }
     },
     {
-        path: '/finalscore',
-        name:'finalscore',
-        component: ()=>import('../components/finalScore')
+        path: '/quizreview',
+        name:'quizreview',
+        component: ()=>import('../components/quizreview')
     },
     {
         path: '/creatingquiz',
@@ -34,7 +34,12 @@ const routes = [
     {
         path: '/takequiz',
         name: 'takequiz',
-        component:()=>import('../components/takequiz')
+        component:()=>import('../components/takequiz/takequiz')
+    },
+    {
+        path: '/takequiz/:id',
+        name: 'whichquiz',
+        component:()=>import('../components/takequiz/whichquiz')
     },
     {
         path: '/signup',
