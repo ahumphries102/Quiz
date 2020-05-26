@@ -58,6 +58,7 @@ export default {
     },
     mounted() {
         this.viewQuiz()
+        console.log(this.allQuestionsAnswers)
     },
     methods: {
         async viewQuiz() {
@@ -69,7 +70,6 @@ export default {
         },
         chooseQuiz(chosenQuiz) {
             this.quizChosen = true
-            console.log(this.quizChosen)
             this.wQ = chosenQuiz
         },
         nextQuestion() {
