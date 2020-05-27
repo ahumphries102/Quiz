@@ -17,11 +17,6 @@ const routes = [
         }
     },
     {
-        path: '/quizreview',
-        name:'quizreview',
-        component: ()=>import('../components/quizreview')
-    },
-    {
         path: '/creatingquiz',
         name:'creatingquiz',
         component: ()=>import('../components/creatingquiz')
@@ -30,6 +25,11 @@ const routes = [
         path: '/login',
         name: 'login',
         component:()=>import('../components/login')
+    },
+    {
+        path: '/quizreview',
+        name:'quizreview',
+        component: ()=>import('../components/quizreview')
     },
     {
         path: '/takequiz',

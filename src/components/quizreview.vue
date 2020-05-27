@@ -17,7 +17,8 @@
                 <v-btn v-show="currentQuestion <= 0" color="primary" @click="$emit('close')">Go Back</v-btn>
                 <v-btn color="primary" @click="previousQuestion" v-show="currentQuestion > 0"><
                 </v-btn>
-                <v-btn color="primary" v-show="!finalQuestionReached" @click="nextQuestion" :disabled="currentQuestion === allQuizzes[wQ].quiz.length-1">{{endOfQuizText}}</v-btn>
+                <v-btn v-show="currentQuestion === allQuizzes[wQ].quiz.length-1?true:false" color="primary" :to="{name:'creatingquiz'}">Return to Main Menu</v-btn>
+                <v-btn v-show="currentQuestion === allQuizzes[wQ].quiz.length-1?false:true" color="primary" @click="nextQuestion">></v-btn>
             </v-card-actions>
         </v-card>
     </div>
@@ -35,17 +36,12 @@ export default {
     data:()=>({
         currentQuestion: 0,
         endOfQuizText:'>',
-        finalQuestionReached: false,
     }),
     methods:{
         nextQuestion(){
             if(this.currentQuestion !== this.allQuizzes[this.wQ].quiz.length -1){
                 this.currentQuestion++
             }
-//:this.endOfQuizText = 'Return to Previous Screen'
-            // if(this.endOfQuizText === 'Return to Previous Screen'){
-            //     this.$emit('close')
-            // }
         },
         previousQuestion(){
             this.currentQuestion--
