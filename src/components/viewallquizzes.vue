@@ -1,27 +1,36 @@
 <template>
-    <div>
-        
-    </div>
+  <div>
+    <v-card>
+      <v-card-title>
+          <p>All Quizzes</p>
+      </v-card-title>
+      <v-card-text>
+        <v-list>
+          <v-list-item v-for="(quiz, index) in allQuizzes" :key="index">
+              <router-link :to="{name:'nav'}">Quiz {{index + 1}}</router-link>
+          </v-list-item>
+        </v-list>
+      </v-card-text>
+    </v-card>
+  </div>
 </template>
 
 <script>
 export default {
-    name:'allquizzes',
-    data() {
-        return {
-            
-        }
-    },
-    mounted(){
-        this.getAllQuizzes()
-    },
-    methods: {
-        async getAllQuizzes() {
-            let request = await this.$root.fetchData('POST', "/viewquiz", {
-                username: this.$store.state.username
-            })
-            this.allQuizzes = request
-        }
+  name: "viewallquizzes",
+  data() {
+    return {
+      allQuizzes: []
+    };
+  },
+  mounted() {
+    this.getAllQuizzes();
+  },
+  methods: {
+    async getAllQuizzes() {
+      let request = await this.$root.fetchData("GET", "/allquizzes")
+      this.allQuizzes = request
     }
-}
+  }
+};
 </script>

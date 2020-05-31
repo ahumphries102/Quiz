@@ -8,7 +8,11 @@ require('dotenv').config()
 const token = process.env.VUE_APP_TOKEN
 
 router.get('/allquizzes', async(req, res, next)=>{
-    
+    Quiz.find({},(err,quizzes)=>{
+       err?res.send(err):res.send(quizzes)
+       next()
+    })
+    next()
 })
 
 router.post('/createUser', async (req, res, next) => {
