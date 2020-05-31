@@ -32,8 +32,8 @@
     data: () => ({
         drawer:null,
         routes:{
-            listName:['Create a Quiz', 'View Your Quizzes', 'Take a Quiz'],
-            nameOfRoute:['creatingquiz','viewquiz','takequiz']
+            listName:['Create a Quiz', 'View Your Quizzes', 'Take a Quiz', 'View All Quizzes'],
+            nameOfRoute:['creatingquiz','viewquiz','takequiz', 'viewallquizzes']
         }
     }),
     methods:{

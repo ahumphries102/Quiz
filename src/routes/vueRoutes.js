@@ -47,6 +47,11 @@ const routes = [
         component:()=>import('../components/signup')
     },
     {
+        path: '/viewallquizzes',
+        name: 'viewallquizzes',
+        component:()=>import('../components/viewallquizzes')
+    },
+    {
         path: '/viewquiz',
         name: 'viewquiz',
         component:()=>import('../components/userquizzes/viewquiz')
