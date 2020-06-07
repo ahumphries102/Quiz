@@ -6,8 +6,8 @@
       </v-card-title>
       <v-card-text>
         <v-list>
-          <v-list-item v-for="(quiz, index) in allQuizzes" :key="index">
-              <router-link :to="{name:'nav'}">Quiz {{index + 1}}</router-link>
+          <v-list-item v-for="(quiz, ind) in allQuizzes" :key="ind">
+              <router-link :to="{path:`/viewallquizzes/${ind}`, params:'id'}">Quiz {{ind + 1}}</router-link>
           </v-list-item>
         </v-list>
       </v-card-text>

@@ -49,7 +49,12 @@ const routes = [
     {
         path: '/viewallquizzes',
         name: 'viewallquizzes',
-        component:()=>import('../components/viewallquizzes')
+        component:()=>import('../components/allquizzes/viewallquizzes')
+    },
+    {
+        path: '/viewallquizzes/:id',
+        name: 'broaduserquiz',
+        component:()=>import('../components/allquizzes/broaduserquiz')
     },
     {
         path: '/viewquiz',

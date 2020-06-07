@@ -7,6 +7,9 @@ const quizSchema = new Schema({
     },
     quiz:{
         type:Array
+    },
+    quizName:{
+        type:String
     }
 })
 
