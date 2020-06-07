@@ -61,11 +61,8 @@ router.post('/sendtoken', async (req, res, next) => {
     })
     next()
 })
-
 router.post('/viewquiz', (req, res, next) => {
-    Quiz.find({
-        username: req.body.username
-    }, (err, quizzes) => {
+    Quiz.find({$or:[{username:req.body.username}, {quizName:req.body.quizName}]}, (err, quizzes) => {
         if (err) throw err
         res.send(quizzes)
     })

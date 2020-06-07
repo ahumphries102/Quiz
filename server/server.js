@@ -19,7 +19,7 @@ const uri = process.env.SERVER
 
 mongoose.connect(uri, {
         useNewUrlParser: true,
-        useUnifiedTopology: false,
+        useUnifiedTopology: true,
         useCreateIndex:true
     },
     () => console.log('Database connected'))
