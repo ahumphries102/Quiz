@@ -7,8 +7,6 @@ import store from './storage/store'
 Vue.prototype.$store = store
 
 Vue.config.productionTip = false
-let token = process.env.VUE_APP_TOKEN
-//console.log(JSON.parse(atob(token.split('.')[1])))
 
 new Vue({
   router,

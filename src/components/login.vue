@@ -2,7 +2,7 @@
   <v-container fill-height>
       <v-card width="50%" class="mx-auto">
           <v-card-title>
-              Login
+            <p>Login</p>
           </v-card-title>
           <v-card-text>
               <v-text-field label="User Name" v-model="loginData.username" />
@@ -36,14 +36,10 @@ export default {
         async login(){
             this.submitted = true
             let request = await this.$root.fetchData('POST', '/sendtoken', this.loginData)
-            
-       
-            
             if(!request.err){
                 this.color = 'green'
                 this.responseMsg = request.msg
                 this.$router.push({name:'creatingquiz'}).catch(err=>err)
-                
                 this.$store.state.username = this.loginData.username
                 this.$store.state.token = request.token
                 this.$store.updateToken()
