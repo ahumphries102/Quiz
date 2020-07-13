@@ -35,9 +35,7 @@
           <v-card-title>Email a Quiz</v-card-title>
           <v-card-subtitle>Enter your email address and password along with the link to the quiz you wish to send</v-card-subtitle>
           <v-card-text>
-            <v-text-field label="from" v-model="email.from" />
             <v-text-field label="to" v-model="email.to" />
-            <v-text-field label="Email Password" v-model="email.password" :type="visible?'':'password'" :append-icon="visible?'mdi-eye':'mdi-eye-off'" @click:append="visible = !visible" />
               <p :style="{color:color}"/>
             <v-text-field label="subject" v-model="email.subject" />
             <v-text-field :disabled="true" label="Quiz URL" v-model="email.quizUrl" />
