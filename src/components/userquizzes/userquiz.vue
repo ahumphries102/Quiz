@@ -30,10 +30,10 @@
       </v-card-actions>
     </v-card>
     <v-dialog v-model="emailDialog" width="35%">
-      <v-form>
+      <v-form ref="form">
         <v-card>
           <v-card-title>Email a Quiz</v-card-title>
-          <v-card-subtitle>Enter your email address and password along with the link to the quiz you wish to send</v-card-subtitle>
+          <v-card-subtitle>Simly enter the users email address and a subject letting them know you're sending.</v-card-subtitle>
           <v-card-text>
             <v-text-field label="to" v-model="email.to" />
               <p :style="{color:color}"/>
@@ -93,6 +93,7 @@ export default {
         "/sendEmail",
         this.email
       );
+      this.$refs.form.reset()
     }
   }
 };
