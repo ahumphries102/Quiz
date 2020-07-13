@@ -12,6 +12,7 @@
     "core-js": "^3.4.3",
     "dotenv": "^8.2.0",
     "mongoose": "^5.9.7",
+    "nodemailer": "^6.4.10",
     "nodemon": "^2.0.3",
     "restify": "^8.5.1",
     "restify-router": "^0.5.1",

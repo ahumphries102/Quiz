@@ -2,6 +2,7 @@
 const Quiz = require('./schemas/quizSchema')
 const User = require('./schemas/userSchema')
 const Router = require('restify-router').Router
+const nodeMailer = require('./mail')
 const router = new Router()
 
 require('dotenv').config()
@@ -14,7 +15,19 @@ router.get('/allquizzes', async(req, res, next)=>{
     })
     next()
 })
-
+router.get('/viewquiz/:id', async(req, res, next)=>{
+    Quiz.find({quizName:req.params.id},(err,specificQuiz)=>{
+        if(specificQuiz.length < 1){
+            res.status(400)
+            res.send('Your query did match any records')
+        }
+        else{
+            err?res.send(err, 400):res.send(specificQuiz)
+        }
+       next()
+    })
+    next()
+})
 router.post('/createUser', async (req, res, next) => {
     try {
         let newUser = new User({
@@ -78,6 +91,24 @@ router.post('/addquiz', (req, res, next) => {
     })
 
     return next()
+})
+
+router.post('/sendEmail', (req,res,next)=>{
+    nodeMailer.transport = {
+        service: 'hotmail',
+        secure: false, // true for 465, false for other ports
+        auth: {
+            user: 'slice102@hotmail.com', // generated ethereal user
+            pass: 'Cameraball1!', // generated ethereal password
+        },
+    }
+    nodeMailer.info = {
+        from: 'slice102@hotmail.com', // sender address
+        to: req.body.to, // list of receivers
+        subject: req.body.subject, // Subject line
+        text: req.body.quizUrl, // plain text body
+    }
+    nodeMailer.sendEmail().catch(err => console.log(err))
 })
 
 module.exports = router
