@@ -39,10 +39,11 @@ export default {
             if(!request.err){
                 this.color = 'green'
                 this.responseMsg = request.msg
-                this.$router.push({name:'creatingquiz'}).catch(err=>err)
-                this.$store.state.username = this.loginData.username
+                this.$store.state.userName = this.loginData.username
                 this.$store.state.token = request.token
                 this.$store.updateToken()
+                this.$router.push({name:'creatingquiz', params:{userName:this.login.username}}).catch(err=>err)
+                console.log(this.$store.state)
                 this.$root.loggedIn = true
                 
             }else{

@@ -2,7 +2,7 @@ const storageKey = 'quizlogin'
 
 const store = {
     state:{
-        username:'',
+        userName:'',
         token:'',
     },
     updateToken(){
@@ -14,7 +14,7 @@ const store = {
     },
     clearStorage(){
         store.state = {
-            username:'',
+            userName:'',
             token:'',
         }
         localStorage.removeItem(storageKey)

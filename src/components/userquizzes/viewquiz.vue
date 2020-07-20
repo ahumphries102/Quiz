@@ -26,7 +26,7 @@ export default {
   methods: {
     async viewQuiz() {
       let request = await this.$root.fetchData("POST", "/viewquiz", {
-        username: this.$store.state.username
+        userName: this.$store.state.userName
       });
       this.allQuizzes = request;
       this.responseMsg = request;

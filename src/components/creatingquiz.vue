@@ -189,7 +189,7 @@ export default {
     async saveQuiz() {
       let request = await this.$root.fetchData("POST", "/addquiz", {
         quizName: this.quizName,
-        username: this.$store.state.username,
+        userName: this.$store.state.userName,
         quiz: this.allQuestionsAnswers,
       });
       this.$router.push({ name: "creatingquiz" }).catch(err => err);
