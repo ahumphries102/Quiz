@@ -7,7 +7,7 @@
           </v-toolbar-title>
           <v-spacer />
           <div v-if="$root.loggedIn" class="d-flex">
-            <p>Hello {{$store.state.username}}</p>
+            <p>Hello {{$store.state.userName}}</p>
             <v-btn depressed color="blue darken-3" @click="logout">Logout</v-btn>
           </div>
       </v-app-bar>
@@ -15,13 +15,13 @@
       <v-navigation-drawer v-model="drawer" :clipped="$vuetify.breakpoint.lgAndUp" app>
           <v-list :disabled="$store.state.token === ''">
               <v-list-item v-for="(routeName, ind) in routes.listName" :key="ind">
-                  <router-link :to="{name:routes.nameOfRoute[ind]}">{{routeName}}</router-link>
+                  <router-link :to="{name:routes.nameOfRoute[ind], params:{userName:$store.state.userName}}">{{routeName}}</router-link>
               </v-list-item>
           </v-list>
       </v-navigation-drawer>
 
       <v-content>
-          <router-view></router-view>
+          <router-view/>
       </v-content>
   </v-app>
 </template>

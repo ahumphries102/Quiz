@@ -6,7 +6,7 @@
           </v-card-title>
           <v-form v-model="valid">
             <v-card-text>
-                <v-text-field label="Enter a User Name" v-model="username" :rules="rules.username"/>
+                <v-text-field label="Enter a User Name" v-model="userName" :rules="rules.userName"/>
                 <v-text-field label="Enter a Password" v-model="password" :type="visible?'':'password'"
                     :append-icon="visible?'mdi-eye':'mdi-eye-off'" @click:append="visible = !visible" :rules="rules.password"/>
                 <p :style="{color:color}">{{responseMsg}}</p>
@@ -28,10 +28,10 @@ export default {
         responseMsg:'',
         rules:{
             password:[v => v.length > 0 || 'Cannot be Blank'],
-            username:[v => v.length > 0 || 'Cannot be Blank'],
+            userName:[v => v.length > 0 || 'Cannot be Blank'],
         },
         submitted:false,
-        username:'',
+        userName:'',
         valid:true,
         visible:false,
     }),
@@ -46,7 +46,7 @@ export default {
                     Accept: 'application/json',
                 },
                 body: JSON.stringify({
-                    username:this.username,
+                    userName:this.userName,
                     password:this.password
                 }) // body data type must match "Content-Type" header
             })
