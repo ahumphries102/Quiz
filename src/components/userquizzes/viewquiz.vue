@@ -6,7 +6,7 @@
     <v-card-text>
       <v-list>
         <v-list-item v-for="(quiz, ind) in allQuizzes" :key="ind">
-          <router-link :to="{ path:`/viewquiz/${ind}`, params:'id' }">{{ind + 1}}: {{quiz.quizName}}</router-link>
+          <router-link :to="{ name:'userquiz', params:{id:ind}}">{{ind + 1}}: {{quiz.quizName}}</router-link>
         </v-list-item>
       </v-list>
     </v-card-text>

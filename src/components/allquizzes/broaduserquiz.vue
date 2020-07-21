@@ -1,7 +1,6 @@
 <template>
-  <div>
-    <v-card>
-      <v-card-title primary-title>title</v-card-title>
+    <v-card v-if="dataFetched">
+      <v-card-title><p>Title</p></v-card-title>
       <v-card-text>
         <h4>Question {{nextQuestion + 1}}/{{allQuizzes[routeId].quiz.length}}: {{allQuizzes[routeId].quiz[nextQuestion].question}}</h4>
         <v-list>
@@ -12,7 +11,6 @@
         </v-list>
       </v-card-text>
     </v-card>
-  </div>
 </template>
 
 <script>
@@ -21,6 +19,7 @@ export default {
   data() {
     return {
       allQuizzes: [],
+      dataFetched:false,
       nextQuestion: 0,
       routeId: 0
     };
@@ -34,6 +33,7 @@ export default {
 
       let request = await this.$root.fetchData("GET", "/allquizzes");
       this.allQuizzes = request;
+      this.dataFetched = true
     }
   }
 };

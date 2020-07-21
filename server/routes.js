@@ -4,9 +4,9 @@ const User = require('./schemas/userSchema')
 const Router = require('restify-router').Router
 const nodeMailer = require('./mail')
 const router = new Router()
-
-require('dotenv').config()
 const token = process.env.VUE_APP_TOKEN
+require('dotenv').config()
+
 
 router.get('/allquizzes', async(req, res, next)=>{
     Quiz.find({},(err,quizzes)=>{
@@ -31,7 +31,7 @@ router.get('/viewquiz/:id', async(req, res, next)=>{
 router.post('/createUser', async (req, res, next) => {
     try {
         let newUser = new User({
-            username: req.body.username.toLowerCase().trim(),
+            userName: req.body.userName.toLowerCase().trim(),
             password: req.body.password
         })
 
@@ -40,7 +40,7 @@ router.post('/createUser', async (req, res, next) => {
     } catch (err) {
         console.log(err)
         res.send({
-            err: 'That username already exists. Please try a different username'
+            err: 'That userName already exists. Please try a different userName'
         })
     }
     next()
@@ -48,7 +48,7 @@ router.post('/createUser', async (req, res, next) => {
 
 router.post('/sendtoken', async (req, res, next) => {
     User.findOne({
-        username: req.body.username
+        userName: req.body.userName
     }, (err, users) => {
         if (users) {
             users.comparePassword(req.body.password, users.password, (err, result) => {
@@ -75,7 +75,7 @@ router.post('/sendtoken', async (req, res, next) => {
     next()
 })
 router.post('/viewquiz', (req, res, next) => {
-    Quiz.find({$or:[{username:req.body.username}, {quizName:req.body.quizName}]}, (err, quizzes) => {
+    Quiz.find({$or:[{userName:req.body.userName}, {quizName:req.body.quizName}]}, (err, quizzes) => {
         if (err) throw err
         res.send(quizzes)
     })
@@ -110,5 +110,7 @@ router.post('/sendEmail', (req,res,next)=>{
     }
     nodeMailer.sendEmail().catch(err => console.log(err))
 })
+// router.post('/saveUserQuiz', (req,res,next)=>{
 
+// })
 module.exports = router

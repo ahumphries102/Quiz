@@ -5,7 +5,7 @@
             <p>Login</p>
           </v-card-title>
           <v-card-text>
-              <v-text-field label="User Name" v-model="loginData.username" />
+              <v-text-field label="User Name" v-model="loginData.userName" />
               <v-text-field label="Password" v-model="loginData.password" :type="visible?'':'password'"
                   :append-icon="visible?'mdi-eye':'mdi-eye-off'" @click:append="visible = !visible" />
               <p :style="{color:color}">{{responseMsg}}</p>
@@ -26,7 +26,7 @@ export default {
         color:'',
         loginData:{
             password:'',
-            username:'',
+            userName:'',
         },
         responseMsg:'',
         submitted:false,
@@ -39,11 +39,10 @@ export default {
             if(!request.err){
                 this.color = 'green'
                 this.responseMsg = request.msg
-                this.$store.state.userName = this.loginData.username
+                this.$store.state.userName = this.loginData.userName
                 this.$store.state.token = request.token
                 this.$store.updateToken()
-                this.$router.push({name:'creatingquiz', params:{userName:this.login.username}}).catch(err=>err)
-                console.log(this.$store.state)
+                this.$router.push({name:'creatingquiz', params:{userName:this.login.userName}}).catch(err=>err)
                 this.$root.loggedIn = true
                 
             }else{
