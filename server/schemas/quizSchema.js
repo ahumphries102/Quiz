@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 let Schema = mongoose.Schema
 
 const quizSchema = new Schema({
-    username:{
+    userName:{
         type:String
     },
     quiz:{
