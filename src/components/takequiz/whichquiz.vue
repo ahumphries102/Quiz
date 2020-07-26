@@ -5,7 +5,7 @@
         <p>Question {{wQu + 1}}/{{allQuizzes[wQ].quiz.length}}: {{allQuizzes[wQ].quiz[0].question}}</p>
         <v-text-field label="Who is taking this quiz?" v-model="userName" />
       </v-card-title>
-      <v-card-text>
+      <v-card-text> 
         <v-list-item
           v-for="(quiz, ind) in allQuizzes[wQ].quiz[wQu].answers"
           :class="currentAnswer === allQuizzes[wQ].quiz[0].answers[ind].answered?'light-green':''"

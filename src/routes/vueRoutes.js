@@ -13,7 +13,9 @@ const routes = [{
             } else {
                 return ({
                     name: 'creatingquiz',
-                    params: userUrlName
+                    params: {
+                        userUrlName: store.state.userName
+                    }
                 })
             }
         }
@@ -44,7 +46,7 @@ const routes = [{
         component: () => import('../components/takequiz/whichquiz')
     },
     {
-        path: userUrlName + '/signup',
+        path: '/signup',
         name: 'signup',
         component: () => import('../components/signup')
     },
@@ -81,28 +83,28 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    if (to.params.userName !== store.state.userName && to.name !== 'pageNotFound') {
+    if (to.params.userName !== store.state.userName && to.name !== 'pageNotFound' && to.name !== '/' && to.name !== 'login'&& to.name !== 'signup') {
         return next({
             name: 'pageNotFound'
         })
     }
-        if (to.name !== 'signup') {
-            setTimeout(() => {
-                // If a user logins they'll get routed correctly. Otherwise the router won't work
-                // the first time you click login, to set the state of our users correct login we have to use an asynchronous call which triggers
-                // after the router checks if the user has the correct login credentials
-                if (store.state.userName === '' && to.name !== 'login') {
-                    return next({
-                        name: 'login'
-                    })
-                } else {
-                    return next()
-                }
-            }, 0);
-        } else {
-            console.log('not signup')
-            next()
-        }
+    if (to.name !== 'signup') {
+        setTimeout(() => {
+            // If a user logins they'll get routed correctly. Otherwise the router won't work
+            // the first time you click login, to set the state of our users correct login we have to use an asynchronous call which triggers
+            // after the router checks if the user has the correct login credentials
+            if (store.state.userName === '' && to.name !== 'login' && to.name !== 'pageNotFound') {
+                return next({
+                    name: 'login'
+                })
+            } else {
+                return next()
+            }
+        }, 0);
+    } else {
+        console.log('not signup')
+        next()
+    }
 })
 
 export default router

@@ -12,7 +12,7 @@
           </div>
       </v-app-bar>
 
-      <v-navigation-drawer v-model="drawer" :clipped="$vuetify.breakpoint.lgAndUp" app>
+      <v-navigation-drawer v-model="drawer" :clipped="$vuetify.breakpoint.lgAndUp" app v-if="$router.currentRoute.name !== 'login'">
           <v-list :disabled="$store.state.token === ''">
               <v-list-item v-for="(routeName, ind) in routes.listName" :key="ind">
                   <router-link :to="{name:routes.nameOfRoute[ind], params:{userName:$store.state.userName}}">{{routeName}}</router-link>

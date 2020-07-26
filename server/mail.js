@@ -1,26 +1,4 @@
 const nodeMailer = require('nodemailer')
-
-
-
-//For email.createTransport
-// {
-//     service: "hotmail",
-//     secure: false, // true for 465, false for other ports
-//     auth: {
-//       user: 'slice102@hotmail.com', // generated ethereal user
-//       pass: 'Cameraball1!', // generated ethereal password
-//     },
-//   }
-
-//for emailInfo
-// {
-//     from: 'slice102@hotmail.com', // sender address
-//     to: "nenosi9307@mailsecv.com", // list of receivers
-//     subject: "Hello ✔", // Subject line
-//     text: "Hello world?", // plain text body
-//     html: "<b>Hello world?</b>", // html body
-//   }
-
 let email = {
     transport: {},
     info: {},

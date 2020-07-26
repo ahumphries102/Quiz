@@ -19,20 +19,21 @@
               <p>Quiz</p>
             </v-toolbar-title>
           </v-toolbar>
-          <v-text-field label="Name Your Quiz" v-model="quizName"/>
+          <v-text-field label="Name Your Quiz" v-model="quizName" />
           <v-text-field label="Enter Question" v-model="question" />
         </template>
+
         <template v-slot:item.answer="{ item }">
           <v-form v-model="valid">
             <v-text-field
-              :rules="rules.answer"
-              @input="addAnswerInput(item.id)"
-              v-model="item.answer"
+              append-icon="mdi-close"
+              counter
               label="Edit"
               single-line
-              counter
-              append-icon="mdi-close"
+              v-model="item.answer"
+              @input="addAnswerInput(item.id)"
               @click:append="deleteAns(item.id)"
+              :rules="rules.answer"
             />
           </v-form>
         </template>
@@ -47,7 +48,7 @@
               :class="isMobile()?'':'mx-5'"
               color="primary"
               :disabled=" numberOfQuestions < 2? true:false"
-              @click="quizBegin"
+              @click="() => quizReady = true"
             >Submit Quiz</v-btn>
             <v-btn color="primary" @click="saveQuiz">Save Quiz</v-btn>
           </div>
@@ -97,17 +98,17 @@ export default {
         answers: [],
         question: ""
       },
-      named:false,
+      named: false,
       numberOfQuestions: 0,
 
       question: "",
       questions: [],
-      quizName:'',
+      quizName: "",
       quizReady: false,
 
       reset: true,
       rules: {
-        answer: [v => v.length > 0 || "Answer cannot be empty"]
+        answer: [v => v && v.length > 0 || "Answer cannot be empty"]
       },
       selected: [],
       singleSelect: true,
@@ -182,26 +183,23 @@ export default {
           delete: this.addAnswerInput
         }
       ];
-    },
-    quizBegin() {
-      this.quizReady = true;
+      console.log(this.allQuestionsAnswers)
     },
     async saveQuiz() {
-      let request = await this.$root.fetchData("POST", "/addquiz", {
+      let response = await this.$root.fetchData("POST", "/addquiz", {
         quizName: this.quizName,
         userName: this.$store.state.userName,
-        quiz: this.allQuestionsAnswers,
+        quiz: this.allQuestionsAnswers
       });
       this.$router.push({ name: "creatingquiz" }).catch(err => err);
-      if (request) {
+      if (response) {
         this.color = "green";
-        this.responseMsg = request.msg;
+        this.responseMsg = response.msg;
       } else {
         this.color = "red";
-        this.responseMsg = request.err;
+        this.responseMsg = response.err;
       }
       this.submitted = false;
-      console.log(request);
     }
   }
 };
