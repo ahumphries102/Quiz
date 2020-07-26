@@ -35,19 +35,19 @@ export default {
     methods:{
         async login(){
             this.submitted = true
-            let request = await this.$root.fetchData('POST', '/sendtoken', this.loginData)
-            if(!request.err){
+            let response = await this.$root.fetchData('POST', '/sendtoken', this.loginData)
+            if(!response.err){
                 this.color = 'green'
-                this.responseMsg = request.msg
+                this.responseMsg = response.msg
                 this.$store.state.userName = this.loginData.userName
-                this.$store.state.token = request.token
+                this.$store.state.token = response.token
                 this.$store.updateToken()
-                this.$router.push({name:'creatingquiz', params:{userName:this.login.userName}}).catch(err=>err)
+                this.$router.push({name:'creatingquiz', params:{userName:this.$store.state.userName}}).catch(err=>err)
                 this.$root.loggedIn = true
                 
             }else{
                 this.color = 'red'
-                this.responseMsg = request.err
+                this.responseMsg = response.err
             }
             this.submitted = false
         }

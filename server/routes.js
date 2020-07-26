@@ -4,9 +4,9 @@ const User = require('./schemas/userSchema')
 const Router = require('restify-router').Router
 const nodeMailer = require('./mail')
 const router = new Router()
-const token = process.env.VUE_APP_TOKEN
-require('dotenv').config()
 
+require('dotenv').config()
+const token = process.env.VUE_APP_TOKEN
 
 router.get('/allquizzes', async(req, res, next)=>{
     Quiz.find({},(err,quizzes)=>{
@@ -30,13 +30,13 @@ router.get('/viewquiz/:id', async(req, res, next)=>{
 })
 router.post('/createUser', async (req, res, next) => {
     try {
-        let newUser = new User({
+        new User({
             userName: req.body.userName.toLowerCase().trim(),
             password: req.body.password
+        }).save(err =>{
+            if(err) return res.send(400,'User already exists')
+            return res.send('Success')
         })
-
-        let request = await newUser.save()
-        res.send(request)
     } catch (err) {
         console.log(err)
         res.send({
@@ -95,22 +95,20 @@ router.post('/addquiz', (req, res, next) => {
 
 router.post('/sendEmail', (req,res,next)=>{
     nodeMailer.transport = {
-        service: 'hotmail',
+        service: process.env.EMAIL_PROVIDER,
         secure: false, // true for 465, false for other ports
         auth: {
-            user: 'slice102@hotmail.com', // generated ethereal user
-            pass: 'Cameraball1!', // generated ethereal password
+            user: process.env.EMAIL, // generated ethereal user
+            pass: process.env.EMAIL_PASSWORD, // generated ethereal password
         },
     }
     nodeMailer.info = {
-        from: 'slice102@hotmail.com', // sender address
+        from: process.env.EMAIL, // sender address
         to: req.body.to, // list of receivers
         subject: req.body.subject, // Subject line
         text: req.body.quizUrl, // plain text body
     }
     nodeMailer.sendEmail().catch(err => console.log(err))
 })
-// router.post('/saveUserQuiz', (req,res,next)=>{
 
-// })
 module.exports = router
