@@ -4,10 +4,9 @@ const User = require('./schemas/userSchema')
 const Router = require('restify-router').Router
 const nodeMailer = require('./mail')
 const router = new Router()
-
+let resMsg
 require('dotenv').config()
 const token = process.env.VUE_APP_TOKEN
-
 router.get('/allquizzes', async(req, res, next)=>{
     Quiz.find({},(err,quizzes)=>{
        err?res.send(err):res.send(quizzes)
@@ -29,19 +28,21 @@ router.get('/viewquiz/:id', async(req, res, next)=>{
     next()
 })
 router.post('/createUser', async (req, res, next) => {
+    resMsg = {
+        error:false,
+        message: 'Success'
+    }
     try {
-        new User({
+        await new User({
             userName: req.body.userName.toLowerCase().trim(),
             password: req.body.password
-        }).save(err =>{
-            if(err) return res.send(400,'User already exists')
-            return res.send('Success')
-        })
+        }).save()
+        return res.send(resMsg)
     } catch (err) {
         console.log(err)
-        res.send({
-            err: 'That userName already exists. Please try a different userName'
-        })
+        resMsg.error = true
+        resMsg.message = 'User already exists'
+        return res.send(400, resMsg)
     }
     next()
 })
