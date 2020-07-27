@@ -3,9 +3,9 @@ import App from './App.vue'
 import router from './routes/vueRoutes'
 import vuetify from './plugins/vuetify'
 import store from './storage/store'
-
+import FetchData from './restClient'
 Vue.prototype.$store = store
-
+Vue.prototype.$fetchData = FetchData
 Vue.config.productionTip = false
 
 new Vue({

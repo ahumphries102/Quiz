@@ -4,7 +4,7 @@ const User = require('./schemas/userSchema')
 const Router = require('restify-router').Router
 const nodeMailer = require('./mail')
 const router = new Router()
-let resMsg
+let resMsg = {}
 require('dotenv').config()
 const token = process.env.VUE_APP_TOKEN
 router.get('/allquizzes', async(req, res, next)=>{
@@ -28,22 +28,19 @@ router.get('/viewquiz/:id', async(req, res, next)=>{
     next()
 })
 router.post('/createUser', async (req, res, next) => {
-    resMsg = {
-        error:false,
-        message: 'Success'
-    }
-    try {
         await new User({
             userName: req.body.userName.toLowerCase().trim(),
             password: req.body.password
-        }).save()
-        return res.send(resMsg)
-    } catch (err) {
-        console.log(err)
-        resMsg.error = true
-        resMsg.message = 'User already exists'
-        return res.send(400, resMsg)
-    }
+            }).save((err, result) => {
+                if (!result) {
+                    console.log(err)
+                    resMsg.error = true
+                    resMsg.message = 'User already exists'
+                    return res.send(400, resMsg)
+                } else {
+                    return res.send(resMsg)
+                }
+            })
     next()
 })
 
@@ -53,24 +50,23 @@ router.post('/sendtoken', async (req, res, next) => {
     }, (err, users) => {
         if (users) {
             users.comparePassword(req.body.password, users.password, (err, result) => {
-
-                if (result === true) {
-                    res.send({
-                        msg: 'Success you logged in',
-                        token: token
-                    })
+                console.log(result)
+                if (result) {
+                    resMsg = {
+                        error:false,
+                        message:'Success'
+                    }
+                    res.send(resMsg)
                 } else {
-                    res.status(401)
-                    res.send({
-                        msg: 'Password Incorrect'
-                    })
+                    resMsg.error = true
+                    resMsg.message = 'Username or password is incorrect'
+                    res.send(401,resMsg)
                 }
             })
         } else {
-            res.status(400)
-            res.send({
-                err: 'Bad User Name'
-            })
+            resMsg.error = true
+            resMsg.message = 'Username or password is incorrect'
+            res.send(400, resMsg)
         }
     })
     next()
@@ -90,8 +86,7 @@ router.post('/addquiz', (req, res, next) => {
         if (err) throw err
         res.send(quiz)
     })
-
-    return next()
+    next()
 })
 
 router.post('/sendEmail', (req,res,next)=>{

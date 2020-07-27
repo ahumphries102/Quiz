@@ -1,6 +1,6 @@
 <template>
   <v-container fill-height>
-      <v-card width="50%" class="mx-auto" :loading="loading">
+      <v-card width="50%" class="mx-auto" :loading="submitted" >
           <v-card-title>
               Signup
           </v-card-title>
@@ -12,7 +12,7 @@
                 <p :style="{color:color}">{{responseMsg}}</p>
             </v-card-text>
             <v-card-actions>
-                <v-btn :loading="submitted" color="primary" :disabled="!valid" @click="submit">Submit</v-btn>
+                <v-btn color="primary" :disabled="!valid" @click="submit">Submit</v-btn>
             </v-card-actions>
           </v-form>
       </v-card>
@@ -24,7 +24,6 @@ export default {
     name:'login',
     data:()=>({
         color:'',
-        loading:false,
         password:'',
         responseMsg:'',
         rules:{
@@ -39,7 +38,6 @@ export default {
     methods:{
         async submit(){
             this.submitted = true
-            this.loading = true
             let response = await fetch('/createUser', {
                 method: 'POST', // *GET, POST, PUT, DELETE, etc.
                 mode: 'cors', // no-cors, *cors, same-origin
@@ -52,7 +50,6 @@ export default {
                     password:this.password
                 }) // body data type must match "Content-Type" header
             })
-            this.loading = false
             let data = await response.json()
             if(data.error === false){
                 this.$router.push({name:'login'}).catch(err=>err)
