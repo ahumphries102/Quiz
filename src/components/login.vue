@@ -35,10 +35,11 @@ export default {
     methods:{
         async login(){
             this.submitted = true
-            let response = await this.$root.fetchData('POST', '/sendtoken', this.loginData)
-            if(!response.err){
+            let response = await this.$fetchData('POST', '/sendtoken', this.loginData)
+            console.log(response)
+            if(!response.error){
                 this.color = 'green'
-                this.responseMsg = response.msg
+                this.responseMsg = response.message
                 this.$store.state.userName = this.loginData.userName
                 this.$store.state.token = response.token
                 this.$store.updateToken()
@@ -47,7 +48,7 @@ export default {
                 
             }else{
                 this.color = 'red'
-                this.responseMsg = response.err
+                this.responseMsg = response.message
             }
             this.submitted = false
         }
