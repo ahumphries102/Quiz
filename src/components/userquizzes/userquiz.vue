@@ -80,7 +80,7 @@ export default {
   },
   methods: {
     async viewQuiz() {
-      let response = await this.$root.fetchData("POST", "/viewquiz", {
+      let response = await this.$fetchData("POST", "/viewquiz", {
         userName: this.$store.state.userName
       });
       this.allQuizzes = response;
@@ -88,7 +88,7 @@ export default {
       this.dataRetrieved = true;
     },
     async sendEmail() {
-      let response = await this.$root.fetchData(
+      let response = await this.$fetchData(
         "POST",
         "/sendEmail",
         this.email

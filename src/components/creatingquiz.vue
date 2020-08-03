@@ -117,6 +117,9 @@ export default {
     };
   },
   mixins: [isMobile],
+    mounted(){
+        this.$fetchData('GET', '/params?dog=hello')
+    },
   methods: {
     setAnswer(value) {
       // sets the object returned from the row from false to whatever value passed in is. Value.value is the boolean from vuetify datatable
@@ -186,7 +189,7 @@ export default {
       console.log(this.allQuestionsAnswers)
     },
     async saveQuiz() {
-      let response = await this.$root.fetchData("POST", "/addquiz", {
+      let response = await this.$fetchData("POST", "/addquiz", {
         quizName: this.quizName,
         userName: this.$store.state.userName,
         quiz: this.allQuestionsAnswers

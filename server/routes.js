@@ -1,29 +1,39 @@
 //const restify = require('restify')
-const Quiz = require('./schemas/quizSchema')
+//const quiz = require('./schemas/quizSchema')
+const {quiz, score} = require('./schemas/quizSchema')
 const User = require('./schemas/userSchema')
 const Router = require('restify-router').Router
 const nodeMailer = require('./mail')
 const router = new Router()
 let resMsg = {}
+console.log(quiz,score)
 require('dotenv').config()
 const token = process.env.VUE_APP_TOKEN
+router.post('/saveScore',(req,res,next)=>{
+    // new Score({
+
+    // })
+    console.log('saving score')
+})
+
 router.get('/allquizzes', async(req, res, next)=>{
-    Quiz.find({},(err,quizzes)=>{
+    quiz.quizSchema.find({},(err,quizzes)=>{
        err?res.send(err):res.send(quizzes)
        next()
     })
     next()
 })
-router.get('/viewquiz/:id', async(req, res, next)=>{
-    Quiz.find({quizName:req.params.id},(err,specificQuiz)=>{
-        if(specificQuiz.length < 1){
-            res.status(400)
-            res.send('Your query did match any records')
-        }
-        else{
-            err?res.send(err, 400):res.send(specificQuiz)
-        }
-       next()
+router.get('/viewquiz/:name', async(req, res, next)=>{
+    console.log(req.query)
+    quiz.find({quizName:req.query.name},(err,specificQuiz)=>{
+        console.log(specificQuiz)
+        err? res.send(400, 'Your query did match any records'):res.send(specificQuiz)
+    })
+    next()
+})
+router.post('/viewquiz', (req, res, next) => {
+    quiz.find({$or:[{userName:req.body.userName}, {quizName:req.body.quizName}]}, (err, quizzes) => {
+        err?res.send(400, 'Couldn\'t find your quiz'):res.send(quizzes)
     })
     next()
 })
@@ -71,16 +81,10 @@ router.post('/sendtoken', async (req, res, next) => {
     })
     next()
 })
-router.post('/viewquiz', (req, res, next) => {
-    Quiz.find({$or:[{userName:req.body.userName}, {quizName:req.body.quizName}]}, (err, quizzes) => {
-        if (err) throw err
-        res.send(quizzes)
-    })
-    next()
-})
+
 
 router.post('/addquiz', (req, res, next) => {
-    let newQuiz = new Quiz(req.body)
+    let newQuiz = new quiz(req.body)
 
     newQuiz.save((err, quiz) => {
         if (err) throw err
