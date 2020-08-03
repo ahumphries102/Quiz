@@ -6,7 +6,7 @@
     <v-card-text>
       <v-list>
         <v-list-item v-for="(quiz, ind) in allQuizzes" :key="ind">
-          <router-link :to="{name:'whichquiz', params:{userName:$store.state.userName, id:ind}}">{{quiz.quizName}}</router-link>
+          <router-link :to="{name:'whichquiz', params:{userName:$store.state.userName, quizName:quiz.quizName}}">{{quiz.quizName}}</router-link>
         </v-list-item>
       </v-list>
     </v-card-text>
@@ -27,10 +27,11 @@ export default {
   },
   methods: {
     async viewQuiz() {
-      let request = await this.$root.fetchData("POST", "/viewquiz", {
+      let request = await this.$fetchData("POST", "/viewquiz", {
         userName: this.$store.state.userName
       });
       this.allQuizzes = request;
+      console.log(this.allQuizzes)
     }
   }
 };
