@@ -38,7 +38,6 @@ export default {
   name: "EndGame",
   components: { FinalScore },
   props: {
-    allQuizzes: Array,
     scoreCard: Object,
     wQ: Number,
   },
@@ -50,11 +49,10 @@ export default {
   mounted() {
     this.dialog = true;
     this.saveScore();
-    console.log(this.scoreCard)
   },
   methods: {
     async saveScore() {
-      const response = this.$fetchData("POST", "/saveScore");
+      const response = await this.$fetchData("POST", "/saveScore", this.scoreCard);
     },
   },
 };

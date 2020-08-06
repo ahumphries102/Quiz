@@ -6,27 +6,23 @@ const Router = require('restify-router').Router
 const nodeMailer = require('./mail')
 const router = new Router()
 let resMsg = {}
-console.log(quiz,score)
 require('dotenv').config()
 const token = process.env.VUE_APP_TOKEN
 router.post('/saveScore',(req,res,next)=>{
-    // new Score({
-
-    // })
-    console.log('saving score')
+    new score(req.body).save((err, userScore) =>{
+        err?res.send(400, err):res.send(userScore)
+    })
+    next()
 })
 
 router.get('/allquizzes', async(req, res, next)=>{
     quiz.quizSchema.find({},(err,quizzes)=>{
-       err?res.send(err):res.send(quizzes)
-       next()
+       err?res.send(400, err):res.send(quizzes)
     })
     next()
 })
 router.get('/viewquiz/:name', async(req, res, next)=>{
-    console.log(req.query)
     quiz.find({quizName:req.query.name},(err,specificQuiz)=>{
-        console.log(specificQuiz)
         err? res.send(400, 'Your query did match any records'):res.send(specificQuiz)
     })
     next()
