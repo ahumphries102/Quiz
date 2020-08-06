@@ -24,16 +24,12 @@
       <v-card-actions>
         <v-btn v-show="wQu <= 0" color="primary" :to="{name:'takequiz'}">View Quizzes</v-btn>
         <v-btn v-show="wQu > 0" color="primary" @click="removeAnswer"><</v-btn>
-        <v-btn
-          color="primary"
-          @click="nextQuestion"
-        >{{nextQuestionButtonText}}</v-btn>
+        <v-btn color="primary" @click="nextQuestion">{{nextQuestionButtonText}}</v-btn>
       </v-card-actions>
     </v-card>
     <EndScreen
       v-if="gameOver"
       @viewAnswers="viewAnswers"
-      :quizObj="quizObj"
       :scoreCard="scoreCard"
       :wQ="wQ"
     />
@@ -58,14 +54,7 @@ export default {
       nextQuestionButtonText: ">",
       noSelectedAnswer: true,
       quizObj: [],
-      scoreCard:{
-        points:[],
-        answerToChoose:[],
-        answers:[],
-        userName:"",
-        quizName:"",
-        question:""
-      },
+      scoreCard: { answers: [], questions: [] },
       valid: true,
       //wQ stands for which quiz
       wQ: 1,
@@ -79,20 +68,22 @@ export default {
   mixins: [isMobile],
   methods: {
     async viewQuiz() {
-      const response = await this.$fetchData("GET", `/viewquiz/?name=${this.$router.currentRoute.params.quizName}`);
+      const response = await this.$fetchData(
+        "GET",
+        `/viewquiz/?name=${encodeURI(this.$router.currentRoute.params.quizName)}`
+      );
       this.quizObj = response[0];
       this.dataFetched = true;
-      console.log(this.quizObj)
-      this.scoreCard.quizName = this.quizObj.quizName
+      this.scoreCard.quizName = this.quizObj.quizName;
+      this.scoreCard.questions = this.quizObj.quiz.map((ele) => ele.question);
     },
     nextQuestion() {
       this.nQ++;
       this.scoreCard.answers.push(this.currentAnswer);
       this.scoreCard.points = this.scoreCard.answers.reduce((acc, ele) => {
-        if (ele === true) acc++
+        if (ele.answered === true) acc++;
         return acc;
       }, 0);
-
       if (this.wQu === this.quizObj.quiz.length - this.lr) {
         this.gameOver = true;
       } else {
@@ -100,18 +91,17 @@ export default {
         this.wQu++;
       }
       this.currentAnswer = "";
+      console.log(this.scoreCard.points);
     },
     removeAnswer() {
       this.wQu--;
-      if (this.wQu < 0) {
-        this.wQu = 0;
-      }
-      this.scoreCard.answers.points.pop();
+      if (this.wQu <= 0) this.wQu = 0;
+      this.scoreCard.answers.pop();
+      console.log(this.scoreCard.points);
     },
-    saveAnswer(value) {
-      console.log(value)
+    saveAnswer(chosenAnswer) {
       this.noSelectedAnswer = false;
-      this.currentAnswer = value;
+      this.currentAnswer = chosenAnswer;
     },
     viewAnswers() {
       this.gameOver = false;
