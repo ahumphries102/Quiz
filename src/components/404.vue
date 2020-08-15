@@ -11,7 +11,7 @@
         <p>Looks like you may be lost</p>
 
         <v-btn
-          :to="{name:'creatingquiz', params:{userName:$store.state.userName}}"
+          :to="{name:'createquiz', params:{userName:$store.state.userName}}"
           color="primary"
         >
           Click to Take Me Home

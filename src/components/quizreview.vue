@@ -17,7 +17,7 @@
                 <v-btn v-show="currentQuestion <= 0" color="primary" @click="$emit('close')">Go Back</v-btn>
                 <v-btn color="primary" @click="previousQuestion" v-show="currentQuestion > 0"><
                 </v-btn>
-                <v-btn v-show="currentQuestion === allQuizzes[wQ].quiz.length-1?true:false" color="primary" :to="{name:'creatingquiz'}">Return to Main Menu</v-btn>
+                <v-btn v-show="currentQuestion === allQuizzes[wQ].quiz.length-1?true:false" color="primary" :to="{name:'createquiz'}">Return to Main Menu</v-btn>
                 <v-btn v-show="currentQuestion === allQuizzes[wQ].quiz.length-1?false:true" color="primary" @click="nextQuestion">></v-btn>
             </v-card-actions>
         </v-card>

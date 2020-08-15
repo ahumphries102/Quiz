@@ -1,17 +1,17 @@
 <template>
   <v-container fill-height class="justify-center">
-    <v-card flat>
+    <v-card flat :loading="test">
       <v-data-table
+        class="pa-10 elevation-1"
+        disable-sort
+        item-key="id"
+        show-select
         v-if="!quizReady"
         v-model="selected"
-        disable-sort
+        v-on:item-selected="setAnswer"
         :headers="headers"
         :items="listOfAnswers"
         :single-select="singleSelect"
-        item-key="id"
-        show-select
-        class="pa-10 elevation-1"
-        v-on:item-selected="setAnswer"
       >
         <template v-slot:top>
           <v-toolbar flat>
@@ -63,12 +63,13 @@
 import TakeQuiz from "./takequiz/takequiz";
 import { isMobile } from "../mixins/mixins";
 export default {
-  name: "creatingquiz",
+  name: "createquiz",
   components: {
-    TakeQuiz
+    TakeQuiz,
   },
   data() {
     return {
+      test:false,
       allQuestionsAnswers: [],
       answer: "",
       checked: false,
@@ -76,8 +77,8 @@ export default {
       headers: [
         {
           text: "Answers",
-          value: "answer"
-        }
+          value: "answer",
+        },
       ],
 
       listOfAnswers: [
@@ -85,41 +86,35 @@ export default {
           id: 0,
           answer: "",
           answered: false,
-          delete: this.addAnswerInput
+          delete: this.addAnswerInput,
         },
         {
           id: 1,
           answer: "",
           answered: false,
-          delete: this.addAnswerInput
-        }
+          delete: this.addAnswerInput,
+        },
       ],
       newWayToQuiz: {
         answers: [],
-        question: ""
+        question: "",
       },
       named: false,
       numberOfQuestions: 0,
-
       question: "",
       questions: [],
       quizName: "",
       quizReady: false,
-
       reset: true,
       rules: {
-        answer: [v => v && v.length > 0 || "Answer cannot be empty"]
+        answer: [(v) => (v && v.length > 0) || "Answer cannot be empty"],
       },
       selected: [],
       singleSelect: true,
-
-      valid: true
+      valid: true,
     };
   },
   mixins: [isMobile],
-    mounted(){
-        this.$fetchData('GET', '/params?dog=hello')
-    },
   methods: {
     setAnswer(value) {
       // sets the object returned from the row from false to whatever value passed in is. Value.value is the boolean from vuetify datatable
@@ -130,18 +125,20 @@ export default {
     },
     deleteAns(value) {
       if (this.listOfAnswers.length > 2)
-        this.listOfAnswers = this.listOfAnswers.filter(ele => ele.id != value);
+        this.listOfAnswers = this.listOfAnswers.filter(
+          (ele) => ele.id != value
+        );
     },
     //checks user input if they're adding any text. only fires on last answer input field
     addAnswerInput(id) {
-      let dataIds = this.listOfAnswers.map(ele => ele.id);
+      let dataIds = this.listOfAnswers.map((ele) => ele.id);
       let maxValue = Math.max(...dataIds);
       if (maxValue === id) {
         this.listOfAnswers.push({
           id: Date.now(),
           answer: "",
           answered: false,
-          delete: this.addAnswerInput
+          delete: this.addAnswerInput,
         });
       }
     },
@@ -162,7 +159,7 @@ export default {
       //reset the quiz so we don't keep sending in old data or erasing it as we push it in to allQuestionsAnswers
       this.newWayToQuiz = {
         answers: [],
-        question: ""
+        question: "",
       };
 
       //check if there is a true answer
@@ -177,24 +174,25 @@ export default {
           id: Date.now() + 1,
           answer: "",
           answered: false,
-          delete: this.addAnswerInput
+          delete: this.addAnswerInput,
         },
         {
           id: Date.now() + 2,
           answer: "",
           answered: false,
-          delete: this.addAnswerInput
-        }
+          delete: this.addAnswerInput,
+        },
       ];
-      console.log(this.allQuestionsAnswers)
+      console.log(this.allQuestionsAnswers);
     },
     async saveQuiz() {
+      this.test = true
       let response = await this.$fetchData("POST", "/addquiz", {
         quizName: this.quizName,
         userName: this.$store.state.userName,
-        quiz: this.allQuestionsAnswers
+        quiz: this.allQuestionsAnswers,
       });
-      this.$router.push({ name: "creatingquiz" }).catch(err => err);
+      this.$router.push({ name: "createquiz" }).catch((err) => err);
       if (response) {
         this.color = "green";
         this.responseMsg = response.msg;
@@ -203,7 +201,7 @@ export default {
         this.responseMsg = response.err;
       }
       this.submitted = false;
-    }
-  }
+    },
+  },
 };
 </script>

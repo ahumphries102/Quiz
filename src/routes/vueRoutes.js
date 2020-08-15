@@ -12,7 +12,7 @@ const routes = [{
                 }
             } else {
                 return ({
-                    name: 'creatingquiz',
+                    name: 'createquiz',
                     params: {
                         userUrlName: store.state.userName
                     }
@@ -21,8 +21,8 @@ const routes = [{
         }
     },
     {
-        path: userUrlName + '/creatingquiz',
-        name: 'creatingquiz',
+        path: userUrlName + '/createquiz',
+        name: 'createquiz',
         component: () => import('../components/creatingquiz')
     },
     {
@@ -83,10 +83,19 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    if (to.params.userName !== store.state.userName && to.name !== 'pageNotFound' && to.name !== '/' && to.name !== 'login'&& to.name !== 'signup') {
+    if (to.name === 'login' && store.state.token) {
+        return next({
+            name: 'createquiz'
+        })
+    } else {
+        next()
+    }
+    if (to.params.userName !== store.state.userName && to.name !== 'pageNotFound' && to.name !== '/' && to.name !== 'login' && to.name !== 'signup') {
         return next({
             name: 'pageNotFound'
         })
+    } else {
+        next()
     }
     if (to.name !== 'signup') {
         setTimeout(() => {

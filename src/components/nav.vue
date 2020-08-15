@@ -33,7 +33,7 @@
         drawer:null,
         routes:{
             listName:['Create a Quiz', 'View Your Quizzes', 'Take a Quiz', 'View All Quizzes'],
-            nameOfRoute:['creatingquiz','viewquiz','takequiz', 'viewallquizzes']
+            nameOfRoute:['createquiz','viewquiz','takequiz', 'viewallquizzes']
         }
     }),
     methods:{
