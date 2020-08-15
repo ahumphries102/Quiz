@@ -1,6 +1,6 @@
 <template>
   <v-container fill-height>
-    <v-card :width="isMobile()?'100%':'50%'" class="mx-auto" v-if="dataFetched">
+    <v-card :width="isMobile?'100%':'50%'" class="mx-auto" v-if="dataFetched">
       <v-card-title>
         <p>Question {{wQu + 1}}/{{quizObj.quiz.length}}: {{quizObj.quiz[0].question}}</p>
       </v-card-title>

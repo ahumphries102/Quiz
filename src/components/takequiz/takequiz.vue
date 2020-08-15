@@ -22,7 +22,8 @@ export default {
       dataRetrieved: false
     };
   },
-  beforeMount() {
+  mounted() {
+    console.log('hello')
     this.viewQuiz();
   },
   methods: {
