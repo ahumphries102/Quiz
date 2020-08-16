@@ -42,6 +42,7 @@ const routes = [{
     },
     {
         path: userUrlName + '/takequiz/:quizName',
+        props: {default:true},
         name: 'whichquiz',
         component: () => import('../components/takequiz/whichquiz')
     },

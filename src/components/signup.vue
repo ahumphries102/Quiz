@@ -43,24 +43,19 @@ export default {
   methods: {
     async submit() {
       this.submitted = true;
-      let response = await fetch("/createUser", {
-        method: "POST", // *GET, POST, PUT, DELETE, etc.
-        mode: "cors", // no-cors, *cors, same-origin
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
+      let response = await this.$fetchData(
+        "POST",
+        "/createUser",
+        {
           userName: this.userName,
           password: this.password,
-        }), // body data type must match "Content-Type" header
-      });
-      let data = await response.json();
-      if (data.error === false) {
+        } // body data type must match "Content-Type" header
+      );
+      if (!response.error) {
         this.$router.push({ name: "login" }).catch((err) => err);
       } else {
         this.color = "red";
-        this.responseMsg = data.message;
+        this.responseMsg = response.message;
         this.submitted = false;
       }
       this.submitted = false;

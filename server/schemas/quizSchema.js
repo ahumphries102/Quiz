@@ -18,6 +18,14 @@ const scoreSchema = new Schema({
         type: Array,
         required: true
     },
+    day: {
+        type: Number,
+        required: [true, 'Day was not submitted']
+    },
+    month: {
+        type: String,
+        required: [true, 'Month was not submitted']
+    },
     points: {
         type: Number,
         required: [true, 'Question is too short']
@@ -27,11 +35,15 @@ const scoreSchema = new Schema({
     },
     quizName: {
         type: String,
-        required: true
+        required: [true, 'Your quiz must have a name']
     },
     userName: {
         type: String,
-        required: [true, 'No name was submitted']
+        required: [true, 'Your quiz must have your name']
+    },
+    year: {
+        type: Number,
+        required: [true, 'Year was not submitted']
     },
 })
 
