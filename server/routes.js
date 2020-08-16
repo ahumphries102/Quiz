@@ -1,6 +1,6 @@
 //const restify = require('restify')
 //const quiz = require('./schemas/quizSchema')
-const {quiz, score} = require('./schemas/quizSchema')
+const {    quiz,    score} = require('./schemas/quizSchema')
 const User = require('./schemas/userSchema')
 const Router = require('restify-router').Router
 const nodeMailer = require('./mail')
@@ -8,45 +8,54 @@ const router = new Router()
 let resMsg = {}
 require('dotenv').config()
 const token = process.env.VUE_APP_TOKEN
-router.post('/saveScore',(req,res,next)=>{
-    new score(req.body).save((err, userScore) =>{
-        err?res.send(400, err):res.send(userScore)
+router.post('/saveScore', (req, res, next) => {
+    resMsg.message = 'Your score has been saved'
+    new score(req.body).save((err, userScore) => {
+        err ? res.send(400, err) : res.send(resMsg)
     })
     next()
 })
 
-router.get('/allquizzes', async(req, res, next)=>{
-    quiz.quizSchema.find({},(err,quizzes)=>{
-       err?res.send(400, err):res.send(quizzes)
+router.get('/allquizzes', async (req, res, next) => {
+    quiz.find({}, (err, quizzes) => {
+        err ? res.send(400, err) : res.send(quizzes)
     })
     next()
 })
-router.get('/viewquiz/:name', async(req, res, next)=>{
-    quiz.find({quizName:req.query.name},(err,specificQuiz)=>{
-        err? res.send(400, 'Your query did match any records'):res.send(specificQuiz)
+router.get('/viewquiz/:name', async (req, res, next) => {
+    quiz.find({
+        quizName: req.query.name
+    }, (err, specificQuiz) => {
+        err ? res.send(400, 'Your query did match any records') : res.send(specificQuiz)
     })
     next()
 })
 router.post('/viewquiz', (req, res, next) => {
-    quiz.find({$or:[{userName:req.body.userName}, {quizName:req.body.quizName}]}, (err, quizzes) => {
-        err?res.send(400, 'Couldn\'t find your quiz'):res.send(quizzes)
+    quiz.find({
+        $or: [{
+            userName: req.body.userName
+        }, {
+            quizName: req.body.quizName
+        }]
+    }, (err, quizzes) => {
+        err ? res.send(400, 'Couldn\'t find your quiz') : res.send(quizzes)
     })
     next()
 })
 router.post('/createUser', async (req, res, next) => {
-        await new User({
-            userName: req.body.userName.toLowerCase().trim(),
-            password: req.body.password
-            }).save((err, result) => {
-                if (!result) {
-                    console.log(err)
-                    resMsg.error = true
-                    resMsg.message = 'User already exists'
-                    return res.send(400, resMsg)
-                } else {
-                    return res.send(resMsg)
-                }
-            })
+    await new User({
+        userName: req.body.userName.toLowerCase().trim(),
+        password: req.body.password
+    }).save((err, result) => {
+        if (!result) {
+            console.log(err)
+            resMsg.error = true
+            resMsg.message = 'User already exists'
+            return res.send(400, resMsg)
+        } else {
+            return res.send(resMsg)
+        }
+    })
     next()
 })
 
@@ -59,14 +68,14 @@ router.post('/sendtoken', async (req, res, next) => {
                 console.log(result)
                 if (result) {
                     resMsg = {
-                        error:false,
-                        message:'Success'
+                        error: false,
+                        message: 'Success'
                     }
                     res.send(resMsg)
                 } else {
                     resMsg.error = true
                     resMsg.message = 'Username or password is incorrect'
-                    res.send(401,resMsg)
+                    res.send(401, resMsg)
                 }
             })
         } else {
@@ -89,7 +98,7 @@ router.post('/addquiz', (req, res, next) => {
     next()
 })
 
-router.post('/sendEmail', (req,res,next)=>{
+router.post('/sendEmail', (req, res, next) => {
     nodeMailer.transport = {
         service: process.env.EMAIL_PROVIDER,
         secure: false, // true for 465, false for other ports

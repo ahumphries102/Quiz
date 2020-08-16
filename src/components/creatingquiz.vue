@@ -1,6 +1,6 @@
 <template>
   <v-container fill-height class="justify-center">
-    <v-card flat :loading="test">
+    <v-card flat>
       <v-data-table
         class="pa-10 elevation-1"
         disable-sort
@@ -69,7 +69,6 @@ export default {
   },
   data() {
     return {
-      test:false,
       allQuestionsAnswers: [],
       answer: "",
       checked: false,
@@ -186,7 +185,6 @@ export default {
       console.log(this.allQuestionsAnswers);
     },
     async saveQuiz() {
-      this.test = true
       let response = await this.$fetchData("POST", "/addquiz", {
         quizName: this.quizName,
         userName: this.$store.state.userName,

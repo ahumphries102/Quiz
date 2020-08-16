@@ -1,12 +1,12 @@
 <template>
   <v-card>
-    <v-card-title>
+    <v-card-title v-if="dataRetrieved">
       <p>Choose a Quiz to Take</p>
     </v-card-title>
     <v-card-text>
       <v-list>
-        <v-list-item v-for="(quiz, ind) in allQuizzes" :key="ind">
-          <router-link :to="{name:'whichquiz', params:{userName:$store.state.userName, quizName:quiz.quizName}}">{{quiz.quizName}}</router-link>
+        <v-list-item  v-for="(quiz, ind) in allQuizzes" :key="ind">
+          <router-link v-if="dataRetrieved" :to="{name:'whichquiz', params:{userUrlName:$store.state.userName, quizName:quiz.quizName}}">{{quiz.quizName}}</router-link>
         </v-list-item>
       </v-list>
     </v-card-text>
@@ -19,11 +19,11 @@ export default {
   data() {
     return {
       allQuizzes: [],
-      dataRetrieved: false
+      dataRetrieved: false,
     };
   },
   mounted() {
-    console.log('hello')
+    
     this.viewQuiz();
   },
   methods: {
@@ -32,7 +32,7 @@ export default {
         userName: this.$store.state.userName
       });
       this.allQuizzes = request;
-      console.log(this.allQuizzes)
+      this.dataRetrieved = true
     }
   }
 };
