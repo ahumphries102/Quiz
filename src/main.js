@@ -6,6 +6,7 @@ import store from './storage/store'
 import FetchData from './restClient'
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import '@mdi/font/css/materialdesignicons.css'
+Vue.forceUpdate
 Vue.prototype.$store = store
 Vue.prototype.$fetchData = FetchData
 Vue.config.productionTip = false

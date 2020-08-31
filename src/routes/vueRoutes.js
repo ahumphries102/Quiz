@@ -73,6 +73,11 @@ const routes = [{
         component: () => import('../components/userquizzes/userquiz')
     },
     {
+        path: userUrlName + '/scores',
+        name: 'scores',
+        component: () => import('../components/scores')
+    },
+    {
         path: '/404',
         name: 'pageNotFound',
         component: () => import('../components/404')
