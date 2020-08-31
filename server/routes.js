@@ -8,6 +8,15 @@ const router = new Router()
 let resMsg = {}
 require('dotenv').config()
 const token = process.env.VUE_APP_TOKEN
+
+router.get('/viewscore', (req,res,next)=>{
+    resMsg.message = 'No score found'
+    score.find({}, (err, score)=>{
+        err ? res.send(400, err) : res.send(score)
+    })
+    next()
+})
+
 router.post('/saveScore', (req, res, next) => {
     resMsg.message = 'Your score has been saved'
     new score(req.body).save((err, userScore) => {

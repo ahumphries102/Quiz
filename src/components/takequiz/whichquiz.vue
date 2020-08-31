@@ -54,6 +54,7 @@ export default {
       nextQuestionButtonText: ">",
       noSelectedAnswer: true,
       quizObj: [],
+      reRenderKey: 0,
       scoreCard: { answers: [], questions: [] },
       valid: true,
       //wQ stands for which quiz
@@ -70,7 +71,9 @@ export default {
     async viewQuiz() {
       const response = await this.$fetchData(
         "GET",
-        `/viewquiz/?name=${encodeURI(this.$router.currentRoute.params.quizName)}`
+        `/viewquiz/?name=${encodeURI(
+          this.$router.currentRoute.params.quizName
+        )}`
       );
       this.quizObj = response[0];
       this.dataFetched = true;

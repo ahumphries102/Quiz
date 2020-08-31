@@ -12,6 +12,7 @@
         </v-card-subtitle>
         <v-card-actions>
           <v-btn text color="primary" class="mx-auto" @click="answersViewing = true">View Answers</v-btn>
+          <v-btn text class="mx-auto" color="primary" @click="$emit('update')">Retake</v-btn>
           <v-btn text class="mx-auto" color="primary" :to="{name:'createquiz'}">Home</v-btn>
         </v-card-actions>
       </v-card>
