@@ -12,27 +12,26 @@
         </v-text-field>
       </v-card-subtitle>
       <v-card-text>
-        <v-list-item
-          v-for="(answer, ind) in quizObj.quiz[wQu].answers"
-          :class="currentAnswer === answer?'light-green':''"
-          :dark="currentAnswer === answer"
-          :style="{'border-radius':'50px'}"
-          :key="ind"
-          @click="saveAnswer(answer)"
-        >{{String.fromCharCode('A'.charCodeAt(0)+ind)}}: {{answer.answer}}</v-list-item>
+        <v-list>
+          <v-list-item
+            v-for="(answer, ind) in quizObj.quiz[wQu].answers"
+            :class="answer.wasAnswered ?'light-green':''"
+            :dark="currentAnswer === answer"
+            :style="{'border-radius':'50px', width:'50%'}"
+            :key="ind"
+            @click="saveAnswer(answer, quizObj.quiz[wQu], answer)"
+          >
+            <v-list-item-content>{{String.fromCharCode('A'.charCodeAt(0)+ind)}}: {{answer.answer}}</v-list-item-content>
+          </v-list-item>
+        </v-list>
       </v-card-text>
       <v-card-actions>
-        <v-btn v-show="wQu <= 0" color="primary" :to="{name:'takequiz'}">View Quizzes</v-btn>
+        <v-btn v-show="wQu <= 0" color="primary" :to="{name:'takequiz'}">Back</v-btn>
         <v-btn v-show="wQu > 0" color="primary" @click="removeAnswer"><</v-btn>
-        <v-btn color="primary" @click="nextQuestion">{{nextQuestionButtonText}}</v-btn>
+        <v-btn color="primary" @click="nextQuestion" :disabled="!quizObj.quiz[wQu].clicked">{{nextQuestionButtonText}}</v-btn>
       </v-card-actions>
     </v-card>
-    <EndScreen
-      v-if="gameOver"
-      @viewAnswers="viewAnswers"
-      :scoreCard="scoreCard"
-      :wQ="wQ"
-    />
+    <EndScreen v-if="gameOver" @viewAnswers="viewAnswers" :scoreCard="scoreCard" :wQ="wQ" />
   </v-container>
 </template>
 
@@ -56,6 +55,7 @@ export default {
       quizObj: [],
       reRenderKey: 0,
       scoreCard: { answers: [], questions: [] },
+      userChoicesMade: [],
       valid: true,
       //wQ stands for which quiz
       wQ: 1,
@@ -79,6 +79,13 @@ export default {
       this.dataFetched = true;
       this.scoreCard.quizName = this.quizObj.quizName;
       this.scoreCard.questions = this.quizObj.quiz.map((ele) => ele.question);
+      this.quizObj.quiz.forEach((ele) => {
+        ele.clicked = false
+        this.userChoicesMade.push("false");
+        ele.answers.forEach(ele2 => {
+          ele2.wasAnswered = false
+        })
+      });
     },
     nextQuestion() {
       this.nQ++;
@@ -94,7 +101,6 @@ export default {
         this.wQu++;
       }
       this.currentAnswer = "";
-      console.log(this.scoreCard.points);
     },
     removeAnswer() {
       this.wQu--;
@@ -102,9 +108,14 @@ export default {
       this.scoreCard.answers.pop();
       console.log(this.scoreCard.points);
     },
-    saveAnswer(chosenAnswer) {
+    saveAnswer(chosenAnswer, quizObject, quizAnswer) {
       this.noSelectedAnswer = false;
       this.currentAnswer = chosenAnswer;
+      quizObject.clicked = true
+      quizObject.answers.forEach(ele => {
+        ele.wasAnswered = false
+      })
+      quizAnswer.wasAnswered = true
     },
     viewAnswers() {
       this.gameOver = false;

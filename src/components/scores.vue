@@ -1,10 +1,12 @@
 <template>
-  <v-card>{{scores[0].points}}</v-card>
+<div>
+  <v-card>{{scores}}</v-card>
+</div>
 </template>
 
 <script>
 export default {
-  name: "view score",
+  name: "viewScore",
   data() {
     return {
       scores: null,

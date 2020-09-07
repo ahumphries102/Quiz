@@ -12,9 +12,9 @@ const routes = [{
                 }
             } else {
                 return ({
-                    name: 'createquiz',
+                    name:'createquiz',
                     params: {
-                        userUrlName: store.state.userName
+                        userName: store.state.userName
                     }
                 })
             }
