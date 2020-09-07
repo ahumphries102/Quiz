@@ -79,9 +79,13 @@ export default {
       this.dataFetched = true;
       this.scoreCard.quizName = this.quizObj.quizName;
       this.scoreCard.questions = this.quizObj.quiz.map((ele) => ele.question);
+      // after we get the quiz from the db we need to ada few more properties to it
       this.quizObj.quiz.forEach((ele) => {
+        // first we need to know if a user actually clicked on something so we can decide to let the user on
+        // to the next question
         ele.clicked = false
-        this.userChoicesMade.push("false");
+        // then we need to go through all the answers and add a wasAnswered property.
+        // this sets which object the user clicked on. Read more on this in the savedAnswers function
         ele.answers.forEach(ele2 => {
           ele2.wasAnswered = false
         })
@@ -111,10 +115,14 @@ export default {
     saveAnswer(chosenAnswer, quizObject, quizAnswer) {
       this.noSelectedAnswer = false;
       this.currentAnswer = chosenAnswer;
+      // we set if the user clicked on an object (an answer)
       quizObject.clicked = true
+      // Loop through each answer and turn them all false.
+      // If we don't do this then each time a user clicks on an answer it will turn green.
       quizObject.answers.forEach(ele => {
         ele.wasAnswered = false
       })
+      // Lastly we set the actual answer a user made to true
       quizAnswer.wasAnswered = true
     },
     viewAnswers() {
