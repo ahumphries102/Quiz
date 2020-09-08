@@ -1,5 +1,5 @@
 <template>
-  <v-container fill-height>
+  <v-container fill-height >
     <v-card :width="isMobile?'100%':'50%'" class="mx-auto" v-if="dataFetched">
       <v-card-title>
         <p>Question {{wQu + 1}}/{{quizObj.quiz.length}}: {{quizObj.quiz[wQu].question}}</p>
@@ -16,7 +16,7 @@
           <v-list-item
             v-for="(answer, ind) in quizObj.quiz[wQu].answers"
             :class="answer.wasAnswered ?'light-green':''"
-            :dark="currentAnswer === answer"
+            :dark="answer.wasAnswered"
             :style="{'border-radius':'50px', width:'50%'}"
             :key="ind"
             @click="saveAnswer(answer, quizObj.quiz[wQu], answer)"
@@ -31,7 +31,7 @@
         <v-btn color="primary" @click="nextQuestion" :disabled="!quizObj.quiz[wQu].clicked">{{nextQuestionButtonText}}</v-btn>
       </v-card-actions>
     </v-card>
-    <EndScreen v-if="gameOver" @viewAnswers="viewAnswers" :scoreCard="scoreCard" :wQ="wQ" />
+    <EndScreen v-if="gameOver" @viewAnswers="viewAnswers" :scoreCard="scoreCard" :wQ="wQ" @retake="()=>retakeQuiz += 1"/>
   </v-container>
 </template>
 
@@ -45,6 +45,7 @@ export default {
   },
   data() {
     return {
+      retakeQuiz: 0,
       currentAnswer: "",
       dataFetched: false,
       gameOver: false,
@@ -53,7 +54,6 @@ export default {
       nextQuestionButtonText: ">",
       noSelectedAnswer: true,
       quizObj: [],
-      reRenderKey: 0,
       scoreCard: { answers: [], questions: [] },
       userChoicesMade: [],
       valid: true,

@@ -12,7 +12,7 @@
         </v-card-subtitle>
         <v-card-actions>
           <v-btn text color="primary" class="mx-auto" @click="answersViewing = true">View Answers</v-btn>
-          <v-btn text class="mx-auto" color="primary" @click="$emit('update')">Retake</v-btn>
+          <v-btn text class="mx-auto" color="primary" @click="$emit('retake')">Retake</v-btn>
           <v-btn text class="mx-auto" color="primary" :to="{name:'createquiz'}">Home</v-btn>
         </v-card-actions>
       </v-card>
@@ -71,7 +71,6 @@ export default {
       newBody.day = day;
       newBody.month = monthNames[month]
       newBody.year = year
-      console.log(newBody)
       const response = await this.$fetchData("POST", "/saveScore", newBody);
       this.responseMsg = response.message
     },
