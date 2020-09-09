@@ -1,25 +1,7 @@
 <template>
     <div>
         <v-card>
-            <v-card-title class="d-flex flex-column align-start">
-                <p>Question {{currentQuestion + 1}}/{{allQuizzes[wQ].quiz.length}}<br>{{allQuizzes[wQ].quiz[currentQuestion].question}}</p>
-            </v-card-title>
-            <v-divider/>
-            <v-card-text>
-                <h3 class="my-5" v-for="(answer, ind) in allQuizzes[wQ].quiz[currentQuestion].answers" :key="ind" :style="{color:answer.answered?'green':'red'}">
-                    {{answer.answer}}
-                </h3>
-                <p>
-                    Your answer was<b>{{tallyScore[currentQuestion].answered?tallyScore[currentQuestion].answer:tallyScore[currentQuestion].answer}}</b>
-                </p>
-            </v-card-text>
-            <v-card-actions>
-                <v-btn v-show="currentQuestion <= 0" color="primary" @click="$emit('close')">Go Back</v-btn>
-                <v-btn color="primary" @click="previousQuestion" v-show="currentQuestion > 0"><
-                </v-btn>
-                <v-btn v-show="currentQuestion === allQuizzes[wQ].quiz.length-1?true:false" color="primary" :to="{name:'createquiz'}">Return to Main Menu</v-btn>
-                <v-btn v-show="currentQuestion === allQuizzes[wQ].quiz.length-1?false:true" color="primary" @click="nextQuestion">></v-btn>
-            </v-card-actions>
+            
         </v-card>
     </div>
 </template>
