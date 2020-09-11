@@ -1,20 +1,8 @@
 <template>
   <v-container fill-height>
+    <p v-show="false">{{reRender}}</p>
     <v-card :width="isMobile?'100%':'50%'" class="mx-auto" v-if="initialData.dataFetched">
-      <ul
-        v-for="(answer, ind) in initialData.quizObj.quiz[initialData.wQu].answers"
-        :style="{'border-radius':'50px', width:'50%'}"
-        :key="ind"
-      >
-        <li>
-          <p
-            :class="answer.wasAnswered ?'light-green':''"
-            @click="saveAnswer(answer)"
-          >{{answer.answer}}</p>
-          <p>{{answer.wasAnswered}}</p>
-        </li>
-      </ul>
-      <!-- <v-card-title>
+      <v-card-title>
         <p>Question {{initialData.wQu + 1}}/{{initialData.quizObj.quiz.length}}: {{initialData.quizObj.quiz[initialData.wQu].question}}</p>
       </v-card-title>
       <v-card-subtitle>
@@ -24,17 +12,18 @@
           </template>
         </v-text-field>
       </v-card-subtitle>
-      <v-card-text>
-        {{initialData.quizObj.quiz[0].answers}}
-        
+      <v-card-text v-show="initialData.scoreCard.userName.length > 0">
         <v-list-item
           v-for="(answer, ind) in initialData.quizObj.quiz[initialData.wQu].answers"
-          :style="{'border-radius':'50px', width:'50%'}"
+          @click="saveAnswer(answer, initialData.quizObj.quiz[initialData.wQu])"
+          :class="answer.wasAnswered?'light-green':''"
+          :dark="answer.wasAnswered" 
           :key="ind"
+          :style="{'border-radius':'50px', width:'50%'}"
         >
           <v-list-item-content
-            :class="answer.wasAnswered ?'light-green':''"
-            @click="saveAnswer(answer, answer)"
+            
+           
           >{{String.fromCharCode('A'.charCodeAt(0)+ind)}}: {{answer.answer}}</v-list-item-content>
         </v-list-item>
       </v-card-text>
@@ -44,16 +33,16 @@
         <v-btn
           color="primary"
           @click="nextQuestion"
-          :disabled="!initialData.quizObj.quiz[initialData.wQu].clicked || initialData.scoreCard.userName.length < 1"
+          :disabled="!initialData.quizObj.quiz[initialData.wQu].clicked  || initialData.scoreCard.userName.length < 1"
         >{{initialData.nextQuestionButtonText}}</v-btn>
-      </v-card-actions>-->
+      </v-card-actions>
     </v-card>
     <EndScreen
       v-if="initialData.gameOver"
+      @retake="reset"
       @viewAnswers="viewAnswers"
       :scoreCard="initialData.scoreCard"
       :wQ="initialData.wQ"
-      @retake="reset"
     />
   </v-container>
 </template>
@@ -68,6 +57,9 @@ export default {
   },
   data() {
     return {
+      // creating an initial data property is a rare occurence. I did this because I have to reset the data
+      // if a user requests to retake their quiz. Vue does not allow developers to simply reset the data function return values.
+      // however; we can get around this by simply resetting the initalData object. It must be backed up in order to reset the values.
       initialData: {
         currentAnswer: "",
         dataFetched: false,
@@ -77,7 +69,6 @@ export default {
         nextQuestionButtonText: ">",
         noSelectedAnswer: true,
         quizObj: [],
-        retakeQuiz: 0,
         scoreCard: { answers: [], questions: [], userName: "" },
         userChoicesMade: [],
         valid: true,
@@ -87,18 +78,21 @@ export default {
         wQu: 0,
       },
       backUpData: {},
-      test: false,
+      reRender: 0,
+      test:0,
     };
   },
   mounted() {
     this.viewQuiz();
+    // we create a clone of initial data so when a user retakes their quiz they can simply refresh the page
+    // which will set inital data to the clone which... resets the data!
     this.backUpData = JSON.parse(JSON.stringify(this.initialData));
   },
   mixins: [isMobile],
   methods: {
     // reset is used to reset all the data when the user wishes to retake their quiz.
     reset() {
-      this.initialData = this.backUpData;
+      this.initialData = JSON.parse(JSON.stringify(this.backUpData));
       this.viewQuiz();
     },
     async viewQuiz() {
@@ -153,27 +147,18 @@ export default {
       this.initialData.scoreCard.answers.pop();
       console.log(this.initialData.scoreCard.points);
     },
-    saveAnswer(quizObject) {
-      
-      // this.initialData.noSelectedAnswer = false;
-      // this.initialData.currentAnswer = quizObject.answer;
-      // we set if the user clicked on an object (an answer)
-      //quizObject.clicked = true;
+    saveAnswer(quizObject, quizObjectParent) {
+      // quizObjectParent is one step up from quizObject in its object hierarchy.
+      // Each quiz has X amount of quizObjects based on how many the user creates. Each question must
+      // have a click property so we can keep track if a user made chose an answer.
+      quizObjectParent.clicked = true
+      this.reRender += 1
+      this.initialData.noSelectedAnswer = false;
+      this.initialData.currentAnswer = quizObject.answer;
       // Loop through each answer and turn them all false.
       // If we don't do this then each time a user clicks on an answer it will turn green.
-      this.initialData.quizObj.quiz.forEach((ele) => {
-        ele.answers.forEach((ele2) => {
-          if (ele2.answer === quizObject.answer) {
-            ele2.wasAnswered = true;
-            console.log(ele2)
-          } else {
-            console.log(ele2)
-            ele2.wasAnswered = false;
-          }
-        });
-      });
+      quizObjectParent.answers.forEach(ele => ele.answer === quizObject.answer? ele.wasAnswered = true : ele.wasAnswered = false );
       
-
       // console.log(this.initialData.quizObj.quiz);
     },
     viewAnswers() {
