@@ -1,7 +1,7 @@
 <template>
   <v-container fill-height>
     <p v-show="false">{{reRender}}</p>
-    <v-card :width="isMobile?'100%':'50%'" class="mx-auto" v-if="initialData.dataFetched">
+    <v-card :width="isMobile?'80%':'50%'" class="mx-auto" v-if="initialData.dataFetched">
       <v-card-title>
         <p>Question {{initialData.wQu + 1}}/{{initialData.quizObj.quiz.length}}: {{initialData.quizObj.quiz[initialData.wQu].question}}</p>
       </v-card-title>
@@ -22,8 +22,6 @@
           :style="{'border-radius':'50px', width:'50%'}"
         >
           <v-list-item-content
-            
-           
           >{{String.fromCharCode('A'.charCodeAt(0)+ind)}}: {{answer.answer}}</v-list-item-content>
         </v-list-item>
       </v-card-text>
@@ -67,9 +65,8 @@ export default {
         //used when to check the quizObj length -1. It's a 'magic number'
         lr: 1,
         nextQuestionButtonText: ">",
-        noSelectedAnswer: true,
         quizObj: [],
-        scoreCard: { answers: [], questions: [], userName: "" },
+        scoreCard: { points:5, answers: [], questions: [], userName: "", selectedAnswerInfo: [] },
         userChoicesMade: [],
         valid: true,
         //wQ stands for which quiz
@@ -78,8 +75,9 @@ export default {
         wQu: 0,
       },
       backUpData: {},
+      // vue will not rerender the component if certain data is changed. To avoid that issue we simply increment this value
+      // this forces vue to rerender
       reRender: 0,
-      test:0,
     };
   },
   mounted() {
@@ -122,10 +120,15 @@ export default {
     },
     nextQuestion() {
       this.initialData.nQ++;
+      // After we choose our answer and go to the next question we push into the answers array
+      // a boolean value based on if the answer selected was true or false (correct or wrong)
       this.initialData.scoreCard.answers.push(this.initialData.currentAnswer);
+      // we loop through that array and set the scoreCard points
       this.initialData.scoreCard.points = this.initialData.scoreCard.answers.reduce(
         (acc, ele) => {
-          if (ele.answered === true) acc++;
+          // since we're reducing, we're basically adding each true value up and setting the score to that.
+          if (ele === true) acc++;
+          // if we don't find a true value we return the value of the acc, which would be 0
           return acc;
         },
         0
@@ -136,30 +139,28 @@ export default {
       ) {
         this.initialData.gameOver = true;
       } else {
-        this.initialData.noSelectedAnswer = true;
         this.initialData.wQu++;
       }
-      this.initialData.currentAnswer = "";
     },
     removeAnswer() {
       this.initialData.wQu--;
       if (this.initialData.wQu <= 0) this.wQu = 0;
       this.initialData.scoreCard.answers.pop();
-      console.log(this.initialData.scoreCard.points);
     },
     saveAnswer(quizObject, quizObjectParent) {
+      if(!quizObjectParent.clicked)this.initialData.scoreCard.selectedAnswerInfo.push(quizObject)
       // quizObjectParent is one step up from quizObject in its object hierarchy.
       // Each quiz has X amount of quizObjects based on how many the user creates. Each question must
       // have a click property so we can keep track if a user made chose an answer.
       quizObjectParent.clicked = true
       this.reRender += 1
-      this.initialData.noSelectedAnswer = false;
-      this.initialData.currentAnswer = quizObject.answer;
-      // Loop through each answer and turn them all false.
-      // If we don't do this then each time a user clicks on an answer it will turn green.
-      quizObjectParent.answers.forEach(ele => ele.answer === quizObject.answer? ele.wasAnswered = true : ele.wasAnswered = false );
+      this.initialData.currentAnswer = quizObject.answered;
       
-      // console.log(this.initialData.quizObj.quiz);
+      quizObjectParent.answers.forEach(ele => {
+        // Loop through each answer and turn them all false.
+        // If we don't do this then each time a user clicks on an answer it will turn green.
+        ele.answer === quizObject.answer? ele.wasAnswered = true : ele.wasAnswered = false
+      });
     },
     viewAnswers() {
       this.initialData.gameOver = false;
