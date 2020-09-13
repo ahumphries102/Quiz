@@ -16,9 +16,9 @@
           <v-btn text class="mx-auto" color="primary" :to="{name:'createquiz'}">Home</v-btn>
         </v-card-actions>
       </v-card>
-      <FinalScore
+      <QuizReview
         v-if="answersViewing"
-        :allQuizzes="allQuizzes"
+        :scoreCard="scoreCard"
         @close="answersViewing = false"
         :wQ="wQ"
       />
@@ -27,11 +27,11 @@
 </template>
 
 <script>
-import FinalScore from "./quizreview";
+import QuizReview from "./quizreview";
 import { isMobile } from "../mixins/mixins";
 export default {
   name: "EndGame",
-  components: { FinalScore },
+  components: { QuizReview },
   props: {
     scoreCard: Object,
     wQ: Number,
@@ -44,7 +44,8 @@ export default {
   mixins: [isMobile],
   mounted() {
     this.dialog = true;
-    this.saveScore();
+    console.log(this.scoreCard)
+    //this.saveScore();
   },
   methods: {
     async saveScore() {
