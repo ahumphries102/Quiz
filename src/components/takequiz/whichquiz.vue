@@ -1,6 +1,5 @@
 <template>
   <v-container fill-height>
-    <p v-show="false">{{reRender}}</p>
     <v-card :width="isMobile?'80%':'50%'" class="mx-auto" v-if="initialData.dataFetched">
       <v-card-title>
         <p>Question {{initialData.wQu + 1}}/{{initialData.quizObj.quiz.length}}: {{initialData.quizObj.quiz[initialData.wQu].question}}</p>
@@ -62,22 +61,19 @@ export default {
         currentAnswer: "",
         dataFetched: false,
         gameOver: false,
-        //used when to check the quizObj length -1. It's a 'magic number'
+        // used when to check the quizObj length -1. It's a 'magic number'
         lr: 1,
         nextQuestionButtonText: ">",
         quizObj: [],
         scoreCard: { points:5, answers: [], questions: [], userName: "", selectedAnswerInfo: [] },
         userChoicesMade: [],
         valid: true,
-        //wQ stands for which quiz
+        // wQ stands for which quiz
         wQ: 1,
-        //wQu stand for which question
+        // wQu stand for which question
         wQu: 0,
       },
       backUpData: {},
-      // vue will not rerender the component if certain data is changed. To avoid that issue we simply increment this value
-      // this forces vue to rerender
-      reRender: 0,
     };
   },
   mounted() {
@@ -153,7 +149,6 @@ export default {
       // Each quiz has X amount of quizObjects based on how many the user creates. Each question must
       // have a click property so we can keep track if a user made chose an answer.
       quizObjectParent.clicked = true
-      this.reRender += 1
       this.initialData.currentAnswer = quizObject.answered;
       
       quizObjectParent.answers.forEach(ele => {
@@ -161,6 +156,8 @@ export default {
         // If we don't do this then each time a user clicks on an answer it will turn green.
         ele.answer === quizObject.answer? ele.wasAnswered = true : ele.wasAnswered = false
       });
+      // vue is not observing when a user makes a selection so I force an update to happen.
+      this.$forceUpdate()
     },
     viewAnswers() {
       this.initialData.gameOver = false;
