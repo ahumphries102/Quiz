@@ -84,13 +84,13 @@ export default {
         {
           id: 0,
           answer: "",
-          answered: false,
+          theAnswer: false,
           delete: this.addAnswerInput,
         },
         {
           id: 1,
           answer: "",
-          answered: false,
+          theAnswer: false,
           delete: this.addAnswerInput,
         },
       ],
@@ -118,7 +118,7 @@ export default {
     setAnswer(value) {
       // sets the object returned from the row from false to whatever value passed in is. Value.value is the boolean from vuetify datatable
       if (value.value === true) {
-        value.item.answered = value.value;
+        value.item.theAnswer = value.value;
       }
       this.checked = true;
     },
@@ -136,7 +136,7 @@ export default {
         this.listOfAnswers.push({
           id: Date.now(),
           answer: "",
-          answered: false,
+          theAnswer: false,
           delete: this.addAnswerInput,
         });
       }
@@ -172,13 +172,13 @@ export default {
         {
           id: Date.now() + 1,
           answer: "",
-          answered: false,
+          theAnswer: false,
           delete: this.addAnswerInput,
         },
         {
           id: Date.now() + 2,
           answer: "",
-          answered: false,
+          theAnswer: false,
           delete: this.addAnswerInput,
         },
       ];
