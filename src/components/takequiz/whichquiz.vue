@@ -65,7 +65,7 @@ export default {
         lr: 1,
         nextQuestionButtonText: ">",
         quizObj: [],
-        scoreCard: { points:5, answers: [], questions: [], userName: "", selectedAnswerInfo: [] },
+        scoreCard: { points:0, answers: [], questions: [], userName: "", selectedAnswerInfo: [], wholeQuiz: {} },
         userChoicesMade: [],
         valid: true,
         // wQ stands for which quiz
@@ -113,12 +113,15 @@ export default {
           ele2.wasAnswered = false;
         });
       });
+      
+      this.initialData.scoreCard.wholeQuiz = this.initialData.quizObj.quiz.map(ele => ele.answers)
     },
     nextQuestion() {
       this.initialData.nQ++;
       // After we choose our answer and go to the next question we push into the answers array
       // a boolean value based on if the answer selected was true or false (correct or wrong)
       this.initialData.scoreCard.answers.push(this.initialData.currentAnswer);
+      console.log(this.initialData.currentAnswer)
       // we loop through that array and set the scoreCard points
       this.initialData.scoreCard.points = this.initialData.scoreCard.answers.reduce(
         (acc, ele) => {
@@ -126,9 +129,7 @@ export default {
           if (ele === true) acc++;
           // if we don't find a true value we return the value of the acc, which would be 0
           return acc;
-        },
-        0
-      );
+        },0);
       if (
         this.initialData.wQu ===
         this.initialData.quizObj.quiz.length - this.initialData.lr
@@ -144,12 +145,13 @@ export default {
       this.initialData.scoreCard.answers.pop();
     },
     saveAnswer(quizObject, quizObjectParent) {
+      
       if(!quizObjectParent.clicked)this.initialData.scoreCard.selectedAnswerInfo.push(quizObject)
       // quizObjectParent is one step up from quizObject in its object hierarchy.
       // Each quiz has X amount of quizObjects based on how many the user creates. Each question must
       // have a click property so we can keep track if a user made chose an answer.
       quizObjectParent.clicked = true
-      this.initialData.currentAnswer = quizObject.answered;
+      this.initialData.currentAnswer = quizObject.theAnswer;
       
       quizObjectParent.answers.forEach(ele => {
         // Loop through each answer and turn them all false.

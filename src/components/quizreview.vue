@@ -4,9 +4,11 @@
         {{scoreCard}}
       </v-card-title>
       <v-card-text >
-        <p>{{scoreCard.questions[0]}}?</p>
-        <p>You answered, <strong>{{scoreCard.selectedAnswerInfo[0].answer}}</strong>, which was {{scoreCard.selectedAnswerInfo[0].answered?'correct':'incorrect'}}</p>
-        <p>The correct answer is, <strong>{{scoreCard.selectedAnswerInfo[1].answer}}</strong></p>
+          <p v-for="(quiz) in this.scoreCard.wholeQuiz[0]" :key="quiz.answer">
+            {{quiz.answer}}
+            <br>
+            {{quiz.theAnswer}}
+          </p>
       </v-card-text>
       <v-card-actions>
         
