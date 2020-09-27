@@ -40,12 +40,11 @@ export default {
   methods: {
     async login() {
       this.submitted = true;
-      let response = await this.$fetchData(
+      const response = await this.$fetchData(
         "POST",
         "/sendtoken",
         this.loginData
       );
-      console.log(response);
       if (!response.error) {
         this.color = "green";
         this.responseMsg = response.message;

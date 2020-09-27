@@ -7,7 +7,7 @@
         </v-card-title>
         <v-divider class="my-2"/>
         <v-card-subtitle>
-          <h3>You answered {{scoreCard.points}}/{{scoreCard.questions.length}} questions correctly</h3>
+          <h3>You answered {{quizObj.points}}/{{quizObj.quiz.length}} questions correctly</h3>
           <p>{{responseMsg}}</p>
         </v-card-subtitle>
         <v-card-actions>
@@ -17,9 +17,9 @@
         </v-card-actions>
       </v-card>
       <QuizReview
-        v-if="answersViewing"
-        :scoreCard="scoreCard"
         @close="answersViewing = false"
+        v-if="answersViewing"
+        :quizObj="quizObj"
         :wQ="wQ"
       />
     </v-dialog>
@@ -33,7 +33,7 @@ export default {
   name: "EndGame",
   components: { QuizReview },
   props: {
-    scoreCard: Object,
+    quizObj: Object,
     wQ: Number,
   },
   data: () => ({
@@ -44,12 +44,12 @@ export default {
   mixins: [isMobile],
   mounted() {
     this.dialog = true;
-    console.log(this.scoreCard)
+    console.log(JSON.stringify(this.quizObj, undefined, 2))
     //this.saveScore();
   },
   methods: {
     async saveScore() {
-      let newBody = JSON.parse(JSON.stringify(this.scoreCard));
+      let newBody = JSON.parse(JSON.stringify(this.quizObj));
       const dateObj = new Date();
       const month = dateObj.getUTCMonth(); //months from 1-12
       const day = dateObj.getUTCDate();

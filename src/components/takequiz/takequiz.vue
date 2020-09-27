@@ -5,6 +5,7 @@
     </v-card-title>
     <v-card-text>
       <v-list >
+        <v-btn text @click="changeFilter">{{aThroughZ?'A-Z':'Z-A'}}</v-btn>
         <v-list-item  v-for="(quiz, ind) in allQuizzes" :key="ind">
           <router-link  v-if="dataRetrieved" :to="{name:'whichquiz', params:{userUrlName:$store.state.userName, quizName:quiz.quizName}}">{{quiz.quizName}}</router-link>
         </v-list-item>
@@ -18,7 +19,7 @@ export default {
   name: "takequiz",
   data() {
     return {
-      test:0,
+      aThroughZ:true,
       allQuizzes: [],
       dataRetrieved: false,
     };
@@ -27,11 +28,13 @@ export default {
     this.viewQuiz();
   },
   methods: {
+    changeFilter(){
+      this.aThroughZ = !this.aThroughZ
+      this.aThroughZ?this.allQuizzes.sort((a,b) => (a.quizName > b.quizName)? 1 : -1):this.allQuizzes.sort((a,b) => (a.quizName < b.quizName)? 1 : -1)
+    },
     async viewQuiz() {
-      let request = await this.$fetchData("POST", "/viewquiz", {
-        userName: this.$store.state.userName
-      });
-      this.allQuizzes = request;
+      let response = await this.$fetchData("GET", "/allquizzes");
+      this.allQuizzes = response.sort((a,b) => (a.quizName > b.quizName)? 1 : -1)
       this.dataRetrieved = true
     }
   }
