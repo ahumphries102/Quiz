@@ -6,8 +6,9 @@
         <span class="hidden-sm-and-down">Quiz App</span>
       </v-toolbar-title>
       <v-spacer />
-      <div v-if="$root.loggedIn" class="d-flex">
+      <div v-if="$root.loggedIn" class="d-flex ">
         <p>Hello {{$store.state.userName}}</p>
+        <p>Mail Box {{0}}</p>
         <v-btn depressed color="blue darken-3" @click="logout">Logout</v-btn>
       </div>
     </v-app-bar>
@@ -44,11 +45,24 @@ export default {
         "View Your Quizzes",
         "Take a Quiz",
         "View All Quizzes",
+        "Mail a Quiz"
       ],
       nameOfRoute: ["createquiz", "viewquiz", "takequiz", "viewallquizzes"],
     },
   }),
+  mounted(){
+    this.checkMail()
+  },
   methods: {
+    async checkMail(){
+      const response = await this.$fetchData(
+        "POST",
+        "/checkmail",
+        {
+          userName: 'test'
+        }
+      );
+    },
     logout() {
       this.$router.push({ name: "login" }).catch((err) => err);
       this.$store.clearStorage();

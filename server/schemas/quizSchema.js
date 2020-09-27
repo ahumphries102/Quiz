@@ -6,9 +6,24 @@ const quizSchema = new Schema({
         type: String
     },
     quiz: {
-        type: Array
+        type: Object
     },
     quizName: {
+        type: String
+    },
+    quizCompleted: {
+        type: Boolean
+    },
+    quizLookedAt: {
+        type: Boolean
+    },
+    whoIsReceiving:{
+        type: String
+    },
+    whoIsSending:{
+        type: String
+    },
+    originalCreator:{
         type: String
     }
 })

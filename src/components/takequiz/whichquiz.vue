@@ -1,22 +1,23 @@
 <template>
   <v-container fill-height>
-    <v-card :width="isMobile?'80%':'50%'" class="mx-auto" v-if="initialData.dataFetched">
+    <v-card :width="isMobile?'20%':'20%'" class="mx-auto" v-if="initialData.dataFetched">
       <v-card-title>
-        <p>Question {{initialData.wQu + 1}}/{{initialData.quizObj.quiz.length}}: {{initialData.quizObj.quiz[initialData.wQu].question}}</p>
-      </v-card-title>
-      <v-card-subtitle>
-        <v-text-field v-model="initialData.scoreCard.userName">
+        <v-text-field v-model="initialData.quizObj.userName">
           <template #prepend>
             <p>Name:</p>
           </template>
         </v-text-field>
+      </v-card-title>
+      <v-card-subtitle>
+        <p>Question {{initialData.wQu + 1}}/{{initialData.quizObj.quiz.length}}: {{initialData.quizObj.quiz[initialData.wQu].question}}</p>
       </v-card-subtitle>
-      <v-card-text v-show="initialData.scoreCard.userName.length > 0">
+      <v-card-text v-show="initialData.quizObj.userName.length > 0">
         <v-list-item
           v-for="(answer, ind) in initialData.quizObj.quiz[initialData.wQu].answers"
           @click="saveAnswer(answer, initialData.quizObj.quiz[initialData.wQu])"
-          :class="answer.wasAnswered?'light-green':''"
-          :dark="answer.wasAnswered" 
+          :disabled="answer.userAnswer"
+          :class="answer.userAnswer?'light-green':''"
+          :dark="answer.userAnswer" 
           :key="ind"
           :style="{'border-radius':'50px', width:'50%'}"
         >
@@ -30,7 +31,7 @@
         <v-btn
           color="primary"
           @click="nextQuestion"
-          :disabled="!initialData.quizObj.quiz[initialData.wQu].clicked  || initialData.scoreCard.userName.length < 1"
+          :disabled="!initialData.quizObj.quiz[initialData.wQu].clicked  || initialData.quizObj.userName.length < 1"
         >{{initialData.nextQuestionButtonText}}</v-btn>
       </v-card-actions>
     </v-card>
@@ -38,7 +39,7 @@
       v-if="initialData.gameOver"
       @retake="reset"
       @viewAnswers="viewAnswers"
-      :scoreCard="initialData.scoreCard"
+      :quizObj="initialData.quizObj"
       :wQ="initialData.wQ"
     />
   </v-container>
@@ -64,9 +65,9 @@ export default {
         // used when to check the quizObj length -1. It's a 'magic number'
         lr: 1,
         nextQuestionButtonText: ">",
-        quizObj: [],
-        scoreCard: { points:0, answers: [], questions: [], userName: "", selectedAnswerInfo: [], wholeQuiz: {} },
-        userChoicesMade: [],
+        quizObj: {},
+        points: 0,
+        usersAnswers: [],
         valid: true,
         // wQ stands for which quiz
         wQ: 1,
@@ -96,34 +97,17 @@ export default {
           this.$router.currentRoute.params.quizName
         )}`
       );
-      this.initialData.quizObj = response[0];
+      this.initialData.quizObj = response;
       this.initialData.dataFetched = true;
-      this.initialData.scoreCard.quizName = this.initialData.quizObj.quizName;
-      this.initialData.scoreCard.questions = this.initialData.quizObj.quiz.map(
-        (ele) => ele.question
-      );
-      // after we get the quiz from the db we need to ada few more properties to it
-      this.initialData.quizObj.quiz.forEach((ele) => {
-        // first we need to know if a user actually clicked on something so we can decide to let the user on
-        // to the next question
-        ele.clicked = false;
-        // then we need to go through all the answers and add a wasAnswered property.
-        // this sets which object the user clicked on. Read more on this in the savedAnswers function
-        ele.answers.forEach((ele2) => {
-          ele2.wasAnswered = false;
-        });
-      });
-      
-      this.initialData.scoreCard.wholeQuiz = this.initialData.quizObj.quiz.map(ele => ele.answers)
+      console.log(JSON.stringify(this.initialData.quizObj, undefined, 2))
     },
     nextQuestion() {
       this.initialData.nQ++;
       // After we choose our answer and go to the next question we push into the answers array
       // a boolean value based on if the answer selected was true or false (correct or wrong)
-      this.initialData.scoreCard.answers.push(this.initialData.currentAnswer);
-      console.log(this.initialData.currentAnswer)
+      this.initialData.usersAnswers.push(this.initialData.currentAnswer);
       // we loop through that array and set the scoreCard points
-      this.initialData.scoreCard.points = this.initialData.scoreCard.answers.reduce(
+      this.initialData.quizObj.points = this.initialData.usersAnswers.reduce(
         (acc, ele) => {
           // since we're reducing, we're basically adding each true value up and setting the score to that.
           if (ele === true) acc++;
@@ -142,21 +126,19 @@ export default {
     removeAnswer() {
       this.initialData.wQu--;
       if (this.initialData.wQu <= 0) this.wQu = 0;
-      this.initialData.scoreCard.answers.pop();
+      this.initialData.usersAnswers.pop();
     },
     saveAnswer(quizObject, quizObjectParent) {
-      
-      if(!quizObjectParent.clicked)this.initialData.scoreCard.selectedAnswerInfo.push(quizObject)
+      console.log(quizObject)
       // quizObjectParent is one step up from quizObject in its object hierarchy.
       // Each quiz has X amount of quizObjects based on how many the user creates. Each question must
       // have a click property so we can keep track if a user made chose an answer.
       quizObjectParent.clicked = true
       this.initialData.currentAnswer = quizObject.theAnswer;
-      
       quizObjectParent.answers.forEach(ele => {
         // Loop through each answer and turn them all false.
         // If we don't do this then each time a user clicks on an answer it will turn green.
-        ele.answer === quizObject.answer? ele.wasAnswered = true : ele.wasAnswered = false
+        ele.answer === quizObject.answer? ele.userAnswer = true : ele.userAnswer = false
       });
       // vue is not observing when a user makes a selection so I force an update to happen.
       this.$forceUpdate()

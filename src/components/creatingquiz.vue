@@ -1,72 +1,74 @@
 <template>
   <v-container fill-height class="justify-center">
-    <v-card flat>
-      <v-data-table
-        class="pa-10 elevation-1"
-        disable-sort
-        item-key="id"
-        show-select
-        v-if="!quizReady"
-        v-model="selected"
-        v-on:item-selected="setAnswer"
-        :headers="headers"
-        :items="listOfAnswers"
-        :single-select="singleSelect"
-      >
-        <template v-slot:top>
-          <v-toolbar flat>
-            <v-toolbar-title>
-              <p>Quiz</p>
-            </v-toolbar-title>
-          </v-toolbar>
-          <v-text-field label="Name Your Quiz" v-model="quizName" />
-          <v-text-field label="Enter Question" v-model="question" />
-        </template>
+    <v-card flat elevation="1" class="d-flex">
+      <v-row class="pa-5">
+        <v-col cols="auto">
+          <v-data-table
+            disable-sort
+            hide-default-footer
+            item-key="id"
+            show-select
+            v-if="!quizReady"
+            v-model="selected"
+            v-on:item-selected="setAnswer"
+            :headers="headers"
+            :items="listOfAnswers"
+            :single-select="singleSelect"
+          >
+            <template v-slot:top>
+              <v-toolbar flat>
+                <v-toolbar-title>
+                  <p>Create a Quiz</p>
+                </v-toolbar-title>
+              </v-toolbar>
+              <v-text-field label="Name Your Quiz" v-model="quizName" />
+              <v-text-field label="Enter Question" v-model="question" />
+            </template>
 
-        <template v-slot:item.answer="{ item }">
-          <v-form v-model="valid">
-            <v-text-field
-              append-icon="mdi-close"
-              counter
-              label="Edit"
-              single-line
-              v-model="item.answer"
-              @input="addAnswerInput(item.id)"
-              @click:append="deleteAns(item.id)"
-              :rules="rules.answer"
-            />
-          </v-form>
-        </template>
-        <template v-slot:footer>
-          <div>
-            <v-btn
-              color="primary"
-              @click="addAnswer"
-              :disabled="!valid || !checked || question.length < 1"
-            >Add Answer | {{ numberOfQuestions }}</v-btn>
-            <v-btn
-              :class="isMobile()?'':'mx-5'"
-              color="primary"
-              :disabled=" numberOfQuestions < 2? true:false"
-              @click="() => quizReady = true"
-            >Submit Quiz</v-btn>
-            <v-btn color="primary" @click="saveQuiz">Save Quiz</v-btn>
-          </div>
-        </template>
-      </v-data-table>
+            <template v-slot:item.answer="{ item }">
+              <v-form v-model="valid">
+                <v-text-field
+                  append-icon="mdi-close"
+                  counter
+                  label="Edit"
+                  single-line
+                  v-model="item.answer"
+                  @input="addAnswerInput(item.id)"
+                  @click:append="deleteAns(item.id)"
+                  :rules="rules.answer"
+                />
+              </v-form>
+            </template>
+            <template v-slot:footer>
+              <v-card-actions>
+                <v-btn
+                  color="primary"
+                  @click="addAnswer"
+                  :disabled="!valid || !checked || !question.length"
+                >Add Question</v-btn>
+                <v-btn color="primary" @click="saveQuiz" :disabled="numberOfQuestions < 2">Save Quiz</v-btn>
+              </v-card-actions>
+            </template>
+          </v-data-table>
+        </v-col>
+        <v-divider vertical class="ml-5" />
+        <v-col cols="auto">
+          <h3>Your Questions</h3>
+          <v-list>
+            <v-list-item class="pl-0" v-for="(test,ind) in allQuestionsAnswers" :key="ind">
+              <p>{{ind + 1}}: {{test.question}}</p>
+            </v-list-item>
+          </v-list>
+        </v-col>
+      </v-row>
     </v-card>
-    <TakeQuiz v-if="quizReady" :allQuestionsAnswers="allQuestionsAnswers" />
   </v-container>
 </template>
 
 <script>
-import TakeQuiz from "./takequiz/takequiz";
 import { isMobile } from "../mixins/mixins";
 export default {
   name: "createquiz",
-  components: {
-    TakeQuiz,
-  },
   data() {
     return {
       allQuestionsAnswers: [],
@@ -182,13 +184,16 @@ export default {
           delete: this.addAnswerInput,
         },
       ];
-      console.log(this.allQuestionsAnswers);
     },
     async saveQuiz() {
       let response = await this.$fetchData("POST", "/addquiz", {
         quizName: this.quizName,
         userName: this.$store.state.userName,
         quiz: this.allQuestionsAnswers,
+        originalCreator: this.$store.state.userName,
+        quizCompleted: false,
+        quizLookedAt: false,
+        whoIsSending: ''
       });
       this.$router.push({ name: "createquiz" }).catch((err) => err);
       if (response) {

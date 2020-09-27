@@ -1,13 +1,27 @@
 //const restify = require('restify')
 //const quiz = require('./schemas/quizSchema')
-const {    quiz,    score} = require('./schemas/quizSchema')
+const { quiz, score} = require('./schemas/quizSchema')
 const User = require('./schemas/userSchema')
 const Router = require('restify-router').Router
 const nodeMailer = require('./mail')
 const router = new Router()
 let resMsg = {}
 require('dotenv').config()
-const token = process.env.VUE_APP_TOKEN
+// const token = process.env.VUE_APP_TOKEN
+
+router.post('/checkmail', (req,res,next)=>{
+    resMsg.message = 'No score found'
+    score.find({
+        whoIsReceiving:req.body.whoIsReceiving
+    }, (err, score)=>{
+        console.log(score)
+        if(err)res.send(400, err)
+        if(req.body.userName === score.whoIsReceiving)
+        {res.send(score)}
+        else{res.send('nuffin')}
+    })
+    next()
+})
 
 router.get('/viewscore', (req,res,next)=>{
     resMsg.message = 'No score found'
@@ -35,7 +49,9 @@ router.get('/viewquiz/:name', async (req, res, next) => {
     quiz.find({
         quizName: req.query.name
     }, (err, specificQuiz) => {
-        err ? res.send(400, 'Your query did match any records') : res.send(specificQuiz)
+        // we respond with specificQuiz[0] because mongo sends us back an array and we just need to send
+        // an object. So we send the literal value within mongo's array.
+        err ? res.send(400, 'Your query did match any records') : res.send(specificQuiz[0])
     })
     next()
 })
