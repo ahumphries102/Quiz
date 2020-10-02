@@ -1,6 +1,6 @@
 <template>
   <v-container fill-height>
-    <v-card width="50%" class="mx-auto">
+    <v-card width="auto" class="mx-auto">
       <v-card-title>
         <p>Login</p>
       </v-card-title>
@@ -14,9 +14,11 @@
           @click:append="visible = !visible"
         />
         <p :style="{color:color}">{{responseMsg}}</p>
+        <Token @close="()=> tokenUsed = false" v-if="tokenUsed" />
       </v-card-text>
-      <v-card-actions>
+      <v-card-actions class="justify-center">
         <v-btn color="primary" @click="$router.push({name:'signup'})">Signup</v-btn>
+        <v-btn color="primary" @click="tokenUsed = true">Use token</v-btn>
         <v-btn :loading="submitted" color="primary" @click="login">Login</v-btn>
       </v-card-actions>
     </v-card>
@@ -25,8 +27,10 @@
 
 <script>
 import store from "../storage/store";
+import Token from "./token";
 export default {
   name: "login",
+  components: { Token },
   data: () => ({
     color: "",
     loginData: {
@@ -35,6 +39,7 @@ export default {
     },
     responseMsg: "",
     submitted: false,
+    tokenUsed: false,
     visible: false,
   }),
   methods: {

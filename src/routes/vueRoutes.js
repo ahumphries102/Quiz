@@ -78,6 +78,11 @@ const routes = [{
         component: () => import('../components/scores')
     },
     {
+        path: userUrlName + '/mail',
+        name: 'mail',
+        component: () => import('../components/mail')
+    },
+    {
         path: '/404',
         name: 'pageNotFound',
         component: () => import('../components/404')

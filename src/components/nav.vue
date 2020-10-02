@@ -47,7 +47,7 @@ export default {
         "View All Quizzes",
         "Mail a Quiz"
       ],
-      nameOfRoute: ["createquiz", "viewquiz", "takequiz", "viewallquizzes"],
+      nameOfRoute: ["createquiz", "viewquiz", "takequiz", "viewallquizzes", "mail"],
     },
   }),
   mounted(){
