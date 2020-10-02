@@ -1,6 +1,7 @@
 //const restify = require('restify')
-//const quiz = require('./schemas/quizSchema')
+// quiz and score are our databases
 const { quiz, score} = require('./schemas/quizSchema')
+const Email = require('./schemas/emailSchema')
 const User = require('./schemas/userSchema')
 const Router = require('restify-router').Router
 const nodeMailer = require('./mail')
@@ -9,16 +10,56 @@ let resMsg = {}
 require('dotenv').config()
 // const token = process.env.VUE_APP_TOKEN
 
+router.post('/usetoken', (req,res,next)=>{
+    resMsg.message = ''
+    Email.find({
+        userToken: req.body.userToken,
+      }, (err, email)=>{
+        if(err)res.send(400, err)
+        else if(!email.length){
+            resMsg.message = "No quiz found"
+            res.send(400, resMsg.message)
+        }
+        else{
+            res.send(email)
+        }
+    })
+    next()
+})
+
+router.post('/savetokeninfo', (req,res,next)=>{
+    resMsg.message = 'email info saved'
+    let email = new Email(req.body)
+    email.save({
+        from: req.body.from,
+        quizUrl: req.body.quizUrl,
+        subject: req.body.subject,
+        to: req.body.to,
+        userToken: req.body.userToken,
+      }, (err, email)=>{
+        if(err)res.send(400, err)
+        else if(!email.length){
+            res.send(400, resMsg.message)
+        }
+        else{
+            res.send(email)
+        }
+    })
+    next()
+})
+
 router.post('/checkmail', (req,res,next)=>{
     resMsg.message = 'No score found'
     score.find({
-        whoIsReceiving:req.body.whoIsReceiving
+            whoIsReceiving: req.body.userName
     }, (err, score)=>{
-        console.log(score)
         if(err)res.send(400, err)
-        if(req.body.userName === score.whoIsReceiving)
-        {res.send(score)}
-        else{res.send('nuffin')}
+        else if(!score.length){
+            res.send(resMsg.message)
+        }
+        else{
+            res.send(score)
+        }
     })
     next()
 })
@@ -138,7 +179,7 @@ router.post('/sendEmail', (req, res, next) => {
         subject: req.body.subject, // Subject line
         text: req.body.quizUrl, // plain text body
     }
-    nodeMailer.sendEmail().catch(err => console.log(err))
+    nodeMailer.sendEmail().catch(err => res.send(400, err))
 })
 
 module.exports = router

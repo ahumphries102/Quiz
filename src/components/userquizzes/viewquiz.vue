@@ -25,11 +25,12 @@ export default {
   },
   methods: {
     async viewQuiz() {
-      let request = await this.$fetchData("POST", "/viewquiz", {
+      let response = await this.$fetchData("POST", "/viewquiz", {
         userName: this.$store.state.userName
       });
-      this.allQuizzes = request;
-      this.responseMsg = request;
+      console.log(response)
+      this.allQuizzes = response;
+      this.responseMsg = response;
     }
   }
 };

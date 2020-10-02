@@ -1,29 +1,22 @@
 <template>
-  <div>
-    <v-dialog v-model="dialog" :width="isMobile()?'100%':'50%'" persistent>
-      <v-card class="text-center" v-if="!answersViewing">
-        <v-card-title class="justify-center">
-          <h2>Final Score</h2>
-        </v-card-title>
-        <v-divider class="my-2"/>
-        <v-card-subtitle>
-          <h3>You answered {{quizObj.points}}/{{quizObj.quiz.length}} questions correctly</h3>
-          <p>{{responseMsg}}</p>
-        </v-card-subtitle>
-        <v-card-actions>
-          <v-btn text color="primary" class="mx-auto" @click="answersViewing = true">View Answers</v-btn>
-          <v-btn text class="mx-auto" color="primary" @click="$emit('retake')">Retake</v-btn>
-          <v-btn text class="mx-auto" color="primary" :to="{name:'createquiz'}">Home</v-btn>
-        </v-card-actions>
-      </v-card>
-      <QuizReview
-        @close="answersViewing = false"
-        v-if="answersViewing"
-        :quizObj="quizObj"
-        :wQ="wQ"
-      />
-    </v-dialog>
-  </div>
+  <v-dialog v-model="dialog" :width="isMobile()?'100%':'50%'" persistent>
+    <v-card class="text-center" v-if="!answersViewing">
+      <v-card-title class="justify-center">
+        <h2>Final Score</h2>
+      </v-card-title>
+      <v-divider class="my-2" />
+      <v-card-subtitle>
+        <h3>You answered {{quizObj.points}}/{{quizObj.quiz.length}} questions correctly</h3>
+        <p>{{responseMsg}}</p>
+      </v-card-subtitle>
+      <v-card-actions>
+        <v-btn text color="primary" class="mx-auto" @click="answersViewing = true">View Answers</v-btn>
+        <v-btn text class="mx-auto" color="primary" @click="$emit('retake')">Retake</v-btn>
+        <v-btn text class="mx-auto" color="primary" :to="{name:'createquiz'}">Home</v-btn>
+      </v-card-actions>
+    </v-card>
+    <QuizReview @close="answersViewing = false" v-if="answersViewing" :quizObj="quizObj" :wQ="wQ" />
+  </v-dialog>
 </template>
 
 <script>
@@ -39,13 +32,12 @@ export default {
   data: () => ({
     answersViewing: false,
     dialog: false,
-    responseMsg:""
+    responseMsg: "",
   }),
   mixins: [isMobile],
   mounted() {
     this.dialog = true;
-    console.log(JSON.stringify(this.quizObj, undefined, 2))
-    //this.saveScore();
+    this.saveScore();
   },
   methods: {
     async saveScore() {
@@ -68,12 +60,14 @@ export default {
         "November",
         "December",
       ];
-      
-      newBody.day = day;
-      newBody.month = monthNames[month]
-      newBody.year = year
+
+      newBody = {
+        day: day,
+        month: monthNames[month],
+        year: year,
+      };
       const response = await this.$fetchData("POST", "/saveScore", newBody);
-      this.responseMsg = response.message
+      this.responseMsg = response.message;
     },
   },
 };

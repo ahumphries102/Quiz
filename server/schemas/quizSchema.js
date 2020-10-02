@@ -17,13 +17,13 @@ const quizSchema = new Schema({
     quizLookedAt: {
         type: Boolean
     },
-    whoIsReceiving:{
+    whoIsReceiving: {
         type: String
     },
-    whoIsSending:{
+    whoIsSending: {
         type: String
     },
-    originalCreator:{
+    originalCreator: {
         type: String
     }
 })
