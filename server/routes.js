@@ -1,6 +1,9 @@
 //const restify = require('restify')
 // quiz and score are our databases
-const { quiz, score} = require('./schemas/quizSchema')
+const {
+    quiz,
+    score
+} = require('./schemas/quizSchema')
 const Email = require('./schemas/emailSchema')
 const User = require('./schemas/userSchema')
 const Router = require('restify-router').Router
@@ -10,25 +13,24 @@ let resMsg = {}
 require('dotenv').config()
 // const token = process.env.VUE_APP_TOKEN
 
-router.post('/usetoken', (req,res,next)=>{
+router.post('/usetoken', (req, res, next) => {
     resMsg.message = ''
     Email.find({
         userToken: req.body.userToken,
-      }, (err, email)=>{
-        if(err)res.send(400, err)
-        else if(!email.length){
+    }, (err, email) => {
+        if (err) res.send(400, err)
+        else if (!email.length) {
             resMsg.message = "No quiz found"
             res.send(400, resMsg.message)
-        }
-        else{
+        } else {
             res.send(email)
         }
     })
     next()
 })
 
-router.post('/savetokeninfo', (req,res,next)=>{
-    resMsg.message = 'email info saved'
+router.post('/savetokeninfo', (req, res, next) => {
+    let resMsg = ''
     let email = new Email(req.body)
     email.save({
         from: req.body.from,
@@ -36,37 +38,34 @@ router.post('/savetokeninfo', (req,res,next)=>{
         subject: req.body.subject,
         to: req.body.to,
         userToken: req.body.userToken,
-      }, (err, email)=>{
-        if(err)res.send(400, err)
-        else if(!email.length){
-            res.send(400, resMsg.message)
-        }
-        else{
+    }, (err, email) => {
+        if (err) {
+            res.send(400, 'bad info')
+        } else {
             res.send(email)
         }
     })
     next()
 })
 
-router.post('/checkmail', (req,res,next)=>{
+router.post('/checkmail', (req, res, next) => {
     resMsg.message = 'No score found'
     score.find({
-            whoIsReceiving: req.body.userName
-    }, (err, score)=>{
-        if(err)res.send(400, err)
-        else if(!score.length){
+        whoSentQuiz: req.body.userName
+    }, (err, score) => {
+        if (err) res.send(400, err)
+        else if (!score.length) {
             res.send(resMsg.message)
-        }
-        else{
+        } else {
             res.send(score)
         }
     })
     next()
 })
 
-router.get('/viewscore', (req,res,next)=>{
+router.get('/viewscore', (req, res, next) => {
     resMsg.message = 'No score found'
-    score.find({}, (err, score)=>{
+    score.find({}, (err, score) => {
         err ? res.send(400, err) : res.send(score)
     })
     next()

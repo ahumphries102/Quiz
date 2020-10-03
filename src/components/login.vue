@@ -45,7 +45,7 @@ export default {
   methods: {
     async login() {
       this.submitted = true;
-      const response = await this.$fetchData(
+      let response = await this.$fetchData(
         "POST",
         "/sendtoken",
         this.loginData
@@ -63,6 +63,12 @@ export default {
           })
           .catch((err) => err);
         this.$root.loggedIn = true;
+
+        response = await this.$fetchData("POST", "/checkmail", {
+          userName: this.$store.state.userName,
+        });
+        console.log(response.length)
+        this.$store.emailInfo.inbox = response.length
       } else {
         this.color = "red";
         this.responseMsg = response.message;

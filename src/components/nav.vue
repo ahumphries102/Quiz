@@ -8,7 +8,7 @@
       <v-spacer />
       <div v-if="$root.loggedIn" class="d-flex ">
         <p>Hello {{$store.state.userName}}</p>
-        <p>Mail Box {{0}}</p>
+        <router-link :to="{name:'checkemail', params:{userName:$store.state.userName?$store.state.userName:'default'}}">Mail Box {{$store.emailInfo.inbox}}</router-link>
         <v-btn depressed color="blue darken-3" @click="logout">Logout</v-btn>
       </div>
     </v-app-bar>
@@ -50,19 +50,7 @@ export default {
       nameOfRoute: ["createquiz", "viewquiz", "takequiz", "viewallquizzes", "mail"],
     },
   }),
-  mounted(){
-    this.checkMail()
-  },
   methods: {
-    async checkMail(){
-      const response = await this.$fetchData(
-        "POST",
-        "/checkmail",
-        {
-          userName: 'test'
-        }
-      );
-    },
     logout() {
       this.$router.push({ name: "login" }).catch((err) => err);
       this.$store.clearStorage();

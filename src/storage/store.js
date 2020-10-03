@@ -1,6 +1,10 @@
 const storageKey = 'quizlogin'
 
 const store = {
+    emailInfo:{
+        from:'',
+        inbox:0,
+    },
     state:{
         userName:'',
         token:'',

@@ -51,9 +51,11 @@ export default {
         ele.path.includes("takequiz/:quizName") ? ele.path : ""
       );
       this.listOfFullUrls = allQuizObjects.concat(filteredRouterProperties);
+      
+          console.log(allQuizObjects.concat(filteredRouterProperties))
       this.listOfUrls = this.listOfFullUrls.map(
         (ele) =>
-          this.listOfFullUrls[9].path.split(":")[1] +
+          this.listOfFullUrls[this.listOfFullUrls.length-1].path.split(":")[1] +
           ele
       );
       this.listOfFullUrls = this.listOfFullUrls.map((ele) => ele);
@@ -73,9 +75,9 @@ export default {
       this.emailBody.quizUrl = quizSending;
       console.log(this.emailBody);
     
-        let response = await this.$fetchData("POST", "/savetokeninfo", this.emailBody);
-      //const response = await this.$fetchData("POST", "/sendEmail", this.emailBody);
-      //this.$refs.form.reset();
+      //let response = await this.$fetchData("POST", "/savetokeninfo", this.emailBody);
+      response = await this.$fetchData("POST", "/sendEmail", this.emailBody);
+      this.$refs.form.reset();
     },
   },
 };

@@ -3,7 +3,8 @@ import VueRouter from 'vue-router'
 import store from '../storage/store'
 Vue.use(VueRouter)
 const userUrlName = '/:userName'
-const routes = [{
+const routes = [
+    {
         path: '/',
         redirect: to => {
             if (!localStorage.getItem('quizlogin')) {
@@ -19,6 +20,11 @@ const routes = [{
                 })
             }
         }
+    },
+    {
+        path: userUrlName + '/checkemail',
+        name: 'checkemail',
+        component: () => import('../components/checkEmail')
     },
     {
         path: userUrlName + '/createquiz',
