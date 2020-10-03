@@ -53,7 +53,6 @@ export default {
       this.listOfFullUrls = allQuizObjects.concat(filteredRouterProperties);
       this.listOfUrls = this.listOfFullUrls.map(
         (ele) =>
-          "https://quizzor.herokuapp.com/" +
           this.listOfFullUrls[9].path.split(":")[1] +
           ele
       );
