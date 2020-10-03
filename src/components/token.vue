@@ -33,6 +33,7 @@ export default {
             let response = await this.$fetchData("POST", "/usetoken", {userToken:this.userToken});
             this.resIn = response[0]
             this.$store.state.userName = `guest${this.resIn.userToken}`
+            this.$store.emailInfo.from = response[0].from
         }
     },
     computed: {

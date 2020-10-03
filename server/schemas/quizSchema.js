@@ -33,9 +33,9 @@ const scoreSchema = new Schema({
         type: Array,
         required: true
     },
-    day: {
+    date: {
         type: Number,
-        required: [true, 'Day was not submitted']
+        required: [true, 'Date was not submitted']
     },
     month: {
         type: String,
@@ -60,6 +60,14 @@ const scoreSchema = new Schema({
         type: Number,
         required: [true, 'Year was not submitted']
     },
+    whoSentQuiz:{
+        type: String,
+        required: [true, 'There must be a user who is receiving']
+    },
+    completed:{
+        type: Boolean,
+        required: [true, 'The quiz must be completed as either true or false']
+    }
 })
 
 const quiz = mongoose.model('quiz', quizSchema, 'quizzes')

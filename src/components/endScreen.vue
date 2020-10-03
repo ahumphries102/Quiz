@@ -54,13 +54,15 @@ export default {
   mounted() {
     this.dialog = true;
     this.saveScore();
+    console.log(this.quizObj)
   },
   methods: {
     async saveScore() {
+      
       let newBody = JSON.parse(JSON.stringify(this.quizObj));
       const dateObj = new Date();
       const month = dateObj.getUTCMonth(); //months from 1-12
-      const day = dateObj.getUTCDate();
+      const date = dateObj.getUTCDate();
       const year = dateObj.getUTCFullYear();
       const monthNames = [
         "January",
@@ -76,11 +78,16 @@ export default {
         "November",
         "December",
       ];
-
+      
       newBody = {
-        day: day,
+        date: date,
         month: monthNames[month],
         year: year,
+        userName:this.quizObj.userName,
+        quizName:this.quizObj.quizName,
+        points:this.quizObj.points,
+        whoSentQuiz: this.$store.emailInfo.from,
+        completed: true,
       };
       const response = await this.$fetchData("POST", "/saveScore", newBody);
       this.responseMsg = response.message;
