@@ -6,11 +6,11 @@
           </v-card-title>
           <v-card-text>
               <v-text-field label="Enter your token" v-model.number="userToken"/>
-              <p>{{responseInfo.quizUrl}}</p>
-              <v-btn v-show="responseInfo.quizUrl" :to="{path:updatedUrl}">Go to {{updatedUrl}}</v-btn>
+              <p v-show="resIn.quizUrl">You are about to take the quiz <strong>{{resIn.quizUrl?resIn.quizUrl.split('takequiz/')[1]:''}}</strong></p>
           </v-card-text>
           <v-card-actions>
-              <v-btn color="primary" @click="useToken">Send</v-btn>
+              <v-btn v-show="resIn.quizUrl" color="primary" :to="{path:updatedUrl}">Take Quiz</v-btn>
+              <v-btn v-show="!resIn.quizUrl" color="primary" @click="useToken">Send</v-btn>
           </v-card-actions>
       </v-card>
   </v-dialog>
@@ -21,7 +21,8 @@ export default {
     name:'token',
     data:()=>({
         dialog:false,
-        responseInfo:{},
+        // short for responseInfo
+        resIn:{},
         userToken:'',
     }),
     mounted(){
@@ -29,17 +30,14 @@ export default {
     },
     methods: {
         async useToken(){
-            let response = await this.$fetchData("POST", "/usetoken", {userToken:9828});
-            //let response = await this.$fetchData("POST", "/usetoken", {userToken:this.userToken});
-            this.responseInfo = response[0]
-            this.$store.state.userName = `guest${this.responseInfo.userToken}`
-            this.$store.state.token = this.responseInfo.userToken
-            console.log(this.$store.state.userName)
+            let response = await this.$fetchData("POST", "/usetoken", {userToken:this.userToken});
+            this.resIn = response[0]
+            this.$store.state.userName = `guest${this.resIn.userToken}`
         }
     },
     computed: {
         updatedUrl(){
-            if(this.responseInfo.quizUrl) return this.responseInfo.quizUrl = this.responseInfo.quizUrl.replace('userName', `guest${this.responseInfo.userToken}`) 
+            if(this.resIn.quizUrl) return this.resIn.quizUrl = this.resIn.quizUrl.replace('userName', `guest${this.resIn.userToken}`) 
         }
     },
 }
