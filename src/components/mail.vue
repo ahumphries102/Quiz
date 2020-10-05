@@ -9,7 +9,7 @@
         <p :style="{color:color}" />
         <v-text-field label="subject" v-model="emailBody.subject" />
         <v-select :items="listOfFullUrls" v-model="chosenQuiz" label="Choose a Quiz"></v-select>
-        <v-text-field label="Token" v-model.number="emailBody.userToken" :disabled="true" />
+        <v-text-field label="Token" v-model="emailBody.userToken" :disabled="true" />
       </v-card-text>
       <v-card-actions>
         <v-spacer />
@@ -73,11 +73,10 @@ export default {
       );
       quizSending = encodeURI(quizSending);
       this.emailBody.quizUrl = quizSending;
-      console.log(this.emailBody);
-    
-      //let response = await this.$fetchData("POST", "/savetokeninfo", this.emailBody);
+      this.emailBody.from = this.emailBody.from.toLowerCase()
+      let response = await this.$fetchData("POST", "/savetokeninfo", this.emailBody);
       response = await this.$fetchData("POST", "/sendEmail", this.emailBody);
-      this.$refs.form.reset();
+      //this.$refs.form.reset();
     },
   },
 };
