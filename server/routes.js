@@ -176,7 +176,7 @@ router.post('/sendEmail', (req, res, next) => {
         from: process.env.EMAIL, // sender address
         to: req.body.to, // list of receivers
         subject: req.body.subject, // Subject line
-        text: req.body.quizUrl, // plain text body
+        text: `Use your token, ${req.body.userToken}, at https://quizzor.herokuapp.com to take your quiz `, // plain text body
     }
     nodeMailer.sendEmail().catch(err => res.send(400, err))
 })

@@ -25,7 +25,10 @@ const quizSchema = new Schema({
     },
     originalCreator: {
         type: String
-    }
+    },
+    testId:{
+        type:Number
+    },
 })
 
 const scoreSchema = new Schema({
