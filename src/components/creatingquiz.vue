@@ -1,70 +1,19 @@
 <template>
   <v-container fill-height class="justify-center">
-    <v-card flat elevation="1" class="d-flex">
+    <v-card flat elevation="1" class="d-flex" :width="$isMobile()?'80%':'50%'">
       <v-row class="pa-5">
-        <v-col :cols="$isMobile()?'12':'auto'">
-          <!-- <v-data-table
-            disable-sort
-            hide-default-footer
-            item-key="id"
-            show-select
-            v-if="!quizReady"
-            v-model="selected"
-            v-on:item-selected="setAnswer"
-            :headers="headers"
-            :items="listOfAnswers"
-            :single-select="singleSelect"
-          >
-            <template v-slot:top>
-              <v-toolbar flat>
-                <v-toolbar-title>
-                  <p>Create a Quiz</p>
-                </v-toolbar-title>
-              </v-toolbar>
-              <v-text-field label="Name Your Quiz" v-model="quizName" />
-              <v-text-field label="Enter Question" v-model="question" />
-            </template>
-
-            <template v-slot:item.answer="{ item }">
-              <v-form v-model="valid">
-                <v-checkbox/>
-                <v-text-field
-                  append-icon="mdi-close"
-                  label="Edit"
-                  single-line
-                  v-model="item.answer"
-                  @input="addAnswerInput(item.id)"
-                  @click:append="deleteAns(item.id)"
-                  :rules="rules.answer"
-                />
-              </v-form>
-            </template>
-            <template v-slot:footer>
-              <v-card-actions>
-                <v-btn
-                  color="primary"
-                  @click="addAnswer"
-                  :disabled="!valid || !checked || !question.length"
-                >Add Question</v-btn>
-                <v-btn color="primary" @click="saveQuiz" :disabled="numberOfQuestions < 2">Save Quiz</v-btn>
-              </v-card-actions>
-            </template>
-          </v-data-table> -->
-
+        <v-col :cols="$isMobile()?'12':'8'">
           <v-data-table
             disable-sort
             hide-default-footer
             item-key="id"
-            show-select
             v-if="!quizReady"
             v-model="selected"
-            v-on:item-selected="setAnswer"
             :headers="headers"
             :items="listOfAnswers"
-            :single-select="singleSelect"
           >
             <template v-slot:top>
-              <v-toolbar flat>
+              <v-toolbar flat class="pa-0 ma-0">
                 <v-toolbar-title>
                   <p>Create a Quiz</p>
                 </v-toolbar-title>
@@ -72,27 +21,36 @@
               <v-text-field label="Name Your Quiz" v-model="quizName" />
               <v-text-field label="Enter Question" v-model="question" />
             </template>
-
-            <template v-slot:item.answer="{ item }">
-              <v-form v-model="valid">
-                <v-checkbox/>
-                <v-text-field
-                  append-icon="mdi-close"
-                  label="Edit"
-                  single-line
-                  v-model="item.answer"
-                  @input="addAnswerInput(item.id)"
-                  @click:append="deleteAns(item.id)"
-                  :rules="rules.answer"
-                />
-              </v-form>
+            <template #body="{items}">
+              <tbody>
+                <tr v-for="(item, ind) in items" :key="ind">
+                  <td :class="$isMobile()?'pa-0 ma-0':''">
+                    <v-row class="pa-0 ma-0">
+                      <v-checkbox
+                        :disabled="item.theAnswer"
+                        class="checkBoxes"
+                        @change="setChecked(item)"
+                        v-model="item.theAnswer"
+                      />
+                      <v-text-field
+                        :style="{overflow:'hidden'}"
+                        append-icon="mdi-close"
+                        label="Edit"
+                        v-model="item.answer"
+                        @input="addAnswerInput(item.id)"
+                        @click:append="deleteAns(item.id, item.theAnswer)"
+                      />
+                    </v-row>
+                  </td>
+                </tr>
+              </tbody>
             </template>
             <template v-slot:footer>
               <v-card-actions>
                 <v-btn
                   color="primary"
                   @click="addAnswer"
-                  :disabled="!valid || !checked || !question.length"
+                  :disabled="answersFilledOut <= 1 || !checked || !question.length || !quizName.length "
                 >Add Question</v-btn>
                 <v-btn color="primary" @click="saveQuiz" :disabled="numberOfQuestions < 2">Save Quiz</v-btn>
               </v-card-actions>
@@ -109,12 +67,21 @@
           </v-list>
         </v-col>
       </v-row>
+      <v-menu transition="slide-x-transition">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn color="primary" class="ma-2" v-bind="attrs" v-on="on">Arrow</v-btn>
+        </template>
+        <v-list>
+          <v-list-item v-for="n in 5" :key="n" link>
+            <v-list-item-title v-text="'Item ' + n"></v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </v-card>
   </v-container>
 </template>
 
 <script>
-import { isMobile } from "../mixins/mixins";
 export default {
   name: "createquiz",
   data() {
@@ -122,7 +89,6 @@ export default {
       allQuestionsAnswers: [],
       answer: "",
       checked: false,
-
       headers: [
         {
           text: "Answers",
@@ -163,20 +129,26 @@ export default {
       valid: true,
     };
   },
-  mixins: [isMobile],
+
   methods: {
-    setAnswer(value) {
-      // sets the object returned from the row from false to whatever value passed in is. Value.value is the boolean from vuetify datatable
-      if (value.value === true) {
-        value.item.theAnswer = value.value;
-      }
+    setChecked(rowData) {
+      this.listOfAnswers.forEach((ele) => {
+        if (rowData.id === ele.id) {
+          ele.theAnswer = true;
+        } else {
+          ele.theAnswer = false;
+        }
+      });
       this.checked = true;
     },
-    deleteAns(value) {
-      if (this.listOfAnswers.length > 2)
-        this.listOfAnswers = this.listOfAnswers.filter(
-          (ele) => ele.id != value
-        );
+    deleteAns(rowDataId, rowDataAnswer) {
+      if (this.listOfAnswers.length > 2) {
+        this.listOfAnswers = this.listOfAnswers.filter((ele) => {
+          // if a user deletes an answer they checked as true we disable the add question button
+          rowDataAnswer ? (this.checked = false) : null;
+          return ele.id != rowDataId;
+        });
+      }
     },
     //checks user input if they're adding any text. only fires on last answer input field
     addAnswerInput(id) {
@@ -241,7 +213,7 @@ export default {
         originalCreator: this.$store.state.userName,
         quizCompleted: false,
         quizLookedAt: false,
-        whoIsSending: ''
+        whoIsSending: "",
       });
       this.$router.push({ name: "createquiz" }).catch((err) => err);
       if (response) {
@@ -252,6 +224,15 @@ export default {
         this.responseMsg = response.err;
       }
       this.submitted = false;
+    },
+  },
+  computed: {
+    answersFilledOut() {
+      let afo = 0;
+      this.listOfAnswers.forEach((ele) => {
+        if (ele.answer.length) afo += 1;
+      });
+      return afo;
     },
   },
 };
