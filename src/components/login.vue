@@ -1,6 +1,6 @@
 <template>
   <v-container fill-height>
-    <v-card width="auto" class="mx-auto">
+    <v-card :width="$isMobile()?'80%':'25%'" class="mx-auto">
       <v-card-title>
         <p>Login</p>
       </v-card-title>

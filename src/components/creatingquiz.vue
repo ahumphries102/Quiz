@@ -2,7 +2,55 @@
   <v-container fill-height class="justify-center">
     <v-card flat elevation="1" class="d-flex">
       <v-row class="pa-5">
-        <v-col cols="auto">
+        <v-col :cols="$isMobile()?'12':'auto'">
+          <!-- <v-data-table
+            disable-sort
+            hide-default-footer
+            item-key="id"
+            show-select
+            v-if="!quizReady"
+            v-model="selected"
+            v-on:item-selected="setAnswer"
+            :headers="headers"
+            :items="listOfAnswers"
+            :single-select="singleSelect"
+          >
+            <template v-slot:top>
+              <v-toolbar flat>
+                <v-toolbar-title>
+                  <p>Create a Quiz</p>
+                </v-toolbar-title>
+              </v-toolbar>
+              <v-text-field label="Name Your Quiz" v-model="quizName" />
+              <v-text-field label="Enter Question" v-model="question" />
+            </template>
+
+            <template v-slot:item.answer="{ item }">
+              <v-form v-model="valid">
+                <v-checkbox/>
+                <v-text-field
+                  append-icon="mdi-close"
+                  label="Edit"
+                  single-line
+                  v-model="item.answer"
+                  @input="addAnswerInput(item.id)"
+                  @click:append="deleteAns(item.id)"
+                  :rules="rules.answer"
+                />
+              </v-form>
+            </template>
+            <template v-slot:footer>
+              <v-card-actions>
+                <v-btn
+                  color="primary"
+                  @click="addAnswer"
+                  :disabled="!valid || !checked || !question.length"
+                >Add Question</v-btn>
+                <v-btn color="primary" @click="saveQuiz" :disabled="numberOfQuestions < 2">Save Quiz</v-btn>
+              </v-card-actions>
+            </template>
+          </v-data-table> -->
+
           <v-data-table
             disable-sort
             hide-default-footer
@@ -27,9 +75,9 @@
 
             <template v-slot:item.answer="{ item }">
               <v-form v-model="valid">
+                <v-checkbox/>
                 <v-text-field
                   append-icon="mdi-close"
-                  counter
                   label="Edit"
                   single-line
                   v-model="item.answer"
@@ -51,7 +99,7 @@
             </template>
           </v-data-table>
         </v-col>
-        <v-divider vertical class="ml-5" />
+        <v-divider v-show="!$isMobile()" vertical class="ml-5" />
         <v-col cols="auto">
           <h3>Your Questions</h3>
           <v-list>
