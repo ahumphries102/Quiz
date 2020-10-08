@@ -1,6 +1,6 @@
 <template>
   <v-app id="inspire">
-    <v-app-bar :clipped-left="$vuetify.breakpoint.lgAndUp" app color="blue darken-3" dark height="auto">
+    <v-app-bar :clipped-left="$vuetify.breakpoint.lgAndUp" app color="blue darken-3" dark >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title class="ml-0 pl-4">
         <span class="hidden-sm-and-down">Quiz App</span>
