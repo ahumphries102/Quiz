@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" width="25%" @click:outside="$emit('close')">
+  <v-dialog v-model="dialog" width="80%" @click:outside="$emit('close')">
       <v-card>
           <v-card-title>
               User your token
