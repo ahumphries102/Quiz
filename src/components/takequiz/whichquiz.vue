@@ -1,6 +1,6 @@
 <template>
   <v-container fill-height>
-    <v-card :width="isMobile?'100%':'80%'" class="mx-auto" v-if="initialData.dataFetched">
+    <v-card :width="$isMobile()?'100%':'80%'" class="mx-auto" v-if="initialData.dataFetched">
       <v-card-title>
         <v-text-field v-model="initialData.quizObj.userName">
           <template #prepend>

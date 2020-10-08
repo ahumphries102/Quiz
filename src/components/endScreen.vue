@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" :width="isMobile()?'100%':'50%'" persistent>
+  <v-dialog v-model="dialog" :width="$isMobile()?'80%':'50%'" persistent>
     <v-card class="text-center" v-if="!answersViewing && !$router.currentRoute.path.includes('guest')">
       <v-card-title class="justify-center">
         <h2>Final Score</h2>

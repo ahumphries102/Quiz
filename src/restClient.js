@@ -1,4 +1,4 @@
-let fetchData = async(method, url, data) => {
+const fetchData = async(method, url, data) => {
     let mode = 'cors'
     let headers = {
       'Content-Type': 'application/json',

@@ -4,14 +4,14 @@ import router from './routes/vueRoutes'
 import vuetify from './plugins/vuetify'
 import store from './storage/store'
 import FetchData from './restClient'
+import IsMobile from './isMobile'
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import '@mdi/font/css/materialdesignicons.css'
-Vue.forceUpdate
 Vue.observable(store)
 Vue.prototype.$store = store
+Vue.prototype.$isMobile = IsMobile
 Vue.prototype.$fetchData = FetchData
 Vue.config.productionTip = false
-
 new Vue({
   router,
   vuetify,

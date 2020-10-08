@@ -1,14 +1,14 @@
 <template>
   <v-app id="inspire">
-    <v-app-bar :clipped-left="$vuetify.breakpoint.lgAndUp" app color="blue darken-3" dark>
+    <v-app-bar :clipped-left="$vuetify.breakpoint.lgAndUp" app color="blue darken-3" dark height="auto">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-toolbar-title style="width: 300px" class="ml-0 pl-4">
+      <v-toolbar-title class="ml-0 pl-4">
         <span class="hidden-sm-and-down">Quiz App</span>
       </v-toolbar-title>
       <v-spacer />
       <div v-if="$root.loggedIn" class="d-flex ">
         <p>Hello {{$store.state.userName}}</p>
-        <router-link :to="{name:'checkemail', params:{userName:$store.state.userName?$store.state.userName:'default'}}">Mail Box {{$store.emailInfo.inbox}}</router-link>
+        <router-link class="mx-5" :to="{name:'checkemail', params:{userName:$store.state.userName?$store.state.userName:'default'}}">Mail Box {{$store.emailInfo.inbox}}</router-link>
         <v-btn depressed color="blue darken-3" @click="logout">Logout</v-btn>
       </div>
     </v-app-bar>
