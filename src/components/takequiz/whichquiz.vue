@@ -1,10 +1,10 @@
 <template>
   <v-container fill-height>
-    <v-card :width="isMobile?'80%':'80%'" class="mx-auto" v-if="initialData.dataFetched">
+    <v-card :width="isMobile?'100%':'80%'" class="mx-auto" v-if="initialData.dataFetched">
       <v-card-title>
         <v-text-field v-model="initialData.quizObj.userName">
           <template #prepend>
-            <p>Name:</p>
+            <p :style="{width:'50px'}">Name:</p>
           </template>
         </v-text-field>
       </v-card-title>
@@ -26,7 +26,7 @@
         </v-list-item>
       </v-card-text>
       <v-card-actions>
-        <v-btn v-show="initialData.wQu <= 0" color="primary" :to="{name:'takequiz'}">Back</v-btn>
+        <v-btn v-show="initialData.wQu <= 0 && !$router.currentRoute.path.includes('guest')" color="primary" :to="{name:'takequiz'}">Back</v-btn>
         <v-btn v-show="initialData.wQu > 0" color="primary" @click="removeAnswer"><</v-btn>
         <v-btn
           color="primary"
