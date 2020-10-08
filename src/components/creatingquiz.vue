@@ -58,7 +58,7 @@
           </v-data-table>
         </v-col>
         <v-divider v-show="!$isMobile()" vertical class="ml-5" />
-        <v-col cols="auto">
+        <v-col cols="auto" v-if="!$isMobile()">
           <h3>Your Questions</h3>
           <v-list>
             <v-list-item class="pl-0" v-for="(test,ind) in allQuestionsAnswers" :key="ind">
@@ -67,17 +67,24 @@
           </v-list>
         </v-col>
       </v-row>
-      <v-menu transition="slide-x-transition">
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn color="primary" class="ma-2" v-bind="attrs" v-on="on">Arrow</v-btn>
-        </template>
-        <v-list>
-          <v-list-item v-for="n in 5" :key="n" link>
-            <v-list-item-title v-text="'Item ' + n"></v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
     </v-card>
+    <v-menu transition="slide-x-transition" left :offset-x="true" v-if="$isMobile()">
+      <template v-slot:activator="{ on, attrs }">
+        <v-card class="grey d-flex justify-center" v-bind="attrs" v-on="on" height="150px" width="25px">
+          <v-icon>mdi-menu-left</v-icon>
+        </v-card>
+      </template>
+      <v-card>
+      <v-card-text>
+        <h3>Your Questions</h3>
+          <v-list>
+            <v-list-item class="pl-0" v-for="(test,ind) in allQuestionsAnswers" :key="ind">
+              <p>{{ind + 1}}: {{test.question}}</p>
+            </v-list-item>
+          </v-list>
+      </v-card-text>
+      </v-card>
+    </v-menu>
   </v-container>
 </template>
 
