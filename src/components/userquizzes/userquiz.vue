@@ -1,8 +1,8 @@
 <template>
   <div>
     <v-card v-if="dataRetrieved">
-      <v-card-title>
-        <h3>Question {{nextQuestion + 1}}/{{allQuizzes[routeId].quiz.length}}: {{allQuizzes[routeId].quiz[nextQuestion].question}}</h3>
+      <v-card-title :style="{'word-break':'break-word'}">
+        <h3 >Question {{nextQuestion + 1}}/{{allQuizzes[routeId].quiz.length}}: {{allQuizzes[routeId].quiz[nextQuestion].question}}</h3>
       </v-card-title>
       <v-card-subtitle>
         <v-icon @click="emailDialog = true">mdi-email</v-icon>
