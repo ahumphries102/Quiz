@@ -128,7 +128,6 @@ router.beforeEach((to, from, next) => {
             }
         }, 0);
     } else {
-        console.log('not signup')
         next()
     }
 })

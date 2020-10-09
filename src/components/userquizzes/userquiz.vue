@@ -29,31 +29,17 @@
         >></v-btn>
       </v-card-actions>
     </v-card>
-    <v-dialog v-model="emailDialog" width="35%">
-      <v-form ref="form">
-        <v-card>
-          <v-card-title>Email a Quiz</v-card-title>
-          <v-card-subtitle>Simly enter the users email address and a subject letting them know you're sending.</v-card-subtitle>
-          <v-card-text>
-            <v-text-field label="to" v-model="email.to" />
-              <p :style="{color:color}"/>
-            <v-text-field label="subject" v-model="email.subject" />
-            <v-text-field :disabled="true" label="Quiz URL" v-model="email.quizUrl" />
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer />
-            <v-btn color="primary" text @click="sendEmail">send email</v-btn>
-            <v-btn color="primary" text @click="emailDialog = false">Close</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-form>
+    <v-dialog v-model="emailDialog" :width="$isMobile()?'80%':'35%'">
+      <Mail @close="emailDialog = false"/>
     </v-dialog>
   </div>
 </template>
 
 <script>
+import Mail from '../mail'
 export default {
   name: "userquiz",
+  components:{ Mail },
   data: () => ({
     adjustedQuizzes: [],
     allQuizzes: [],

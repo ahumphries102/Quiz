@@ -45,9 +45,6 @@ export default {
       wQu: 0,
     };
   },
-  mounted() {
-    console.log(JSON.stringify(this.quizObj, undefined, 2));
-  },
   methods: {},
 };
 </script>

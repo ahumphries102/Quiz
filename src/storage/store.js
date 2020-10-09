@@ -4,6 +4,7 @@ const store = {
     emailInfo:{
         from:'',
         inbox:0,
+        unread:0,
     },
     state:{
         userName:'',

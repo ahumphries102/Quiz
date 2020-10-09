@@ -1,6 +1,6 @@
 <template>
   <v-container fill-height>
-    <v-card width="50%" class="mx-auto" :loading="submitted">
+    <v-card :width="$isMobile()?'80%':'50%'" class="mx-auto" :loading="submitted">
       <v-card-title>Signup</v-card-title>
       <v-form v-model="valid">
         <v-card-text>

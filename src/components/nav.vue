@@ -1,15 +1,36 @@
 <template>
   <v-app id="inspire">
-    <v-app-bar :clipped-left="$vuetify.breakpoint.lgAndUp" app color="blue darken-3" dark >
+    <v-app-bar :clipped-left="$vuetify.breakpoint.lgAndUp" app color="blue darken-3" dark>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title class="ml-0 pl-4">
         <span class="hidden-sm-and-down">Quiz App</span>
       </v-toolbar-title>
       <v-spacer />
-      <div v-if="$root.loggedIn" class="d-flex ">
-        <p>Hello {{$store.state.userName}}</p>
-        <router-link class="mx-5" :to="{name:'checkemail', params:{userName:$store.state.userName?$store.state.userName:'default'}}">Mail Box {{$store.emailInfo.inbox}}</router-link>
-        <v-btn depressed color="blue darken-3" @click="logout">Logout</v-btn>
+      <div v-if="$root.loggedIn">
+        <v-menu transition="slide-y-transition" left :offset-y="true">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn text dark v-bind="attrs" v-on="on" class="mr-3">
+              <v-icon class="mr-2">mdi-account</v-icon>
+              {{$isMobile()?'':'Hello ' + $store.state.userName}}
+            </v-btn>
+          </template>
+          <v-card>
+            <v-card-text>
+              <v-list>
+                <v-btn text color="primary" @click="logout">Logout</v-btn>
+              </v-list>
+            </v-card-text>
+          </v-card>
+        </v-menu>
+        <v-btn dark text>
+          <router-link
+            :style="{color:'white'}"
+            :to="{name:'checkemail', params:{userName:$store.state.userName?$store.state.userName:'default'}}"
+          >
+            <v-icon :class="$isMobile()?'mr-1':'mr-2'">mdi-email</v-icon>
+            <span :style="{color:'white'}">{{$store.emailInfo.inbox}}</span>
+          </router-link>
+        </v-btn>
       </div>
     </v-app-bar>
 
@@ -19,7 +40,10 @@
       app
       v-if="$router.currentRoute.name !== 'login'"
     >
-      <v-list :disabled="$store.state.token === ''" v-show="!$router.currentRoute.path.includes('guest')">
+      <v-list
+        :disabled="$store.state.token === ''"
+        v-show="!$router.currentRoute.path.includes('guest')"
+      >
         <v-list-item v-for="(routeName, ind) in routes.listName" :key="ind">
           <router-link
             :to="{name:routes.nameOfRoute[ind], params:{userName:$store.state.userName?$store.state.userName:'default'}}"
@@ -45,11 +69,21 @@ export default {
         "View Your Quizzes",
         "Take a Quiz",
         "View All Quizzes",
-        "Mail a Quiz"
+        "Mail a Quiz",
       ],
-      nameOfRoute: ["createquiz", "viewquiz", "takequiz", "viewallquizzes", "mail"],
+      nameOfRoute: [
+        "createquiz",
+        "viewquiz",
+        "takequiz",
+        "viewallquizzes",
+        "mail",
+      ],
     },
   }),
+  mounted() {
+    console.log(
+            this.$store.emailInfo)
+  },
   methods: {
     logout() {
       this.$router.push({ name: "login" }).catch((err) => err);
