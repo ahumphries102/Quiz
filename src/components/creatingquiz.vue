@@ -230,6 +230,7 @@ export default {
           delete: this.addAnswerInput,
         },
       ];
+      console.log(this.allQuestionsAnswers)
     },
     async saveQuiz() {
       const response = await this.$fetchData("POST", "/addquiz", {

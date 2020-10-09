@@ -2,7 +2,7 @@
   <v-container fill-height>
     <v-card :width="$isMobile()?'100%':'80%'" class="mx-auto" v-if="initialData.dataFetched">
       <v-card-title>
-        <v-text-field v-model="initialData.quizObj.userName">
+        <v-text-field label="Enter your name" v-model="initialData.quizObj.userName">
           <template #prepend>
             <p :style="{width:'50px'}">Name:</p>
           </template>
@@ -11,7 +11,7 @@
       <v-card-subtitle>
         <p>Question {{initialData.wQu + 1}}/{{initialData.quizObj.quiz.length}}: {{initialData.quizObj.quiz[initialData.wQu].question}}</p>
       </v-card-subtitle>
-      <v-card-text v-show="initialData.quizObj.userName.length > 0">
+      <v-card-text>
         <v-list-item
           v-for="(answer, ind) in initialData.quizObj.quiz[initialData.wQu].answers"
           @click="saveAnswer(answer, initialData.quizObj.quiz[initialData.wQu])"
@@ -31,7 +31,7 @@
         <v-btn
           color="primary"
           @click="nextQuestion"
-          :disabled="!initialData.quizObj.quiz[initialData.wQu].clicked  || initialData.quizObj.userName.length < 1"
+          :disabled="!initialData.quizObj.quiz[initialData.wQu].clicked  || initialData.quizObj.userName.length < 1 || !initialData.quizObj.userName.length"
         >{{initialData.nextQuestionButtonText}}</v-btn>
       </v-card-actions>
     </v-card>
@@ -98,6 +98,7 @@ export default {
         )}`
       );
       this.initialData.quizObj = response;
+      this.initialData.quizObj.userName = ''
       this.initialData.dataFetched = true;
     },
     nextQuestion() {

@@ -65,7 +65,7 @@ const scoreSchema = new Schema({
     },
     whoSentQuiz:{
         type: String,
-        required: [true, 'There must be a user who is receiving']
+        required: [false, 'There must be a user who is receiving']
     },
     completed:{
         type: Boolean,
