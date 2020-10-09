@@ -52,37 +52,50 @@
                   @click="addAnswer"
                   :disabled="answersFilledOut <= 1 || !checked || !question.length || !quizName.length "
                 >Add Question</v-btn>
-                <v-btn color="primary" @click="saveQuiz" :disabled="numberOfQuestions < 2">Save Quiz</v-btn>
               </v-card-actions>
             </template>
           </v-data-table>
         </v-col>
         <v-divider v-show="!$isMobile()" vertical class="ml-5" />
-        <v-col cols="auto" v-if="!$isMobile()">
+        <v-col cols="auto" v-if="$isMobile()?false:true">
           <h3>Your Questions</h3>
           <v-list>
             <v-list-item class="pl-0" v-for="(test,ind) in allQuestionsAnswers" :key="ind">
-              <p>{{ind + 1}}: {{test.question}}</p>
+              <p>
+                {{ind + 1}} {{test.question}}
+                <v-icon @click="deleteQuestion(test.question)">mdi-delete</v-icon>
+              </p>
             </v-list-item>
           </v-list>
+          <v-btn color="primary" @click="saveQuiz" :disabled="numberOfQuestions < 2">Save Quiz</v-btn>
         </v-col>
       </v-row>
     </v-card>
-    <v-menu transition="slide-x-transition" left :offset-x="true" v-if="$isMobile()">
+    <v-menu transition="slide-x-transition" left :offset-x="true" v-if="$isMobile()?true:false">
       <template v-slot:activator="{ on, attrs }">
-        <v-card class="grey d-flex justify-center" v-bind="attrs" v-on="on" height="150px" width="25px">
+        <v-card
+          class="grey d-flex justify-center"
+          v-bind="attrs"
+          v-on="on"
+          height="150px"
+          width="25px"
+        >
           <v-icon>mdi-menu-left</v-icon>
         </v-card>
       </template>
       <v-card>
-      <v-card-text>
-        <h3>Your Questions</h3>
+        <v-card-text>
+          <h3 class="text-center">Your Questions</h3>
           <v-list>
             <v-list-item class="pl-0" v-for="(test,ind) in allQuestionsAnswers" :key="ind">
-              <p>{{ind + 1}}: {{test.question}}</p>
+              <p>
+                {{ind + 1}}: {{test.question}}
+                <v-icon @click="deleteQuestion(test.question)">mdi-delete</v-icon>
+              </p>
             </v-list-item>
           </v-list>
-      </v-card-text>
+          <v-btn color="primary" @click="saveQuiz" :disabled="numberOfQuestions < 2">Save Quiz</v-btn>
+        </v-card-text>
       </v-card>
     </v-menu>
   </v-container>
@@ -148,6 +161,12 @@ export default {
       });
       this.checked = true;
     },
+    // deletes a question from the Your Questions list
+    deleteQuestion(currentQuestion) {
+      this.allQuestionsAnswers = this.allQuestionsAnswers.filter(
+        (ele) => ele.question !== currentQuestion
+      );
+    },
     deleteAns(rowDataId, rowDataAnswer) {
       if (this.listOfAnswers.length > 2) {
         this.listOfAnswers = this.listOfAnswers.filter((ele) => {
@@ -159,8 +178,8 @@ export default {
     },
     //checks user input if they're adding any text. only fires on last answer input field
     addAnswerInput(id) {
-      let dataIds = this.listOfAnswers.map((ele) => ele.id);
-      let maxValue = Math.max(...dataIds);
+      const dataIds = this.listOfAnswers.map((ele) => ele.id);
+      const maxValue = Math.max(...dataIds);
       if (maxValue === id) {
         this.listOfAnswers.push({
           id: Date.now(),
@@ -213,7 +232,7 @@ export default {
       ];
     },
     async saveQuiz() {
-      let response = await this.$fetchData("POST", "/addquiz", {
+      const response = await this.$fetchData("POST", "/addquiz", {
         quizName: this.quizName,
         userName: this.$store.state.userName,
         quiz: this.allQuestionsAnswers,
@@ -234,6 +253,7 @@ export default {
     },
   },
   computed: {
+    // check how many answers users have filled out. We need at least 2 in order to let users move forward with adding a question.
     answersFilledOut() {
       let afo = 0;
       this.listOfAnswers.forEach((ele) => {

@@ -28,7 +28,6 @@ export default {
       let response = await this.$fetchData("POST", "/viewquiz", {
         userName: this.$store.state.userName
       });
-      console.log(response)
       this.allQuizzes = response;
       this.responseMsg = response;
     }

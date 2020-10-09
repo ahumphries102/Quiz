@@ -99,7 +99,6 @@ export default {
       );
       this.initialData.quizObj = response;
       this.initialData.dataFetched = true;
-      console.log(JSON.stringify(this.initialData.quizObj, undefined, 2))
     },
     nextQuestion() {
       this.initialData.nQ++;
@@ -129,7 +128,6 @@ export default {
       this.initialData.usersAnswers.pop();
     },
     saveAnswer(quizObject, quizObjectParent) {
-      console.log(quizObject)
       // quizObjectParent is one step up from quizObject in its object hierarchy.
       // Each quiz has X amount of quizObjects based on how many the user creates. Each question must
       // have a click property so we can keep track if a user made chose an answer.

@@ -1,8 +1,8 @@
 <template>
-  <v-card width="50%">
+  <v-card :width="$router.currentRoute.path.includes('viewquiz')?'100%':'50%'">
     <v-form ref="form">
       <v-card-title>Email a Quiz</v-card-title>
-      <v-card-subtitle>Simly enter the users emailBody address and a subject letting them know you're sending.</v-card-subtitle>
+      <v-card-subtitle>Simply enter the users emailBody address and a subject letting them know you're sending.</v-card-subtitle>
       <v-card-text>
         <v-text-field label="to" v-model="emailBody.to" />
         <v-text-field label="from" v-model="emailBody.from" />
@@ -14,7 +14,7 @@
       <v-card-actions>
         <v-spacer />
         <v-btn color="primary" text @click="sendEmail">send</v-btn>
-        <v-btn color="primary" text @click="emailDialog = false">Close</v-btn>
+        <v-btn color="primary" text @click="$emit('close')">Close</v-btn>
       </v-card-actions>
     </v-form>
   </v-card>

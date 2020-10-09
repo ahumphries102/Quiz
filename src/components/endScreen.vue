@@ -7,7 +7,6 @@
       <v-divider class="my-2" />
       <v-card-subtitle>
         <h3>You answered {{quizObj.points}}/{{quizObj.quiz.length}} questions correctly</h3>
-        <p>{{responseMsg}}</p>
       </v-card-subtitle>
       <v-card-actions>
         <v-btn text color="primary" class="mx-auto" @click="answersViewing = true">View Answers</v-btn>
@@ -54,7 +53,6 @@ export default {
   mounted() {
     this.dialog = true;
     this.saveScore();
-    console.log(this.quizObj)
   },
   methods: {
     async saveScore() {

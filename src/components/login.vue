@@ -67,7 +67,6 @@ export default {
         response = await this.$fetchData("POST", "/checkmail", {
           userName: this.$store.state.userName,
         });
-        console.log(response.length)
         this.$store.emailInfo.inbox = response.length
       } else {
         this.color = "red";
