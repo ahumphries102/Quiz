@@ -1,5 +1,5 @@
 <template>
-  <v-card :width="$router.currentRoute.path.includes('viewquiz')?'100%':'50%'">
+  <v-card :width="$router.currentRoute.path.includes('viewquiz')?'100%':$isMobile()?'80%':'50%'" :class="$isMobile()?'mx-auto':''">
     <v-form ref="form">
       <v-card-title>Email a Quiz</v-card-title>
       <v-card-subtitle>Simply enter the users emailBody address and a subject letting them know you're sending.</v-card-subtitle>

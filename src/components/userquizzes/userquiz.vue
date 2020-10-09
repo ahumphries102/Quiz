@@ -11,8 +11,9 @@
         <v-list-item
           v-for="(element, ind) in allQuizzes[routeId].quiz[nextQuestion].answers"
           :key="ind"
-          :style="{color:element.answered?'green !important':'red !important'}"
-        >{{String.fromCharCode('A'.charCodeAt(0)+ind)}}: {{element.answer}}</v-list-item>
+          :style="{color:element.theAnswer?'green !important':'red !important'}"
+        >
+        {{String.fromCharCode('A'.charCodeAt(0)+ind)}}: {{element.answer}}</v-list-item>
       </v-card-text>
       <v-card-actions>
         <v-btn v-show="nextQuestion <= 0" color="primary" :to="{name:'viewquiz'}">Back</v-btn>
