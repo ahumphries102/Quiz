@@ -55,7 +55,7 @@ router.post('/checkmail', (req, res, next) => {
     }, (err, score) => {
         if (err) res.send(400, err)
         else if (!score.length) {
-            res.send(resMsg.message)
+            res.send(400, resMsg.message)
         } else {
             res.send(score)
         }

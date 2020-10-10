@@ -31,8 +31,9 @@ export default {
   methods: {
     async getAllQuizzes() {
 
-      const request = await this.$fetchData("GET", "/allquizzes");
-      this.allQuizzes = request;
+      const response = await this.$fetchData("GET", "/allquizzes");
+      console.log(response)
+      this.allQuizzes = response.response;
       this.dataFetched = true
     }
   }
