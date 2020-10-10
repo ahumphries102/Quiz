@@ -7,7 +7,7 @@
           <v-form v-model="valid">
               
           <v-card-text>
-              <v-text-field label="Enter your token" v-model.number="userToken" :rules="$rules.password"/>
+              <v-text-field label="Enter your token" v-model="userToken" :rules="$rules.password"/>
               <p v-show="resIn.quizUrl">You are about to take the quiz <strong>{{resIn.quizUrl?resIn.quizUrl.split('takequiz/')[1]:''}}</strong></p>
           </v-card-text>
           <v-card-actions>
