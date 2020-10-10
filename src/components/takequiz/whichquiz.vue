@@ -97,7 +97,7 @@ export default {
           this.$router.currentRoute.params.quizName
         )}`
       );
-      this.initialData.quizObj = response;
+      this.initialData.quizObj = response.response;
       this.initialData.quizObj.userName = ''
       this.initialData.dataFetched = true;
     },

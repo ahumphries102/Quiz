@@ -5,7 +5,6 @@ const fetchData = async(method, url, data) => {
       Accept: 'application/json',
     }
     let opt = {}
-    
     if (data) {
       opt = {
         method,
@@ -24,6 +23,7 @@ const fetchData = async(method, url, data) => {
     let request
     try {
       request = await fetch(url, opt)
+      
     } catch (err) {
       throw err
     }
@@ -34,7 +34,7 @@ const fetchData = async(method, url, data) => {
     } catch (err) {
       throw err
     }
-    return response
+    return {response:response, request:request}
   }
 
   export default fetchData

@@ -67,15 +67,15 @@ export default {
   },
   methods: {
     async viewQuiz() {
-      let response = await this.$fetchData("POST", "/viewquiz", {
+      const response = await this.$fetchData("POST", "/viewquiz", {
         userName: this.$store.state.userName
       });
-      this.allQuizzes = response;
-      this.responseMsg = response;
+      this.allQuizzes = response.response;
+      this.responseMsg = response.response;
       this.dataRetrieved = true;
     },
     async sendEmail() {
-      let response = await this.$fetchData(
+      const response = await this.$fetchData(
         "POST",
         "/sendEmail",
         this.email

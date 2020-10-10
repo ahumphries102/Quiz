@@ -80,10 +80,6 @@ export default {
       ],
     },
   }),
-  mounted() {
-    console.log(
-            this.$store.emailInfo)
-  },
   methods: {
     logout() {
       this.$router.push({ name: "login" }).catch((err) => err);

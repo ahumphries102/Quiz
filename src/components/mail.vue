@@ -5,7 +5,7 @@
       <v-card-subtitle>Simply enter the users emailBody address and a subject letting them know you're sending.</v-card-subtitle>
       <v-card-text>
         <v-text-field label="to" v-model="emailBody.to" />
-        <v-text-field label="from" v-model="emailBody.from" />
+        <v-text-field :disabled="true" label="from" v-model="emailBody.from" />
         <p :style="{color:color}" />
         <v-text-field label="subject" v-model="emailBody.subject" />
         <v-select :items="listOfFullUrls" v-model="chosenQuiz" label="Choose a Quiz"></v-select>
@@ -62,7 +62,7 @@ export default {
     },
     async getAllQuizzes() {
       const response = await this.$fetchData("GET", "/allquizzes");
-      this.allQuizzes = response;
+      this.allQuizzes = response.response;
       this.dataFetched = true;
       this.createUrls();
     },

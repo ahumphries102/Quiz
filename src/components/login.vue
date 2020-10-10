@@ -4,14 +4,16 @@
       <v-card-title>
         <p>Login</p>
       </v-card-title>
+    <v-form v-model="valid">
       <v-card-text>
-        <v-text-field label="User Name" v-model="loginData.userName" />
+        <v-text-field label="User Name" v-model="loginData.userName" :rules="$rules.userName"/>
         <v-text-field
           label="Password"
           v-model="loginData.password"
-          :type="visible?'':'password'"
-          :append-icon="visible?'mdi-eye':'mdi-eye-off'"
           @click:append="visible = !visible"
+          :append-icon="visible?'mdi-eye':'mdi-eye-off'"
+          :rules="$rules.password"
+          :type="visible?'':'password'"
         />
         <p :style="{color:color}">{{responseMsg}}</p>
         <Token @close="()=> tokenUsed = false" v-if="tokenUsed" />
@@ -19,8 +21,9 @@
       <v-card-actions class="justify-center">
         <v-btn color="primary" @click="$router.push({name:'signup'})">Signup</v-btn>
         <v-btn color="primary" @click="tokenUsed = true">Use token</v-btn>
-        <v-btn :loading="submitted" color="primary" @click="login">Login</v-btn>
+        <v-btn :disabled="!valid" :loading="submitted" color="primary" @click="login">Login</v-btn>
       </v-card-actions>
+    </v-form>
     </v-card>
   </v-container>
 </template>
@@ -40,6 +43,7 @@ export default {
     responseMsg: "",
     submitted: false,
     tokenUsed: false,
+    valid:true,
     visible: false,
   }),
   methods: {
@@ -50,11 +54,11 @@ export default {
         "/sendtoken",
         this.loginData
       );
-      if (!response.error) {
+      if (response.request) {
         this.color = "green";
-        this.responseMsg = response.message;
+        this.responseMsg = response.response.message;
         this.$store.state.userName = this.loginData.userName;
-        this.$store.state.token = response.token;
+        this.$store.state.token = response.response.token;
         this.$store.updateToken();
         this.$router
           .push({
@@ -67,10 +71,10 @@ export default {
         response = await this.$fetchData("POST", "/checkmail", {
           userName: this.$store.state.userName,
         });
-        this.$store.emailInfo.inbox = response.length
+        this.$store.emailInfo.inbox = response.response.length
       } else {
         this.color = "red";
-        this.responseMsg = response.message;
+        this.responseMsg = response.response.message;
       }
       this.submitted = false;
     },

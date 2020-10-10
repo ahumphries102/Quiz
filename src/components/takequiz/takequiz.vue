@@ -33,8 +33,8 @@ export default {
       this.aThroughZ?this.allQuizzes.sort((a,b) => (a.quizName > b.quizName)? 1 : -1):this.allQuizzes.sort((a,b) => (a.quizName < b.quizName)? 1 : -1)
     },
     async viewQuiz() {
-      let response = await this.$fetchData("GET", "/allquizzes");
-      this.allQuizzes = response.sort((a,b) => (a.quizName > b.quizName)? 1 : -1)
+      const response = await this.$fetchData("GET", "/allquizzes");
+      this.allQuizzes = response.response.sort((a,b) => (a.quizName > b.quizName)? 1 : -1)
       this.dataRetrieved = true
     }
   }

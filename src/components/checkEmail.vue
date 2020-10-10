@@ -3,9 +3,11 @@
     <v-data-table :items="yourMail" :headers="headers" :search="search">
       <template #top>
         <v-toolbar flat>
-          <v-toolbar-title><p>Email</p></v-toolbar-title>
+          <v-toolbar-title>
+            <p>Email</p>
+          </v-toolbar-title>
           <v-spacer />
-          <v-text-field label="Filter" v-model="search" append-icon="mdi-magnify"/>
+          <v-text-field label="Filter" v-model="search" append-icon="mdi-magnify" />
         </v-toolbar>
       </template>
     </v-data-table>
@@ -50,10 +52,10 @@ export default {
   },
   methods: {
     async checkEmail() {
-      let response = await this.$fetchData("POST", "/checkmail", {
-        userName: this.$store.state.userName,
-      });
-      this.yourMail = response;
+        const response = await this.$fetchData("POST", "/checkmail", {
+          userName: this.$store.state.userName,
+        });
+        response.request.ok?this.yourMail = response.response:''
     },
   },
 };

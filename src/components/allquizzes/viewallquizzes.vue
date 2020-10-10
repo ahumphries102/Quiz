@@ -28,8 +28,8 @@ export default {
   },
   methods: {
     async getAllQuizzes() {
-      let request = await this.$fetchData("GET", "/allquizzes")
-      this.allQuizzes = request
+      const response = await this.$fetchData("GET", "/allquizzes")
+      this.allQuizzes = response.response
     }
   }
 };
