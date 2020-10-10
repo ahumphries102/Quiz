@@ -15,7 +15,7 @@ const emailSchema = new Schema({
         type: String
     },
     userToken: {
-        type: Number
+        type: String
     },
 })
 
