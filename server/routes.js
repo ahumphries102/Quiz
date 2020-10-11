@@ -41,10 +41,8 @@ router.post('/savetokeninfo', (req, res, next) => {
         userToken: req.body.userToken,
     }, (err, dbEmail) => {
         if (err) {
-            console.log(err)
-            res.send(400, 'bad info')
+            res.send(400, err)
         } else {
-            console.log('good info')
             res.send(dbEmail)
         }
     })

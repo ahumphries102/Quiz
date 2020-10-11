@@ -4,14 +4,14 @@
       <v-card-title>Signup</v-card-title>
       <v-form v-model="valid">
         <v-card-text>
-          <v-text-field label="Enter a User Name" v-model="userName" :rules="$rules.userName" />
+          <v-text-field label="Enter a User Name" v-model="userName" :rules="$rules.length" />
           <v-text-field
             label="Enter a Password"
             v-model="password"
             :type="visible?'':'password'"
             :append-icon="visible?'mdi-eye':'mdi-eye-off'"
             @click:append="visible = !visible"
-            :rules="$rules.password"
+            :rules="$rules.length"
           />
           <p :style="{color:color}">{{responseMsg}}</p>
         </v-card-text>

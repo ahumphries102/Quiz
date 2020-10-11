@@ -1,19 +1,19 @@
 <template>
   <v-card :width="$router.currentRoute.path.includes('viewquiz')?'100%':$isMobile()?'80%':'50%'" :class="$isMobile()?'mx-auto':''">
-    <v-form ref="form">
+    <v-form v-model="valid" ref="form">
       <v-card-title>Email a Quiz</v-card-title>
       <v-card-subtitle>Simply enter the users emailBody address and a subject letting them know you're sending.</v-card-subtitle>
       <v-card-text>
-        <v-text-field label="to" v-model="emailBody.to" />
-        <v-text-field :disabled="true" label="from" v-model="emailBody.from" />
+        <v-text-field label="to" v-model="emailBody.to" :rules="$rules.length"/>
+        <v-text-field :disabled="true" label="from" v-model="emailBody.from" :rules="$rules.length"/>
         <p :style="{color:color}" />
-        <v-text-field label="subject" v-model="emailBody.subject" />
-        <v-select :items="listOfFullUrls" v-model="chosenQuiz" label="Choose a Quiz"></v-select>
+        <v-text-field label="subject" v-model="emailBody.subject" :rules="$rules.length"/>
+        <v-select :items="listOfFullUrls" v-model="chosenQuiz" label="Choose a Quiz" :rules="$rules.length"/>
         <v-text-field label="Token" v-model="emailBody.userToken" :disabled="true" />
       </v-card-text>
       <v-card-actions>
         <v-spacer />
-        <v-btn color="primary" text @click="sendEmail">send</v-btn>
+        <v-btn :disabled="!valid" color="primary" text @click="sendEmail">send</v-btn>
         <v-btn color="primary" text @click="$emit('close')">Close</v-btn>
       </v-card-actions>
     </v-form>
@@ -36,6 +36,7 @@ export default {
     },
     listOfFullUrls: [],
     listOfUrls: [],
+    valid:true,
   }),
   mounted() {
     const min = Math.ceil(1000);
