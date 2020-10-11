@@ -1,7 +1,7 @@
 <template>
   <v-container fill-height class="justify-center">
-    <v-card flat elevation="1" class="d-flex" :width="$isMobile()?'80%':'50%'">
-      <v-row class="pa-5">
+    <v-card flat elevation="1" class="d-flex" :width="$isMobile()?'80%':'40%'">
+      <v-row class="pa-0 ma-0">
         <v-col :cols="$isMobile()?'12':'8'">
           <v-data-table
             disable-sort
@@ -13,7 +13,7 @@
             :items="listOfAnswers"
           >
             <template v-slot:top>
-              <v-toolbar flat class="pa-0 ma-0">
+              <v-toolbar flat>
                 <v-toolbar-title>
                   <p>Create a Quiz</p>
                 </v-toolbar-title>
@@ -56,18 +56,27 @@
             </template>
           </v-data-table>
         </v-col>
-        <v-divider v-show="!$isMobile()" vertical class="ml-5" />
-        <v-col cols="auto" v-if="$isMobile()?false:true">
+        <v-col
+          :cols="$isMobile()?'12':'4'"
+          v-if="$isMobile()?false:true"
+          class="text-center"
+          :style="{position:'relative','border-left':'solid rgba(0,0,0,.1) thin'}"
+        >
           <h3>Your Questions</h3>
-          <v-list>
-            <v-list-item class="pl-0" v-for="(test,ind) in allQuestionsAnswers" :key="ind">
-              <p>
-                {{ind + 1}} {{test.question}}
-                <v-icon @click="deleteQuestion(test.question)">mdi-delete</v-icon>
-              </p>
-            </v-list-item>
-          </v-list>
-          <v-btn color="primary" @click="saveQuiz" :disabled="numberOfQuestions < 2">Save Quiz</v-btn>
+          <v-simple-table>
+            <tbody>
+              <tr v-for="(test,ind) in allQuestionsAnswers" :key="ind">
+                <td>{{ind + 1}}:</td>
+                <td class="pa-0 ma-0">{{test.question}}</td>
+                <td>
+                  <v-icon @click="deleteQuestion(test.question)">mdi-delete</v-icon>
+                </td>
+              </tr>
+            </tbody>
+          </v-simple-table>
+          <v-card-actions :style="{position:'absolute', bottom:'15px'}">
+            <v-btn color="primary" @click="saveQuiz" :disabled="numberOfQuestions < 2">Save Quiz</v-btn>
+          </v-card-actions>
         </v-col>
       </v-row>
     </v-card>
@@ -111,7 +120,7 @@ export default {
       checked: false,
       headers: [
         {
-          text: "Answers",
+          text: "Check which answer is correct",
           value: "answer",
         },
       ],
@@ -230,7 +239,7 @@ export default {
           delete: this.addAnswerInput,
         },
       ];
-      console.log(this.allQuestionsAnswers)
+      console.log(this.allQuestionsAnswers);
     },
     async saveQuiz() {
       const response = await this.$fetchData("POST", "/addquiz", {
