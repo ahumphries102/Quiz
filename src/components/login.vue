@@ -6,13 +6,13 @@
       </v-card-title>
     <v-form v-model="valid">
       <v-card-text>
-        <v-text-field label="User Name" v-model="loginData.userName" :rules="$rules.userName"/>
+        <v-text-field label="User Name" v-model="loginData.userName" :rules="$rules.length"/>
         <v-text-field
           label="Password"
           v-model="loginData.password"
           @click:append="visible = !visible"
           :append-icon="visible?'mdi-eye':'mdi-eye-off'"
-          :rules="$rules.password"
+          :rules="$rules.length"
           :type="visible?'':'password'"
         />
         <p :style="{color:color}">{{responseMsg}}</p>
