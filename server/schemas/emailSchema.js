@@ -3,19 +3,24 @@ let Schema = mongoose.Schema
 
 const emailSchema = new Schema({
     from: {
-        type: String
+        type: String,
+        required:[true, 'From is missing']
     },
     quizUrl: {
-        type: String
+        type: String,
+        required:[true, 'Quiz is missing']
     },
     subject: {
-        type: String
+        type: String,
+        required:[true, 'Subject is missing']
     },
     to: {
-        type: String
+        type: String,
+        required:[true, 'to is missing']
     },
     userToken: {
-        type: String
+        type: String,
+        required:[true, 'token is missing']
     },
 })
 

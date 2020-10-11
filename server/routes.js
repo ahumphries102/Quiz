@@ -37,12 +37,15 @@ router.post('/savetokeninfo', (req, res, next) => {
         quizUrl: req.body.quizUrl,
         subject: req.body.subject,
         to: req.body.to,
+        read: false,
         userToken: req.body.userToken,
-    }, (err, email) => {
+    }, (err, dbEmail) => {
         if (err) {
+            console.log(err)
             res.send(400, 'bad info')
         } else {
-            res.send(email)
+            console.log('good info')
+            res.send(dbEmail)
         }
     })
     next()
