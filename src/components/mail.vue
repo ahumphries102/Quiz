@@ -10,6 +10,7 @@
         <v-text-field label="subject" v-model="emailBody.subject" :rules="$rules.length"/>
         <v-select :items="listOfFullUrls" v-model="chosenQuiz" label="Choose a Quiz" :rules="$rules.length"/>
         <v-text-field label="Token" v-model="emailBody.userToken" :disabled="true" />
+        <p >{{responseMsg}}</p>
       </v-card-text>
       <v-card-actions>
         <v-spacer />
@@ -36,6 +37,7 @@ export default {
     },
     listOfFullUrls: [],
     listOfUrls: [],
+    responseMsg:"",
     valid:true,
   }),
   mounted() {
@@ -77,6 +79,8 @@ export default {
       this.emailBody.from = this.emailBody.from.toLowerCase()
       let response = await this.$fetchData("POST", "/savetokeninfo", this.emailBody);
       response = await this.$fetchData("POST", "/sendEmail", this.emailBody);
+      console.log(response.request)
+      response.request.ok?this.responseMsg = "Email successfully sent":"Email did not send"
       //this.$refs.form.reset();
     },
   },
