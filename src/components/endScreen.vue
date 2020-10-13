@@ -86,6 +86,7 @@ export default {
         points:this.quizObj.points,
         whoSentQuiz: this.$store.emailInfo.from,
         completed: true,
+        reviewed:false,
       };
       const response = await this.$fetchData("POST", "/saveScore", newBody);
       this.responseMsg = response.message;

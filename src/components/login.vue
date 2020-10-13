@@ -1,29 +1,29 @@
 <template>
   <v-container fill-height>
-    <v-card :width="$isMobile()?'80%':'25%'" class="mx-auto">
+    <v-card :width="$isMobile()?'80%':'35%'" class="mx-auto">
       <v-card-title>
         <p>Login</p>
       </v-card-title>
-    <v-form v-model="valid">
-      <v-card-text>
-        <v-text-field label="User Name" v-model="loginData.userName" :rules="$rules.length"/>
-        <v-text-field
-          label="Password"
-          v-model="loginData.password"
-          @click:append="visible = !visible"
-          :append-icon="visible?'mdi-eye':'mdi-eye-off'"
-          :rules="$rules.length"
-          :type="visible?'':'password'"
-        />
-        <p :style="{color:color}">{{responseMsg}}</p>
-        <Token @close="()=> tokenUsed = false" v-if="tokenUsed" />
-      </v-card-text>
-      <v-card-actions class="justify-center">
-        <v-btn color="primary" @click="$router.push({name:'signup'})">Signup</v-btn>
-        <v-btn color="primary" @click="tokenUsed = true">Use token</v-btn>
-        <v-btn :disabled="!valid" :loading="submitted" color="primary" @click="login">Login</v-btn>
-      </v-card-actions>
-    </v-form>
+      <v-form v-model="valid">
+        <v-card-text>
+          <v-text-field label="User Name" v-model="loginData.userName" :rules="$rules.length" />
+          <v-text-field
+            label="Password"
+            v-model="loginData.password"
+            @click:append="visible = !visible"
+            :append-icon="visible?'mdi-eye':'mdi-eye-off'"
+            :rules="$rules.length"
+            :type="visible?'':'password'"
+          />
+          <p :style="{color:color}">{{responseMsg}}</p>
+          <Token @close="()=> tokenUsed = false" v-if="tokenUsed" />
+        </v-card-text>
+        <v-card-actions class="justify-center">
+          <v-btn color="primary" @click="$router.push({name:'signup'})">Signup</v-btn>
+          <v-btn color="primary" @click="tokenUsed = true">Use token</v-btn>
+          <v-btn :disabled="!valid" :loading="submitted" color="primary" @click="login">Login</v-btn>
+        </v-card-actions>
+      </v-form>
     </v-card>
   </v-container>
 </template>
@@ -43,10 +43,25 @@ export default {
     responseMsg: "",
     submitted: false,
     tokenUsed: false,
-    valid:true,
+    timeout: false,
+    valid: true,
     visible: false,
   }),
   methods: {
+    async checkEmail() {
+      const response = await this.$fetchData("POST", "/checkmail", {
+        userName: this.$store.state.userName,
+      });
+      const unreadEmails = response.response.filter((ele) => !ele.reviewed);
+      this.$store.emailInfo.unread = unreadEmails.length
+      this.timeout = setInterval( async () => {
+        if(this.timeout || !this.$store.state.userName.length) {
+          clearInterval(this.timeout)
+          return
+        }
+        this.checkEmail()
+      }, 10000);
+    },
     async login() {
       this.submitted = true;
       let response = await this.$fetchData(
@@ -68,10 +83,8 @@ export default {
           .catch((err) => err);
         this.$root.loggedIn = true;
 
-        response = await this.$fetchData("POST", "/checkmail", {
-          userName: this.$store.state.userName,
-        });
-        this.$store.emailInfo.inbox = response.response.length
+        this.checkEmail();
+        //this.$store.emailInfo.inbox = response.response.length
       } else {
         this.color = "red";
         this.responseMsg = response.response.message;

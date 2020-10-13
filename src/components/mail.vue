@@ -1,6 +1,6 @@
 <template>
   <v-card :width="$router.currentRoute.path.includes('viewquiz')?'100%':$isMobile()?'80%':'50%'" :class="$isMobile()?'mx-auto':''">
-    <v-form v-model="valid" ref="form">
+    <v-form v-model="valid" :disabled="submitted">
       <v-card-title>Email a Quiz</v-card-title>
       <v-card-subtitle>Simply enter the users emailBody address and a subject letting them know you're sending.</v-card-subtitle>
       <v-card-text>
@@ -10,11 +10,11 @@
         <v-text-field label="subject" v-model="emailBody.subject" :rules="$rules.length"/>
         <v-select :items="listOfFullUrls" v-model="chosenQuiz" label="Choose a Quiz" :rules="$rules.length"/>
         <v-text-field label="Token" v-model="emailBody.userToken" :disabled="true" />
-        <p >{{responseMsg}}</p>
+        <p :style="{color:rsp.error?'red':'green'}">{{rsp.msg}}</p>
       </v-card-text>
       <v-card-actions>
         <v-spacer />
-        <v-btn :disabled="!valid" color="primary" text @click="sendEmail">send</v-btn>
+        <v-btn :disabled="!valid" color="primary" text @click="sendEmail" :loading="submitting">send</v-btn>
         <v-btn color="primary" text @click="$emit('close')">Close</v-btn>
       </v-card-actions>
     </v-form>
@@ -33,11 +33,17 @@ export default {
       quizUrl: "",
       subject: "",
       to: "",
+      read:false,
       userToken: 0,
     },
     listOfFullUrls: [],
     listOfUrls: [],
-    responseMsg:"",
+    rsp:{
+      error:false,
+      msg:""
+    },
+    submitted:false,
+    submitting:false,
     valid:true,
   }),
   mounted() {
@@ -55,7 +61,6 @@ export default {
       );
       this.listOfFullUrls = allQuizObjects.concat(filteredRouterProperties);
       
-          console.log(allQuizObjects.concat(filteredRouterProperties))
       this.listOfUrls = this.listOfFullUrls.map(
         (ele) =>
           this.listOfFullUrls[this.listOfFullUrls.length-1].path.split(":")[1] +
@@ -70,6 +75,7 @@ export default {
       this.createUrls();
     },
     async sendEmail() {
+      this.submitting = true
       let quizSending = "";
       this.listOfUrls.forEach((ele) =>
         ele.includes(this.chosenQuiz) ? (quizSending = ele) : ""
@@ -79,9 +85,15 @@ export default {
       this.emailBody.from = this.emailBody.from.toLowerCase()
       let response = await this.$fetchData("POST", "/savetokeninfo", this.emailBody);
       response = await this.$fetchData("POST", "/sendEmail", this.emailBody);
-      console.log(response.request)
-      response.request.ok?this.responseMsg = "Email successfully sent":"Email did not send"
-      //this.$refs.form.reset();
+      this.submitting = false
+      if(response.request.ok){
+        this.submitted = true
+        this.rsp.error = false
+        this.rsp.msg = "Email successfully sent"
+      }else{
+        this.rsp.error = true
+        this.rsp.msg = "Email did not send"
+      }
     },
   },
 };

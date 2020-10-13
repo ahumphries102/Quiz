@@ -70,6 +70,9 @@ const scoreSchema = new Schema({
     completed:{
         type: Boolean,
         required: [true, 'The quiz must be completed as either true or false']
+    },
+    reviewed:{
+        type:Boolean,
     }
 })
 

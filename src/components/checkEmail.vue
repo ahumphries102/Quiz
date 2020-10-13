@@ -56,7 +56,16 @@ export default {
           userName: this.$store.state.userName,
         });
         response.request.ok?this.yourMail = response.response:''
+        this.yourMail.forEach(ele => {
+          ele.reviewed = true
+        })
+        this.updateEmail()
     },
+    async updateEmail(){
+      const response = await this.$fetchData("PUT", "/checkmail", {
+          reviewed: true,
+        });
+    }
   },
 };
 </script>
