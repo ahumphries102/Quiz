@@ -33,7 +33,9 @@ import store from "../storage/store";
 import Token from "./token";
 export default {
   name: "login",
-  components: { Token },
+  components: {
+    Token,
+  },
   data: () => ({
     color: "",
     loginData: {
@@ -49,18 +51,25 @@ export default {
   }),
   methods: {
     async checkEmail() {
-      const response = await this.$fetchData("POST", "/checkmail", {
+      let response = await this.$fetchData("POST", "/checkmail", {
         userName: this.$store.state.userName,
       });
-      const unreadEmails = response.response.filter((ele) => !ele.reviewed);
-      this.$store.emailInfo.unread = unreadEmails.length
-      this.timeout = setInterval( async () => {
-        if(this.timeout || !this.$store.state.userName.length) {
-          clearInterval(this.timeout)
+      let unreadEmails = response.response.filter((ele) => !ele.reviewed);
+      this.$store.emailInfo.unread = unreadEmails.length;
+      this.timeout = setInterval(async () => {
+        // When a user logs in, we begin checking for new emails every so many seconds.
+        // if that user signsout we stop checking for new emails.
+        if(this.$router.currentRoute.path.includes('login') || !this.$store.state.userName.length){
+          clearInterval(this.timeout);
+          console.log('all done')
           return
         }
-        this.checkEmail()
-      }, 10000);
+        response = await this.$fetchData("POST", "/checkmail", {
+          userName: this.$store.state.userName,
+        });
+        unreadEmails = response.response.filter((ele) => !ele.reviewed);
+        this.$store.emailInfo.unread = unreadEmails.length;
+      }, 30000);
     },
     async login() {
       this.submitted = true;
@@ -78,7 +87,9 @@ export default {
         this.$router
           .push({
             name: "createquiz",
-            params: { userName: this.$store.state.userName },
+            params: {
+              userName: this.$store.state.userName,
+            },
           })
           .catch((err) => err);
         this.$root.loggedIn = true;

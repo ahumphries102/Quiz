@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto">
+  <v-card class="mx-auto" :width="$isMobile()?'100%':'auto'">
     <v-card-title>Review</v-card-title>
     <v-card-text>
       <h3>Question {{quizObj.quiz[wQu].question}}</h3>

@@ -1,38 +1,44 @@
 <template>
   <v-container fill-height>
-    <v-card :width="$isMobile()?'100%':'80%'" class="mx-auto" v-if="initialData.dataFetched">
-      <v-card-title>
-        <v-text-field label="Enter your name" v-model="initialData.quizObj.userName">
-          <template #prepend>
-            <p :style="{width:'50px'}">Name:</p>
-          </template>
-        </v-text-field>
+    <v-card :width="$isMobile()?'100%':!initialData.enteredName?'35%':'20%'" class="mx-auto" v-if="initialData.dataFetched">
+      <v-card-title v-show="!initialData.enteredName">
+        <p :style="{'word-break':'break-word'}">Who is taking this quiz?</p>
+        <v-text-field label="Enter your name" v-model="initialData.quizObj.userName" />
       </v-card-title>
-      <v-card-subtitle>
+      <v-card-text v-show="initialData.enteredName" class="pt-5">
         <p>Question {{initialData.wQu + 1}}/{{initialData.quizObj.quiz.length}}: {{initialData.quizObj.quiz[initialData.wQu].question}}</p>
-      </v-card-subtitle>
-      <v-card-text>
         <v-list-item
           v-for="(answer, ind) in initialData.quizObj.quiz[initialData.wQu].answers"
           @click="saveAnswer(answer, initialData.quizObj.quiz[initialData.wQu])"
           :disabled="answer.userAnswer"
           :class="answer.userAnswer?'light-green':''"
-          :dark="answer.userAnswer" 
+          :dark="answer.userAnswer"
           :key="ind"
           :style="{'border-radius':'50px', width:'50%'}"
         >
-          <v-list-item-content
-          >{{String.fromCharCode('A'.charCodeAt(0)+ind)}}: {{answer.answer}}</v-list-item-content>
+          <v-list-item-content>{{String.fromCharCode('A'.charCodeAt(0)+ind)}}: {{answer.answer}}</v-list-item-content>
         </v-list-item>
       </v-card-text>
       <v-card-actions>
-        <v-btn v-show="initialData.wQu <= 0 && !$router.currentRoute.path.includes('guest')" color="primary" :to="{name:'takequiz'}">Back</v-btn>
-        <v-btn v-show="initialData.wQu > 0" color="primary" @click="removeAnswer"><</v-btn>
         <v-btn
+          :disabled="!initialData.quizObj.userName.length"
           color="primary"
-          @click="nextQuestion"
-          :disabled="!initialData.quizObj.quiz[initialData.wQu].clicked  || initialData.quizObj.userName.length < 1 || !initialData.quizObj.userName.length"
-        >{{initialData.nextQuestionButtonText}}</v-btn>
+          v-show="!initialData.enteredName"
+          @click="initialData.enteredName = true"
+        >Continue</v-btn>
+        <div v-show="initialData.enteredName">
+          <v-btn
+            v-show="initialData.wQu <= 0 && !$router.currentRoute.path.includes('guest')"
+            color="primary"
+            :to="{name:'takequiz'}"
+          >Back</v-btn>
+          <v-btn v-show="initialData.wQu > 0" color="primary" @click="removeAnswer"><</v-btn>
+          <v-btn
+            color="primary"
+            @click="nextQuestion"
+            :disabled="!initialData.quizObj.quiz[initialData.wQu].clicked  || initialData.quizObj.userName.length < 1 || !initialData.quizObj.userName.length"
+          >{{initialData.nextQuestionButtonText}}</v-btn>
+        </div>
       </v-card-actions>
     </v-card>
     <EndScreen
@@ -61,6 +67,7 @@ export default {
       initialData: {
         currentAnswer: "",
         dataFetched: false,
+        enteredName: false,
         gameOver: false,
         // used when to check the quizObj length -1. It's a 'magic number'
         lr: 1,
@@ -98,7 +105,7 @@ export default {
         )}`
       );
       this.initialData.quizObj = response.response;
-      this.initialData.quizObj.userName = ''
+      this.initialData.quizObj.userName = "";
       this.initialData.dataFetched = true;
     },
     nextQuestion() {
@@ -113,7 +120,9 @@ export default {
           if (ele === true) acc++;
           // if we don't find a true value we return the value of the acc, which would be 0
           return acc;
-        },0);
+        },
+        0
+      );
       if (
         this.initialData.wQu ===
         this.initialData.quizObj.quiz.length - this.initialData.lr
@@ -132,15 +141,17 @@ export default {
       // quizObjectParent is one step up from quizObject in its object hierarchy.
       // Each quiz has X amount of quizObjects based on how many the user creates. Each question must
       // have a click property so we can keep track if a user made chose an answer.
-      quizObjectParent.clicked = true
+      quizObjectParent.clicked = true;
       this.initialData.currentAnswer = quizObject.theAnswer;
-      quizObjectParent.answers.forEach(ele => {
+      quizObjectParent.answers.forEach((ele) => {
         // Loop through each answer and turn them all false.
         // If we don't do this then each time a user clicks on an answer it will turn green.
-        ele.answer === quizObject.answer? ele.userAnswer = true : ele.userAnswer = false
+        ele.answer === quizObject.answer
+          ? (ele.userAnswer = true)
+          : (ele.userAnswer = false);
       });
       // vue is not observing when a user makes a selection so I force an update to happen.
-      this.$forceUpdate()
+      this.$forceUpdate();
     },
     viewAnswers() {
       this.initialData.gameOver = false;
