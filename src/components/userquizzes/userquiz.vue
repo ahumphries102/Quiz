@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import Mail from '../mail'
+import Mail from '../mail/mailForm'
 export default {
   name: "userquiz",
   components:{ Mail },
