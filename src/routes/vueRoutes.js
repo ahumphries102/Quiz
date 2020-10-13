@@ -22,11 +22,6 @@ const routes = [
         }
     },
     {
-        path: userUrlName + '/checkemail',
-        name: 'checkemail',
-        component: () => import('../components/checkEmail')
-    },
-    {
         path: userUrlName + '/createquiz',
         name: 'createquiz',
         component: () => import('../components/creatingquiz')
@@ -79,14 +74,30 @@ const routes = [
         component: () => import('../components/userquizzes/userquiz')
     },
     {
+        path: userUrlName + '/checkemail',
+        name: 'checkemail',
+        component: () => import('../components/mail/checkEmail')
+    },
+    {
+        path: userUrlName + '/mail',
+        name: 'mainMail',
+        component: () => import('../components/mail/mainMail')
+    },
+    {
+        path: userUrlName + '/mail/:id',
+        name: 'individualMail',
+        props: true,
+        component: () => import('../components/mail/individualMail')
+    },
+    {
         path: userUrlName + '/scores',
         name: 'scores',
         component: () => import('../components/scores')
     },
     {
-        path: userUrlName + '/mail',
-        name: 'mail',
-        component: () => import('../components/mail')
+        path: userUrlName + '/sendmail',
+        name: 'mailForm',
+        component: () => import('../components/mail/mailForm')
     },
     {
         path: '/404',

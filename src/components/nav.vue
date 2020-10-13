@@ -25,7 +25,7 @@
         <v-btn dark text>
           <router-link
             :style="{color:'white'}"
-            :to="{name:'checkemail', params:{userName:$store.state.userName?$store.state.userName:'default'}}"
+            :to="{name:'mainMail', params:{userName:$store.state.userName?$store.state.userName:'default'}}"
           >
             <v-icon :class="$isMobile()?'mr-1':'mr-2'">mdi-email</v-icon>
             <span :style="{color:'white'}">{{$store.emailInfo.unread}}</span>
@@ -76,7 +76,7 @@ export default {
         "viewquiz",
         "takequiz",
         "viewallquizzes",
-        "mail",
+        "mailForm",
       ],
     },
   }),
