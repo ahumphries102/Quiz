@@ -49,13 +49,26 @@ router.post('/savetokeninfo', (req, res, next) => {
     next()
 })
 
+router.put('/checkmail', (req, res, next) => {
+    score.updateMany({
+        reviewed: req.body.reviewed
+    }, (err, score) => {
+        if (err) {
+            return res.send(400, err)
+        }else {
+            res.send('you did it')
+        }
+    })
+    next()
+})
 router.post('/checkmail', (req, res, next) => {
     resMsg.message = 'No score found'
     score.find({
         whoSentQuiz: req.body.userName
     }, (err, score) => {
-        if (err) res.send(400, err)
-        else if (!score.length) {
+        if (err) {
+            res.send(400, err)
+        } else if (!score.length) {
             res.send(400, resMsg.message)
         } else {
             res.send(score)
@@ -179,7 +192,9 @@ router.post('/sendEmail', (req, res, next) => {
         subject: req.body.subject, // Subject line
         text: `Use your token, ${req.body.userToken}, at https://quizzor.herokuapp.com to take your quiz `, // plain text body
     }
-    nodeMailer.sendEmail().catch(err => res.send(400, err))
+    nodeMailer.sendEmail().then(data => res.send('whooray')).catch(err => res.send(400, err))
+
+    next()
 })
 
 module.exports = router

@@ -28,7 +28,7 @@
             :to="{name:'checkemail', params:{userName:$store.state.userName?$store.state.userName:'default'}}"
           >
             <v-icon :class="$isMobile()?'mr-1':'mr-2'">mdi-email</v-icon>
-            <span :style="{color:'white'}">{{$store.emailInfo.inbox}}</span>
+            <span :style="{color:'white'}">{{$store.emailInfo.unread}}</span>
           </router-link>
         </v-btn>
       </div>
