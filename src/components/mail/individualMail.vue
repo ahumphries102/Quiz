@@ -1,6 +1,8 @@
 <template>
   <v-container>
-      {{mailInfo}}
+      <v-list v-for="(value, name, index) in mailInfo" :key="index">
+          {{name}}: {{value}}
+      </v-list>
   </v-container>
 </template>
 
