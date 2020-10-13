@@ -1,6 +1,9 @@
 <template>
   <v-container fluid>
-    <v-data-table :items="yourMail" :headers="headers" :search="search">
+    <v-data-table :items="yourMail" :headers="submitting?headers1:headers" :search="search">
+      <template v-if="submitting" #body>
+        <td class="text-center"><v-progress-circular indeterminate rotate="360"/></td>
+      </template>
       <template #top>
         <v-toolbar flat>
           <v-toolbar-title>
@@ -18,6 +21,7 @@
 export default {
   name: "checkemail",
   data: () => ({
+    headers1:[],
     headers: [
       {
         text: "Test Taker",
@@ -44,6 +48,7 @@ export default {
         value: "year",
       },
     ],
+    submitting:false,
     search: "",
     yourMail: [],
   }),
@@ -52,9 +57,11 @@ export default {
   },
   methods: {
     async checkEmail() {
+        this.submitting = true
         const response = await this.$fetchData("POST", "/checkmail", {
           userName: this.$store.state.userName,
         });
+        this.submitting = false
         response.request.ok?this.yourMail = response.response:''
         this.yourMail.forEach(ele => {
           ele.reviewed = true
