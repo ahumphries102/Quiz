@@ -73,6 +73,9 @@ const scoreSchema = new Schema({
     },
     reviewed:{
         type:Boolean,
+    },
+    id:{
+        type:Number,
     }
 })
 

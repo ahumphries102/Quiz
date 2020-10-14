@@ -49,14 +49,13 @@ router.post('/savetokeninfo', (req, res, next) => {
     next()
 })
 
-router.put('/checkmail', (req, res, next) => {
-    score.updateMany({
-        reviewed: req.body.reviewed
-    }, (err, score) => {
+router.put('/updateScore', (req, res, next) => {
+    console.log(req.body.id)
+    score.findOneAndUpdate({id: req.body.id},{reviewed:true}, (err, score) => {
         if (err) {
             return res.send(400, err)
         }else {
-            res.send('you did it')
+            res.send(score)
         }
     })
     next()
