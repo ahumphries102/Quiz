@@ -13,8 +13,14 @@ export default {
   data: () => ({
   }),
   mounted() {
+    this.updateEmail()
   },
   methods: {
+    async updateEmail(){
+      const response = await this.$fetchData("PUT", "/updateScore", {
+        id: this.mailInfo.id,
+      });
+    }
   },
 };
 </script>
