@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const db = mongoose.connection
 const router = require('./routes')
 let PORT = process.env.PORT || process.env.VUE_APP_HOST
-
+console.log('hoopyd')
 require('dotenv').config()
 
 const server = restify.createServer({
