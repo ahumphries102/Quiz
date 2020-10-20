@@ -25,7 +25,7 @@
           color="primary"
           v-show="!initialData.enteredName"
           @click="initialData.enteredName = true"
-        >Continue</v-btn>
+        >Begin test</v-btn>
         <div v-show="initialData.enteredName">
           <v-btn
             v-show="initialData.wQu <= 0 && !$router.currentRoute.path.includes('guest')"
