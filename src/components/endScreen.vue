@@ -76,9 +76,6 @@ export default {
         "November",
         "December",
       ];
-      const min = Math.ceil(10000);
-      const max = Math.floor(99999);
-       
       newBody = {
         date: date,
         month: monthNames[month],
@@ -86,10 +83,10 @@ export default {
         userName:this.quizObj.userName,
         quizName:this.quizObj.quizName,
         points:this.quizObj.points,
+        pointsPossible: this.quizObj.quiz.length,
         whoSentQuiz: this.$store.emailInfo.from,
         completed: true,
         reviewed:false,
-        id: Math.floor(Math.random() * (max - min) + min)
       };
        const response = await this.$fetchData("POST", "/saveScore", newBody);
        this.responseMsg = response.message;

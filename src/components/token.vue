@@ -36,9 +36,9 @@ export default {
     methods: {
         async useToken(){
             const response = await this.$fetchData("POST", "/usetoken", {userToken:this.userToken});
-            this.resIn = response.response[0]
+            this.resIn = response.response
             this.$store.state.userName = `guest${this.resIn.userToken}`
-            this.$store.emailInfo.from = response.response[0].from
+            this.$store.emailInfo.from = response.response.from
         }
     },
     computed: {

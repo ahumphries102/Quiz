@@ -71,12 +71,13 @@ const scoreSchema = new Schema({
         type: Boolean,
         required: [true, 'The quiz must be completed as either true or false']
     },
+    pointsPossible:{
+        type: Number,
+        required: [true, 'Their must be a total amount of points possible a user could score']
+    },
     reviewed:{
         type:Boolean,
     },
-    id:{
-        type:Number,
-    }
 })
 
 const quiz = mongoose.model('quiz', quizSchema, 'quizzes')
