@@ -23,7 +23,8 @@ router.post('/usetoken', (req, res, next) => {
             resMsg.message = "No quiz found"
             res.send(400, resMsg.message)
         } else {
-            res.send(email)
+            console.log(email[0])
+            res.send(email[0])
         }
     })
     next()
@@ -50,12 +51,31 @@ router.post('/savetokeninfo', (req, res, next) => {
 })
 
 router.put('/updateScore', (req, res, next) => {
-    console.log(req.body.id)
-    score.findOneAndUpdate({id: req.body.id},{reviewed:true}, (err, score) => {
+    //_id looks at the id mongo assigns a document, id is that same value, but from the front end.
+    // on the front side id is the equivelent to _id
+    score.findOneAndUpdate({_id: req.body.id},{reviewed:true}, (err, score) => {
         if (err) {
-            return res.send(400, err)
+            res.send(400, err)
         }else {
             res.send(score)
+        }
+    })
+    next()
+})
+router.del('/deleteScore', (req, res, next)=>{
+    score.deleteOne({_id:req.body.id}, (err, score)=>{
+        err?res.send(400, err): res.send(score)
+    })
+    next()
+})
+router.post('/individualMail', (req,res,next)=>{
+    score.find({
+        _id:req.body.id
+    },(err, score)=>{
+        if(err){
+            res.send(400, err)
+        }else{
+            res.send(score[0])
         }
     })
     next()

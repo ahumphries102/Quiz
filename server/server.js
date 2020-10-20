@@ -17,6 +17,7 @@ server.use(restify.plugins.bodyParser());
 router.applyRoutes(server)
 const uri = process.env.SERVER
 
+mongoose.set('useFindAndModify', false)
 mongoose.connect(uri, {
         useNewUrlParser: true,
         useUnifiedTopology: true,

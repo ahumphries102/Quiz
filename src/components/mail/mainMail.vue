@@ -1,10 +1,21 @@
 <template>
   <v-container>
-      <v-list >
-        <v-list-item  v-for="(letter, ind) in mail" :key="ind">
-            <v-list-item @click="route(letter, ind)">{{letter.userName}}</v-list-item>
-        </v-list-item>
-      </v-list>
+    <v-list>
+      <v-list-item v-for="(letter, ind) in mail" :key="ind">
+        <router-link
+          :to="{
+            name: 'individualMail',
+            params: {
+              userName: $store.state.userName
+                ? $store.state.userName
+                : 'default',
+              id: letter._id,
+            },
+          }"
+          >{{ letter.userName }}</router-link
+        >
+      </v-list-item>
+    </v-list>
   </v-container>
 </template>
 
@@ -12,21 +23,12 @@
 export default {
   name: "mainMail",
   data: () => ({
-      mail:[]
+    mail: [],
   }),
-  mounted(){
-      this.checkEmail()
+  mounted() {
+    this.checkEmail();
   },
   methods: {
-    route(mailInfo, ind){
-        this.$router.push({
-            name:"individualMail",
-            params:{
-                id:ind,
-                mailInfo:mailInfo
-            }
-        })
-    },
     async checkEmail() {
       this.submitting = true;
       const response = await this.$fetchData("POST", "/checkmail", {
