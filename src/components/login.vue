@@ -12,7 +12,7 @@
             v-model="loginData.password"
             @click:append="visible = !visible"
             :append-icon="visible?'mdi-eye':'mdi-eye-off'"
-            :rules="$rules.length"
+            :rules="$rules.mustBeNumber"
             :type="visible?'':'password'"
           />
           <p :style="{color:color}">{{responseMsg}}</p>
@@ -50,6 +50,7 @@ export default {
     visible: false,
   }),
   methods: {
+    
     async checkEmail() {
       let response = await this.$fetchData("POST", "/checkmail", {
         userName: this.$store.state.userName,
