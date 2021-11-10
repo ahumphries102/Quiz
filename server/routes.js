@@ -10,7 +10,19 @@ const Router = require('restify-router').Router
 const nodeMailer = require('./mail')
 const router = new Router()
 let resMsg = {}
+
 require('dotenv').config()
+// **** Sending Mail Authentication 
+const { google } = require('googleapis')
+const { cloudbilling } = require('googleapis/build/src/apis/cloudbilling')
+const OAuth2 = google.auth.OAuth2
+const clientId = process.env.CLIENT_ID
+const clientSecret = process.env.CLIENT_SECRET
+const refreshToken = process.env.REFRESH_TOKEN
+console.log(clientId, refreshToken);
+const OAuth2Client = new OAuth2(clientId, clientSecret)
+OAuth2Client.setCredentials({refresh_token: refreshToken})
+// **** End of mail
 // const token = process.env.VUE_APP_TOKEN
 
 router.post('/usetoken', (req, res, next) => {
@@ -197,12 +209,19 @@ router.post('/addquiz', (req, res, next) => {
 })
 
 router.post('/sendEmail', (req, res, next) => {
+    const accessToken = OAuth2Client.getAccessToken()
+
     nodeMailer.transport = {
         service: process.env.EMAIL_PROVIDER,
         secure: false, // true for 465, false for other ports
         auth: {
+            type: 'OAuth2',
             user: process.env.EMAIL, // generated ethereal user
             pass: process.env.EMAIL_PASSWORD, // generated ethereal password
+            clientId,
+            clientSecret,
+            refreshToken,
+            accessToken
         },
     }
     nodeMailer.info = {
