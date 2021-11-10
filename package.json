@@ -11,6 +11,7 @@
     "bcrypt": "^4.0.1",
     "core-js": "^3.6.5",
     "dotenv": "^8.2.0",
+    "googleapis": "^91.0.0",
     "mongoose": "^5.10.3",
     "nodemailer": "^6.4.11",
     "nodemon": "^2.0.4",

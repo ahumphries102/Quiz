@@ -21,6 +21,7 @@
               <v-text-field label="Name Your Quiz" v-model="quizName" />
               <v-text-field label="Enter Question" v-model="question" />
             </template>
+            
             <template #body="{items}">
               <tbody>
                 <tr v-for="(item, ind) in items" :key="ind">
@@ -120,7 +121,7 @@ export default {
       checked: false,
       headers: [
         {
-          text: "Check which answer is correct",
+          text: "Check mark which answer is correct",
           value: "answer",
         },
       ],
