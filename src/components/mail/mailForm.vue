@@ -86,7 +86,8 @@ export default {
       let response = await this.$fetchData("POST", "/savetokeninfo", this.emailBody);
       response = await this.$fetchData("POST", "/sendEmail", this.emailBody);
       this.submitting = false
-      if(response.requestData.ok){
+      console.log(response);
+      if(!response.requestData.error){
         this.submitted = true
         this.rsp.error = false
         this.rsp.msg = response.requestData.message

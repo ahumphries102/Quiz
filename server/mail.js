@@ -56,16 +56,17 @@ const sendMail = async (req, res) => {
         subject: req.body.subject, // Subject line
         text: `Use your token, ${req.body.userToken}, at https://quizzor.herokuapp.com to take your quiz `, // plain text body
     }
+    const resMsg = {}
     try {
         await emailSetup.sendEmail()
-        const resMsg = {}
-        resMsg.error = true
-        resMsg.message = 'Username or password is incorrect'
+        resMsg.error = false
+        resMsg.message = 'E-mail successfully submitted!'
         res.send(200, resMsg)
     }
     catch (err) {
-        console.log(err);
-        res.send(400, err)
+        resMsg.error = false
+        resMsg.message = err
+        res.send(400, resMsg)
     }
 }
 
