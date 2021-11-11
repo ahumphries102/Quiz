@@ -33,7 +33,7 @@ export default {
 
       const response = await this.$fetchData("GET", "/allquizzes");
       console.log(response)
-      this.allQuizzes = response.response;
+      this.allQuizzes = response.requestData;
       this.dataFetched = true
     }
   }

@@ -69,8 +69,8 @@ export default {
       this.listOfFullUrls = this.listOfFullUrls.map((ele) => ele);
     },
     async getAllQuizzes() {
-      const response = await this.$fetchData("GET", "/allquizzes");
-      this.allQuizzes = response.response;
+    const response = await this.$fetchData("GET", "/allquizzes");
+      this.allQuizzes = response.requestData;
       this.dataFetched = true;
       this.createUrls();
     },
@@ -86,10 +86,10 @@ export default {
       let response = await this.$fetchData("POST", "/savetokeninfo", this.emailBody);
       response = await this.$fetchData("POST", "/sendEmail", this.emailBody);
       this.submitting = false
-      if(response.request.ok){
+      if(response.requestData.ok){
         this.submitted = true
         this.rsp.error = false
-        this.rsp.msg = "Email successfully sent"
+        this.rsp.msg = response.requestData.message
       }else{
         this.rsp.error = true
         this.rsp.msg = "Email did not send"

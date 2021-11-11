@@ -40,7 +40,7 @@ export default {
         id: this.id,
       });
       this.submitting = false;
-      this.mailInfo = response.response
+      this.mailInfo = response.requestData
       console.log(this.mailInfo)
       this.updateEmail();
     },

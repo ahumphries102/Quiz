@@ -28,13 +28,13 @@ const fetchData = async(method, url, data) => {
       throw err
     }
 
-    let response
+    let requestData
     try {
-      response = await request.json()
+      requestData = await request.json()
     } catch (err) {
       throw err
     }
-    return {response:response, request:request}
+    return {requestData, request}
   }
 
   export default fetchData

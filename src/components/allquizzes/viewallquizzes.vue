@@ -29,7 +29,7 @@ export default {
   methods: {
     async getAllQuizzes() {
       const response = await this.$fetchData("GET", "/allquizzes")
-      this.allQuizzes = response.response
+      this.allQuizzes = response.requestData
     }
   }
 };
