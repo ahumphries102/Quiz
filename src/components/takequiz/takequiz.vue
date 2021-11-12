@@ -34,7 +34,7 @@ export default {
     },
     async viewQuiz() {
       const response = await this.$fetchData("GET", "/allquizzes");
-      this.allQuizzes = response.requestDatasort((a,b) => (a.quizName > b.quizName)? 1 : -1)
+      this.allQuizzes = response.requestData.sort((a,b) => (a.quizName > b.quizName)? 1 : -1)
       this.dataRetrieved = true
     }
   }

@@ -14,7 +14,7 @@
     "googleapis": "^91.0.0",
     "mongoose": "^5.10.3",
     "nodemailer": "^6.4.11",
-    "nodemon": "^2.0.4",
+    "nodemon": "^2.0.15",
     "restify": "^8.5.1",
     "restify-router": "^0.5.1",
     "roboto-fontface": "*",

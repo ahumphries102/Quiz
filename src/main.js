@@ -10,8 +10,11 @@ import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import '@mdi/font/css/materialdesignicons.css'
 Vue.observable(store)
 Vue.prototype.$store = store
+// detect if a user is on mobile device
 Vue.prototype.$isMobile = IsMobile
+// used for make fetch calls
 Vue.prototype.$fetchData = FetchData
+// handles validation
 Vue.prototype.$rules = Rules
 Vue.config.productionTip = false
 new Vue({

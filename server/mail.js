@@ -35,29 +35,29 @@ const emailSetup = {
 }
 
 const sendMail = async (req, res) => {
-    const accessToken = OAuth2Client.getAccessToken()
-
-    emailSetup.transport = {
-        service: process.env.EMAIL_PROVIDER,
-        secure: false,
-        auth: {
-            type: 'OAuth2',
-            user: email,
-            pass: password,
-            clientId,
-            clientSecret,
-            refreshToken,
-            accessToken
-        },
-    }
-    emailSetup.info = {
-        from: email, // sender address
-        to: req.body.to, // list of receivers
-        subject: req.body.subject, // Subject line
-        text: `Use your token, ${req.body.userToken}, at https://quizzor.herokuapp.com to take your quiz `, // plain text body
-    }
     const resMsg = {}
     try {
+        const accessToken = OAuth2Client.getAccessToken()
+        emailSetup.transport = {
+            service: process.env.EMAIL_PROVIDER,
+            secure: false,
+            auth: {
+                type: 'OAuth2',
+                user: email,
+                pass: password,
+                clientId,
+                clientSecret,
+                refreshToken,
+                accessToken
+            },
+        }
+        emailSetup.info = {
+            from: email, // sender address
+            to: req.body.to, // list of receivers
+            subject: req.body.subject, // Subject line
+            text: `Use your token, ${req.body.userToken}, at https://quizzor.herokuapp.com to take your quiz `, // plain text body
+        }
+
         await emailSetup.sendEmail()
         resMsg.error = false
         resMsg.message = 'E-mail successfully submitted!'
@@ -65,7 +65,7 @@ const sendMail = async (req, res) => {
     }
     catch (err) {
         resMsg.error = false
-        resMsg.message = err
+        resMsg.message = "Email not sent. Recipient could not be found"
         res.send(400, resMsg)
     }
 }

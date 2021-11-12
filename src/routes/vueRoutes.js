@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import store from '../storage/store'
+import store from '@/storage/store'
 Vue.use(VueRouter)
 const userUrlName = '/:userName'
 const routes = [
@@ -13,7 +13,7 @@ const routes = [
                 }
             } else {
                 return ({
-                    name:'createquiz',
+                    name: 'createquiz',
                     params: {
                         userName: store.state.userName
                     }
@@ -24,85 +24,85 @@ const routes = [
     {
         path: userUrlName + '/createquiz',
         name: 'createquiz',
-        component: () => import('../components/creatingquiz')
+        component: () => import('@/components/creatingquiz')
     },
     {
         path: '/login',
         name: 'login',
-        component: () => import('../components/login')
+        component: () => import('@/components/login')
     },
     {
         path: userUrlName + '/quizreview',
         name: 'quizreview',
-        component: () => import('../components/quizreview')
+        component: () => import('@/components/quizreview')
     },
     {
         path: userUrlName + '/takequiz',
         name: 'takequiz',
-        component: () => import('../components/takequiz/takequiz')
+        component: () => import('@/components/takequiz/takequiz')
     },
     {
         path: userUrlName + '/takequiz/:quizName',
-        props: {default:true},
+        props: { default: true },
         name: 'whichquiz',
-        component: () => import('../components/takequiz/whichquiz')
+        component: () => import('@/components/takequiz/whichquiz')
     },
     {
         path: '/signup',
         name: 'signup',
-        component: () => import('../components/signup')
+        component: () => import('@/components/signup')
     },
     {
         path: userUrlName + '/viewallquizzes',
         name: 'viewallquizzes',
-        component: () => import('../components/allquizzes/viewallquizzes')
+        component: () => import('@/components/allquizzes/viewallquizzes')
     },
     {
         path: userUrlName + '/viewallquizzes/:id',
         name: 'broaduserquiz',
-        component: () => import('../components/allquizzes/broaduserquiz')
+        component: () => import('@/components/allquizzes/broaduserquiz')
     },
     {
         path: userUrlName + '/viewquiz',
         name: 'viewquiz',
-        component: () => import('../components/userquizzes/viewquiz')
+        component: () => import('@/components/userquizzes/viewquiz')
     },
     {
         path: userUrlName + '/viewquiz/:id',
         name: 'userquiz',
         props: true,
-        component: () => import('../components/userquizzes/userquiz')
+        component: () => import('@/components/userquizzes/userquiz')
     },
     {
         path: userUrlName + '/checkemail',
         name: 'checkemail',
-        component: () => import('../components/mail/checkEmail')
+        component: () => import('@/components/mail/checkEmail')
     },
     {
         path: userUrlName + '/mail',
         name: 'mainMail',
-        component: () => import('../components/mail/mainMail')
+        component: () => import('@/components/mail/mainMail')
     },
     {
         path: userUrlName + '/mail/:id',
         name: 'individualMail',
         props: true,
-        component: () => import('../components/mail/individualMail')
+        component: () => import('@/components/mail/individualMail')
     },
     {
         path: userUrlName + '/scores',
         name: 'scores',
-        component: () => import('../components/scores')
+        component: () => import('@/components/scores')
     },
     {
         path: userUrlName + '/sendmail',
         name: 'mailForm',
-        component: () => import('../components/mail/mailForm')
+        component: () => import('@/components/mail/mailForm')
     },
     {
         path: '/404',
         name: 'pageNotFound',
-        component: () => import('../components/404')
+        component: () => import('@/components/404')
     },
 ]
 

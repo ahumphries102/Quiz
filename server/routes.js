@@ -197,8 +197,11 @@ router.post('/addquiz', (req, res, next) => {
 })
 
 router.post('/sendEmail', (req, res, next) => {
-    sendMail(req, res)
-
+    try{
+        sendMail(req, res)
+    }catch(err) {
+        console.log(err)
+    }
     next()
 })
 
