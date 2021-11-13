@@ -34,7 +34,7 @@
           :rules="$rules.length"
         />
         <v-select
-          :items="listOfFullUrls"
+          :items="quizNames"
           v-model="chosenQuiz"
           label="Choose a Quiz"
           :rules="$rules.length"
@@ -63,6 +63,7 @@
 </template>
 
 <script>
+console.clear()
 export default {
   name: "emailform",
   data: () => ({
@@ -77,7 +78,7 @@ export default {
       read: false,
       userToken: 0,
     },
-    listOfFullUrls: [],
+    quizNames: [],
     listOfUrls: [],
     rsp: {
       error: false,
@@ -99,24 +100,21 @@ export default {
       this.emailBody.userToken = Math.floor(Math.random() * (max - min) + min);
     },
     createUrls() {
-      const allQuizObjects = this.allQuizzes.map((ele) => ele.quizName);
-      const filteredRouterProperties = this.$router.options.routes.filter((ele) =>
+      this.quizNames = this.allQuizzes.map((ele) => ele.quizName);
+      // find the element in the router options that contains the object with the path that has takequiz in it
+      const routerPathTakeQuiz = this.$router.options.routes[this.$router.options.routes.findIndex((ele) =>
         ele.path.includes("takequiz/:quizName") ? ele.path : ""
-      );
-      console.log(allQuizObjects);
-      this.listOfFullUrls = allQuizObjects.concat(filteredRouterProperties);
-      console.log(this.listOfFullUrls);
-      this.listOfUrls = this.listOfFullUrls.map(
+      )];
+      this.quizNames.push(routerPathTakeQuiz);
+      this.listOfUrls = this.quizNames.map(
         (ele) =>
-          this.listOfFullUrls[this.listOfFullUrls.length - 1].path.split(
+          this.quizNames[this.quizNames.length - 1].path.split(
             ":"
           )[1] + ele
       );
-      this.listOfFullUrls = this.listOfFullUrls.map((ele) => ele);
     },
     async getAllQuizzes() {
       this.allQuizzes = (await this.$fetchData("GET", "/allquizzes")).requestData
-      this.dataFetched = true;
       this.createUrls();
     },
     async sendEmail() {
@@ -128,20 +126,15 @@ export default {
       quizSending = encodeURI(quizSending);
       this.emailBody.quizUrl = quizSending;
       this.emailBody.from = this.emailBody.from.toLowerCase();
-      let response = await this.$fetchData(
-        "POST",
-        "/savetokeninfo",
-        this.emailBody
-      );
-      response = await this.$fetchData("POST", "/sendEmail", this.emailBody);
+      const response = await Promise.allSettled([this.$fetchData("POST","/savetokeninfo",this.emailBody), this.$fetchData("POST", "/sendEmail", this.emailBody)])
       this.submitting = false;
-      if (!response.requestData.error) {
+      if (!response[1].value.requestData.error) {
         this.submitted = true;
         this.rsp.error = false;
       } else {
         this.rsp.error = true;
       }
-      this.rsp.msg = response.requestData.message;
+      this.rsp.msg = response[1].value.requestData.message;
     },
   },
 };

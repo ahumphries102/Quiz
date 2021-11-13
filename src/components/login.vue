@@ -16,7 +16,7 @@
             v-model="loginData.password"
             @click:append="visible = !visible"
             :append-icon="visible ? 'mdi-eye' : 'mdi-eye-off'"
-            :rules="$rules.mustBeNumber"
+            :rules="$rules.length"
             :type="visible ? '' : 'password'"
           />
           <p :style="{ color: color }">{{ responseMsg }}</p>
@@ -41,7 +41,6 @@
 </template>
 
 <script>
-import store from "../storage/store";
 import Token from "./token";
 export default {
   name: "login",

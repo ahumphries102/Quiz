@@ -88,6 +88,7 @@ export default {
         completed: true,
         reviewed:false,
       };
+      console.log(this.$store.emailInfo);
        const response = await this.$fetchData("POST", "/saveScore", newBody);
        this.responseMsg = response.message;
     },

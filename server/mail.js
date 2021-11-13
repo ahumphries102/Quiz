@@ -64,7 +64,7 @@ const sendMail = async (req, res) => {
         res.send(200, resMsg)
     }
     catch (err) {
-        resMsg.error = false
+        resMsg.error = true
         resMsg.message = "Email not sent. Recipient could not be found"
         res.send(400, resMsg)
     }

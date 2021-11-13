@@ -62,7 +62,7 @@ export default {
           userName: this.$store.state.userName,
         });
         this.submitting = false
-        response.requestData.ok?this.yourMail = response.requestData:''
+        response.request.ok?this.yourMail = response.requestData:''
         this.yourMail.forEach(ele => {
           ele.reviewed = true
         })
