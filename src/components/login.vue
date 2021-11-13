@@ -56,7 +56,6 @@ export default {
     responseMsg: "",
     submitted: false,
     tokenUsed: false,
-    timeout: false,
     valid: true,
     visible: false,
   }),
@@ -67,20 +66,18 @@ export default {
       });
       let unreadEmails = response.requestData.filter((ele) => !ele.reviewed);
       this.$store.emailInfo.unread = unreadEmails.length;
-      this.timeout = setInterval(async () => {
+      const timeout = setInterval(async () => {
         // When a user logs in, we begin checking for new emails every so many seconds.
         // if that user signsout we stop checking for new emails.
-        if (
-          this.$router.currentRoute.path.includes("login") ||
-          !this.$store.state.userName.length
-        ) {
-          clearInterval(this.timeout);
-          return;
-        }
+        if (this.$router.currentRoute.path.includes("login") || !this.$store.state.userName.length) {
+          console.log('hello');
+          clearInterval(timeout)
+          return
+        } 
         response = await this.$fetchData("POST", "/checkmail", {
           userName: this.$store.state.userName,
         });
-        unreadEmails = response.requestData.filter((ele) => !ele.reviewed);
+        unreadEmails = response.requestData.filter(ele => !ele.reviewed);
         this.$store.emailInfo.unread = unreadEmails.length;
       }, 30000);
     },
