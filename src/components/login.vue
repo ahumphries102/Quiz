@@ -60,26 +60,19 @@ export default {
     visible: false,
   }),
   methods: {
-    async checkEmail() {
-      let response = await this.$fetchData("POST", "/checkmail", {
-        userName: this.$store.state.userName,
-      });
-      let unreadEmails = response.requestData.filter((ele) => !ele.reviewed);
-      this.$store.emailInfo.unread = unreadEmails.length;
+    // check email will check once and then call constantlyCheckEmails to check again and again.
+    async constantlyCheckEmail(){
       const timeout = setInterval(async () => {
-        // When a user logs in, we begin checking for new emails every so many seconds.
-        // if that user signsout we stop checking for new emails.
+        // When a user logs in, we begin checking for new emails by checking if they're not on the login page and they have a username.
         if (this.$router.currentRoute.path.includes("login") || !this.$store.state.userName.length) {
-          console.log('hello');
           clearInterval(timeout)
           return
-        } 
-        response = await this.$fetchData("POST", "/checkmail", {
+        }
+        let emails = await this.$fetchData("POST", "/checkmail", {
           userName: this.$store.state.userName,
         });
-        unreadEmails = response.requestData.filter(ele => !ele.reviewed);
-        this.$store.emailInfo.unread = unreadEmails.length;
-      }, 30000);
+        this.$store.emailInfo.emails = emails.requestData
+      }, 10000);
     },
     async login() {
       this.submitted = true;
@@ -88,7 +81,6 @@ export default {
         "/sendtoken",
         this.loginData
       );
-      console.log(response);
       if (!response.requestData.error) {
         this.color = "green";
         this.responseMsg = response.requestData.message;
@@ -105,7 +97,8 @@ export default {
           .catch((err) => console.error(err));
         this.$root.loggedIn = true;
 
-        this.checkEmail();
+        this.$store.checkEmail();
+        this.constantlyCheckEmail()
       } else {
         this.color = "red";
         this.responseMsg = response.requestData.message;

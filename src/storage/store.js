@@ -1,31 +1,40 @@
+import fetchData from '../restClient'
 const storageKey = 'quizlogin'
 
 const store = {
-    emailInfo:{
-        from:'',
-        inbox:0,
-        unread:0,
+    emailInfo: {
+        emails: [],
+        from: '',
+        inbox: 0,
+        unread: 0
     },
-    state:{
-        userName:'',
-        token:'',
+    state: {
+        userName: '',
+        token: '',
     },
-    updateToken(){
-        if(!localStorage.getItem(storageKey)){
+    async checkEmail() {
+        let response = await fetchData("POST", "/checkmail", {
+            userName: this.state.userName,
+        });
+        this.emailInfo.unread = response.requestData.filter(ele => !ele.reviewed).length
+        return response.requestData
+    },
+    updateToken() {
+        if (!localStorage.getItem(storageKey)) {
             localStorage.setItem(storageKey, JSON.stringify(store.state))
-        }else{
+        } else {
             store.state = JSON.parse(localStorage.getItem(storageKey))
         }
     },
-    clearStorage(){
+    clearStorage() {
         store.state = {
-            userName:'',
-            token:'',
+            userName: '',
+            token: '',
         }
         localStorage.removeItem(storageKey)
     }
 }
-if(localStorage.getItem(storageKey)){
+if (localStorage.getItem(storageKey)) {
     store.state = JSON.parse(localStorage.getItem(storageKey))
 }
 export default store

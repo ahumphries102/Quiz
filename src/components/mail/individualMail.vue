@@ -24,24 +24,22 @@ export default {
     mailInfo:{}
   }),
   mounted() {
-    this.checkEmail()
-    this.initialData = JSON.parse(JSON.stringify(this.mailInfo))
+    this.checkIndividualMail()
   },
   methods: {
     async deleteLetter(){
-      const response = await this.$fetchData("DELETE", "/deleteScore", {
+      await this.$fetchData("DELETE", "/deleteScore", {
         id: this.id,
       });
       this.$router.push({name:"mainMail"})
     },
-    async checkEmail() {
+    async checkIndividualMail() {
       this.submitting = true;
       const response = await this.$fetchData("POST", "/individualMail", {
         id: this.id,
       });
       this.submitting = false;
       this.mailInfo = response.requestData
-      console.log(this.mailInfo)
       this.updateEmail();
     },
     async updateEmail() {

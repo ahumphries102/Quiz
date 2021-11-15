@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-list>
-      <v-list-item v-for="(letter, ind) in mail" :key="ind">
+      <v-list-item v-for="(email, ind) in emails" :key="ind">
         <router-link
           :to="{
             name: 'individualMail',
@@ -9,10 +9,10 @@
               userName: $store.state.userName
                 ? $store.state.userName
                 : 'default',
-              id: letter._id,
+              id: email._id,
             },
           }"
-          >{{ letter.userName }}</router-link
+          >{{ email.userName }}</router-link
         >
       </v-list-item>
     </v-list>
@@ -23,23 +23,10 @@
 export default {
   name: "mainMail",
   data: () => ({
-    mail: [],
+    emails: [],
   }),
-  mounted() {
-    this.checkEmail();
-  },
-  methods: {
-    async checkEmail() {
-      this.submitting = true;
-      const response = await this.$fetchData("POST", "/checkmail", {
-        userName: this.$store.state.userName,
-      });
-      this.submitting = false;
-      response.request.ok ? (this.mail = response.requestData) : "";
-      this.mail.forEach((ele) => {
-        ele.reviewed = true;
-      });
-    },
+  async mounted() {
+    this.emails = await this.$store.checkEmail()
   },
 };
 </script>
